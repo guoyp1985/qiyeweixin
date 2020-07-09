@@ -1,9 +1,9 @@
 {
-  "uid": "gxb",
+  "uid": "zhenludev",
   "append": true,
   "watch": true,
   "script": "node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-  "sourceDir": "/www/gxb/",
+  "sourceDir": "/www/zhenludev/",
   "watchDirectory": "/src",
   "logFile": "/www/zhenludev/forever/logs/forever.log",
   "outFile": "/www/zhenludev/forever/logs/out.log",
