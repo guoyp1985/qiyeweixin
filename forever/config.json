@@ -5,8 +5,8 @@
   "script": "node_modules/webpack-dev-server/bin/webpack-dev-server.js",
   "sourceDir": "/www/gxb/",
   "watchDirectory": "/src",
-  "logFile": "/www/gxb/forever/logs/forever.log",
-  "outFile": "/www/gxb/forever/logs/out.log",
-  "errFile": "/www/gxb/forever/logs/error.log",
+  "logFile": "/www/zhenludev/forever/logs/forever.log",
+  "outFile": "/www/zhenludev/forever/logs/out.log",
+  "errFile": "/www/zhenludev/forever/logs/error.log",
   "args": ["--inline", "--progress", "--config", "build/webpack.dev.conf.js"]
 }
