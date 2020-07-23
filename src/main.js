@@ -27,6 +27,7 @@ Vue.use(ConfirmPlugin)
 console.log(Vue.wechat)
 require('es6-promise').polyfill()
 
+console.log('env.debugmode', ENV.DebugMode)
 if (ENV.DebugMode) {
   const VConsole = require('vconsole')
   const vConsole = new VConsole()
@@ -132,7 +133,10 @@ let cancelAllPendings = () => {
 }
 
 // 排除全局请求过滤器中的请求url
-const rExcludeUrls = ENV.NoAccessUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
+const rExcludeUrls = ENV.NoAccessUrls.map(url => {
+  url = `${ENV.BokaApi}wx[a-zA-Z0-9]{16}${url}`
+  return RegExp(url.replace(/\//g, '\\/').replace(/\*/g, '.*').replace(/\?/g, '\\?'))
+})
 const matchExclude = url => {
   for (let i = 0; i < rExcludeUrls.length; i++) {
     if (rExcludeUrls[i].test(url)) {
@@ -145,26 +149,41 @@ const matchExclude = url => {
 // let responseFail = false
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
-  if (!matchExclude(config.url)) {
+  console.log('执行ajax请求', config.url)
+  console.log(Token.get())
+  if (!matchExclude(config.url) && config.url.indexOf('mobileLogin') < 0 && config.url.indexOf('verifyMobile') < 0 && config.url.indexOf('miniSetting') < 0) {
     config.cancelToken = new CancelToken(c => {
       pendings.push({ u: config.url + '&' + config.method, f: c })
     })
 
     const token = Token.get()
-    console.log(`interceptors: ${config.url}`)
+    // console.log(`interceptors: ${config.url}`)
     // console.log(`interceptors: ${JSON.stringify(token)}`)
     if (Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
-      access((path) => {
-        router.replace({path: path})
-      })
+      console.log('跳转登录之前')
+      // const url = location.href
+      //             .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+      //               return `${p1}?${p3}${p2}`
+      //             })
+      //             .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+      //               return `${p1}&${p3}${p2}`
+      //             })
+      router.replace({path: '/login?appid=' + lUrl.query.appid})
+      // access((path) => {
+      //   router.replace({path: path})
+      // })
     } else {
-      // console.log(`interceptors: Bearer ${token.token}`)
+      console.log(`interceptors: Bearer ${token.token}`)
       config.headers['Authorization'] = `Bearer ${token.token}`
-      if (config.url.indexOf(ENV.FactoryApi) > -1 && ENV.ApiVersion === 'V2') {
+      if (ENV.ApiVersion === 'V2') {
         config.headers['Accept'] = ENV.ApiAccept
       }
+    }
+  } else {
+    if (ENV.ApiVersion === 'V2') {
+      config.headers['Accept'] = ENV.ApiAccept
     }
   }
   return config
@@ -174,214 +193,42 @@ Vue.http.interceptors.request.use(config => {
 
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
-  console.log('请求执行后')
+  console.log('请求结束')
   console.log(response)
   return response
 }, error => {
-  if (error.response) {
-    Token.remove()
-    vue.$vux.alert.show({
-      title: '提示',
-      content: `无效token:${Token.get().token} :: 禁止未授权访问`
-    })
-    if (error.response.status === 401) {
-      console.error('未授权请求')
-      Vue.access(isPC => {
-        if (isPC) {
-          router.push('login')
-        }
-      })
-    }
-  }
+  console.log('请求结束错误了')
+  console.log(error)
 })
 
-const access = success => {
-  let query = ''
-  const url = location.href
-              .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
-                query = p3
-                return `${p1}?${p3}${p2}` // '$1?$3$2'
-              })
-              .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
-                query = p3
-                return `${p1}&${p3}${p2}` // '$1&$3$2'
-              })
-  const lUrl = urlParse(url, true)
-  const token = lUrl.query.token
-  const expiredAt = lUrl.query.expired_at
-  const code = lUrl.query.code
-  const state = lUrl.query.state
-  const from = lUrl.query.from
-  // const miniHeight = parseInt(lUrl.query.miniHeight)
-  // const miniAppId = lUrl.query.miniappid
-  // const miniOpenId = lUrl.query.miniopenid
-  console.log(lUrl)
-  console.log(from)
-  // if (state === 'miniAccess' && code) {
-  //   console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
-  //   const params = {code: code, miniopenid: miniOpenId, appid: miniAppId}
-  //   Vue.http.get(`${ENV.BokaApi}/api/withMiniLogin`, {params: params})
-  //   .then(
-  //     res => {
-  //       console.log(res)
-  //       if (!res || !res.data || res.data.errcode) {
-  //         if (res.data.flag === 0) console.error(res.data.error)
-  //         else console.error(res)
-  //         return
-  //       }
-  //       Token.set(res.data.data)
-  //       // 取用户信息
-  //       // console.log(`miniAccess: /user/show`)
-  //       return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-  //     },
-  //     res => {
-  //       console.error(res)
-  //     }
-  //   )
-  //   .then(
-  //     res => {
-  //       if (!res) return
-  //       User.set(res.data)
-  //       // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-  //       // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-  //       console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
-  //       // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
-  //       store.commit('updateMiniInvoke', {miniInvoke: true})
-  //       success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-  //       // if (MiniApp.getOpenId() && MiniApp.getAppId()) {
-  //       //   MiniApp.removeOpenId()
-  //       //   MiniApp.removeAppId()
-  //       //   let dt = new Date().getTime()
-  //       //   router.push({path: `/centerSales?from=miniprogram&_dt=${dt}`})
-  //       // }
-  //     }
-  //   )
-  // } else
-  if (from === 'miniprogram') {
-    // if (miniAppId && miniAppId !== '') {
-    //   const redirectUri = location.href.replace(/(?:&from=miniprogram)|(?:from=miniprogram&)/g, '')
-    //   const originHref = encodeURIComponent(redirectUri)
-    //   console.log(originHref)
-    //   // 小程序web-view内授权
-    //   // location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
-    //   location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
-    // } else
-    // if (miniHeight) { // 适配小程序web-view高度上的bug
-    //   AdapterHeight.set(miniHeight)
-    // }
-    if (token && token !== '') {
-      Token.set({token: token, expired_at: expiredAt})
-      // console.log(`miniprogram: /user/show`)
-      Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-      .then(
-       res => {
-         if (!res) return
-         User.set(res.data)
-         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-         console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
-         // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
-         store.commit('updateMiniInvoke', {miniInvoke: true})
-         success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-       }
-      )
-    }
-  } else if (state === 'defaultAccess' && code) {
-    console.log('进入到了defaultAccess code 的判断内')
-    // 401授权，取得token
-    Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
-    .then(
-      res => {
-        console.log('weinxin/authUser success')
-        console.log(res)
-        if (!res || !res.data || res.data.errcode || !res.data.flag) {
-          // alert('清空缓存重试')
-          console.log('进入到了authUser请求未返回数据')
-          Token.remove()
-          vue.$vux.alert.show({
-            title: '提示',
-            content: `用户信息获取失败，请重新进入`,
-            onHide () {
-              location.replace(lUrl.href)
-            }
-          })
-          return
-        }
-        Token.set(res.data.data)
-        // 取用户信息
-        // console.log(`defaultAccess: /user/show`)
-        return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-      }, res => {
-        console.log('进入到了authUser请求失败')
-        console.log(res)
-        Token.remove()
-        vue.$vux.alert.show({
-          title: '提示',
-          content: `未获取到用户信息`,
-          onHide () {
-            location.replace(lUrl.href)
-          }
-        })
-      }
-    )
-    .then(
-      res => {
-        // console.log('weinxin/authUser error')
-        // console.log(res)
-        if (!res) return
-        const rData = res.data
-        for (let i = 0; i < ENV.DebugList.length; i++) {
-          console.log(ENV.DebugList[i].uid === rData.uid)
-          if (ENV.DebugList[i].uid === rData.uid) {
-            authCount = 0
-            vue.$vux.alert.show({
-              title: '提示',
-              content: `token:${Token.get().token} :: 已取到用户信息`,
-              onShow () {
-                console.log('Plugin: I\'m showing')
-              },
-              onHide () {
-                const f = alertStack.pop()
-                if (f) {
-                  f()
-                }
-              }
-            })
-          }
-        }
-        User.set(res.data)
-        // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-        location.replace(`https://${lUrl.hostname}/#${lUrl.hash.replace(/#/, '')}?${query}`)
-        console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        // setTimeout(() => {
-        //   success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        // }, 50)
-      }, res => {
-        Token.remove()
-        vue.$vux.alert.show({
-          title: '提示',
-          content: `未取到用户信息`,
-          onHide () {
-            location.replace(lUrl.href)
-          }
-        })
-      }
-    )
-  } else {
-    console.log('已经授权过了')
-    Vue.access(isPC => {
-      if (isPC) {
-        success && success()
-        router.push({name: 'tLogin'})
-      } else {
-        const originHref = encodeURIComponent(location.href)
-        // 微信授权
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=defaultAccess#wechat_redirect`)
-      }
-    })
-  }
-}
+// const access = success => {
+//   // let query = ''
+//   const url = location.href
+//               .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+//                 // query = p3
+//                 return `${p1}?${p3}${p2}` // '$1?$3$2'
+//               })
+//               .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+//                 // query = p3
+//                 return `${p1}&${p3}${p2}` // '$1&$3$2'
+//               })
+//   const lUrl = urlParse(url, true)
+//   // const token = lUrl.query.token
+//   // const expiredAt = lUrl.query.expired_at
+//   Vue.access(isPC => {
+//     if (isPC) {
+//       success && success()
+//       console.log(lUrl.href)
+//       // location.replace(lUrl.href)
+//       // router.push({name: 'tLogin'})
+//     } else {
+//       success && success()
+//       // const originHref = encodeURIComponent(location.href)
+//       // // 微信授权
+//       // location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=defaultAccess#wechat_redirect`)
+//     }
+//   })
+// }
 
 const clearCache = () => {
   const url = location.href
@@ -393,11 +240,8 @@ const clearCache = () => {
               })
   const lUrl = urlParse(url, true)
   const from = lUrl.query.from
-  if (from === 'miniprogram') {
-    console.log('mini clear')
-    Token.remove()
-  }
   if (ENV.Version !== Version.get()) {
+    console.log('进入到了清除缓存操作')
     Token.remove()
     User.remove()
     Access.remove()
@@ -417,76 +261,113 @@ const render = () => {
   vue.$mount('#app-box')
 }
 
-clearCache()
+// clearCache()
 
-const alertStack = []
-let authCount = 0
 // 页面入口
-try {
-  if (!Token.get() || Token.isExpired() || !User.get()) {
-    access(path => {
-      console.log(`Entry: ${path}`)
-      router.replace({path: path})
-      let curUser = User.get()
-      if (curUser && curUser.uid) {
-        for (let i = 0; i < ENV.DebugList.length; i++) {
-          if (ENV.DebugList[i].uid === User.get().uid) {
-            alertStack.push(
-              () => {
-                vue.$vux.alert.show({
-                  title: '提示',
-                  content: `token:${Token.get().token} :: 开始渲染页面`,
-                  onShow () {
-                    console.log('Plugin: I\'m showing')
-                  },
-                  onHide () {
-                    console.log('Plugin: I\'m hiding')
-                  }
-                })
-              }
-            )
-          }
-        }
-      }
-      render()
-    })
-  } else {
-    for (let i = 0; i < ENV.DebugList.length; i++) {
-      if (ENV.DebugList[i].uid === User.get().uid) {
-        vue.$vux.alert.show({
-          title: '提示',
-          content: `有token:${Token.get().token} :: 开始渲染页面`,
-          onShow () {
-            console.log('Plugin: I\'m showing')
-          },
-          onHide () {
-            console.log('Plugin: I\'m hiding')
-          }
-        })
-      }
-    }
-    render()
+// let queryParam = ''
+const url = location.href
+          .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+            // queryParam = p3
+            return `${p1}?${p3}${p2}` // '$1?$3$2'
+          })
+          .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+            // queryParam = p3
+            return `${p1}&${p3}${p2}` // '$1&$3$2'
+          })
+const lUrl = urlParse(url, true)
+let miniData = {}
+let sysData = {}
+let curAppid = lUrl.query.appid
+let miniinfoStr = `${curAppid}-miniinfo`
+let sysparaStr = `${curAppid}-syspara`
+if (localStorage.getItem(miniinfoStr) && localStorage.getItem(miniinfoStr) !== '') {
+  miniData = JSON.parse(localStorage.getItem(miniinfoStr))
+  sysData = JSON.parse(localStorage.getItem(sysparaStr))
+}
+console.log('小程序数据')
+console.log(location.href)
+console.log(lUrl.query)
+console.log(miniinfoStr)
+console.log(miniData)
+console.log(sysData)
+console.log('获取到的用户信息')
+console.log(User.get())
+if (lUrl.query.state === 'miniAccess' && lUrl.query.code) {
+  Vue.$vux.loading.show()
+  let ajaxUrl = ENV.BokaApi
+  if (ENV.ApiVersion === 'V2' && lUrl.query.appid) {
+    ajaxUrl = `${ajaxUrl}${lUrl.query.appid}`
   }
-} catch (e) {
-  if (authCount >= 3) {
-    vue.$vux.alert.show({
-      title: '提示',
-      content: `持续授权3次失败，请联系运营方处理`
-    })
-  } else {
-    authCount++
-    vue.$vux.alert.show({
-      title: '提示',
-      content: `error:${e.toString()} :: 代码异常`,
-      onHide () {
-        Token.remove()
-        User.remove()
-        access(path => {
-          console.log(`Entry: ${path}`)
-          router.replace({path: path})
+  ajaxUrl = `${ajaxUrl}/member/officialBind`
+  // alert(ajaxUrl)
+  // alert(lUrl.query.code)
+  Vue.http.post(ajaxUrl, {code: lUrl.query.code}).then(res => {
+    Vue.$vux.loading.hide()
+    // alert(JSON.stringify(res))
+    if (!res || !res.data || res.data.errcode || !res.data.flag) {
+      Vue.$vux.alert.show({
+        title: '提示',
+        content: `用户信息获取失败，请重新进入`,
+        onHide () {
+          router.push(`/center?appid=${lUrl.query.appid}`)
           render()
-        })
+        }
+      })
+      return
+    }
+    Vue.$vux.alert.show({
+      title: '提示',
+      content: `绑定公众号成功`,
+      onHide () {
+        router.push(`/center?appid=${lUrl.query.appid}`)
+        render()
       }
     })
+    render()
+  }, res => {
+    Vue.$vux.loading.hide()
+    console.log('绑定')
+    console.log(res)
+    Vue.$vux.alert.show({
+      title: '提示',
+      content: `未获取到用户信息`,
+      onHide () {
+        router.push(`/center?appid=${lUrl.query.appid}`)
+        render()
+      }
+    })
+  })
+} else {
+  if (!localStorage.getItem(miniinfoStr) || localStorage.getItem(miniinfoStr) === '' || !miniData || !sysData || !miniData.fid || !sysData.BackgroundColor) {
+    let ajaxUrl = ENV.BokaApi
+    if (ENV.ApiVersion === 'V2' && lUrl.query.appid) {
+      ajaxUrl = `${ajaxUrl}${lUrl.query.appid}`
+    }
+    ajaxUrl = `${ajaxUrl}/miniSetting`
+    Vue.http.post(ajaxUrl).then(res => {
+      if (res) {
+        const data = res.data
+        if (data.flag) {
+          localStorage.setItem(miniinfoStr, JSON.stringify(data.miniinfo))
+          localStorage.setItem(sysparaStr, JSON.stringify(data.syspara))
+        }
+        if (!res || !data || !User.get()) {
+          router.replace({path: '/login', query: lUrl.query})
+          render()
+        } else {
+          render()
+        }
+      } else {
+        router.replace({path: '/login', query: lUrl.query})
+        render()
+      }
+    })
+  } else {
+    if (!User.get()) {
+      router.replace({path: '/login', query: lUrl.query})
+      render()
+    } else {
+      render()
+    }
   }
 }
