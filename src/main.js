@@ -338,36 +338,10 @@ if (lUrl.query.state === 'miniAccess' && lUrl.query.code) {
     })
   })
 } else {
-  if (!localStorage.getItem(miniinfoStr) || localStorage.getItem(miniinfoStr) === '' || !miniData || !sysData || !miniData.fid || !sysData.BackgroundColor) {
-    let ajaxUrl = ENV.BokaApi
-    if (ENV.ApiVersion === 'V2' && lUrl.query.appid) {
-      ajaxUrl = `${ajaxUrl}${lUrl.query.appid}`
-    }
-    ajaxUrl = `${ajaxUrl}/miniSetting`
-    Vue.http.post(ajaxUrl).then(res => {
-      if (res) {
-        const data = res.data
-        if (data.flag) {
-          localStorage.setItem(miniinfoStr, JSON.stringify(data.miniinfo))
-          localStorage.setItem(sysparaStr, JSON.stringify(data.syspara))
-        }
-        if (!res || !data || !User.get()) {
-          router.replace({path: '/login', query: lUrl.query})
-          render()
-        } else {
-          render()
-        }
-      } else {
-        router.replace({path: '/login', query: lUrl.query})
-        render()
-      }
-    })
-  } else {
-    if (!User.get()) {
-      router.replace({path: '/login', query: lUrl.query})
-      render()
-    } else {
-      render()
-    }
-  }
+  // if (!User.get()) {
+  //   router.replace({path: '/login', query: lUrl.query})
+  //   render()
+  // } else {
+    render()
+  // }
 }
