@@ -56,7 +56,8 @@ export default {
       addressData: ChinaAddressV4Data,
       area: [],
       province: '',
-      city: ''
+      city: '',
+      issubmit: false
     }
   },
   methods: {
@@ -89,22 +90,26 @@ export default {
       //     }
       //   }
       // }
-
-      if (address === '' || this.linkman1 === '' || this.telephone1 === '' || this.identity === '') {
-        this.$vux.toast.text('必填项不能为空', 'middle')
-      } else if (!(/^1[3456789]\d{9}$/).test(this.telephone1)) {
-        this.$vux.toast.text('请输入正确的手机号', 'middle')
-      } else {
-        this.$http.post(`${ENV.BokaApi}/api/Visitor/addClues`, {
-          title: this.linkman1,
-          mobile: this.telephone1,
-          identity: this.identity,
-          province: address[0],
-          city: address[1]
-        }).then(res => {
-          console.log(res)
-          // let data = res.data
-        })
+      if (!this.issubmit){
+        if (address === '' || this.linkman1 === '' || this.telephone1 === '' || this.identity === '') {
+          this.$vux.toast.text('必填项不能为空', 'middle')
+        } else if (!(/^1[3456789]\d{9}$/).test(this.telephone1)) {
+          this.$vux.toast.text('请输入正确的手机号', 'middle')
+        } else {
+          this.issubmit = true
+          this.$http.post(`${ENV.BokaApi}/api/Visitor/addClues`, {
+            title: this.linkman1,
+            mobile: this.telephone1,
+            identity: this.identity,
+            province: address[0],
+            city: address[1]
+          }).then(res => {
+            console.log(res)
+            let data = res.data
+            this.$vux.toast.text(data.error, 'middle')
+            this.issubmit = false
+          })
+        }
       }
     },
     toStatement () {
@@ -112,6 +117,7 @@ export default {
     }
   },
   activated () {
+    this.issubmit = false
   }
 }
 </script>
