@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="submit-bottom  bg-white">
-        <div class="btn submit-btn mb5" @click="submitEvent">立即提交表单免费获取制...</div>
+        <div class="btn submit-btn mb10" @click="submitEvent">立即提交表单免费获取制...</div>
         <div class="agree-statement font12">提交即视为您已阅读并同意<span class="statement" @click="toStatement">《个人信息保护声明》</span></div>
       </div>
     </div>
@@ -128,7 +128,7 @@ export default {
 }
 .from{
   padding: 20px;
-  margin-bottom: 100px;
+  margin-bottom: 140px;
   .from-item{
     margin-bottom: 20px;
     .item-title{
@@ -155,7 +155,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100px;
+  height: 140px;
   color: #bcbcbc;
   text-align: center;
   .submit-btn{
