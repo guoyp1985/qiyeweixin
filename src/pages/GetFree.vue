@@ -18,8 +18,8 @@
           <div class="item-title">您的身份是<span>*</span></div>
           <div class="item-cell">
             <select v-model="identity">
-              <option>我是客户，需要制作视频</option>
-              <option>我是视频制作团队，求合作</option>
+              <option value="1">我是客户，需要制作视频</option>
+              <option value="2">我是视频制作团队，求合作</option>
             </select>
             </div>
         </div>
@@ -41,6 +41,7 @@
 </template>
 <script>
 import {XAddress, ChinaAddressV4Data, Value2nameFilter as value2name} from 'vux'
+import ENV from 'env'
 export default {
   components: {
     XAddress
@@ -104,7 +105,6 @@ export default {
           console.log(res)
           // let data = res.data
         })
-
       }
     },
     toStatement () {
