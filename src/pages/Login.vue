@@ -85,7 +85,7 @@ export default {
       if (ENV.ApiVersion === 'V2' && this.query.appid) {
         ajaxUrl = `${ajaxUrl}${this.query.appid}`
       }
-      ajaxUrl = `${ajaxUrl}/verifyMobile`
+      ajaxUrl = `${ajaxUrl}/api/Visitor/VerifyMobile`
       this.$http.post(ajaxUrl, {
         mobile: this.$util.trim(this.mobile)
       }).then(res => {
@@ -144,7 +144,7 @@ export default {
       if (ENV.ApiVersion === 'V2' && this.query.appid) {
         ajaxUrl = `${ajaxUrl}${this.query.appid}`
       }
-      ajaxUrl = `${ajaxUrl}/mobileLogin`
+      ajaxUrl = `${ajaxUrl}/api/Visitor/mobileLogin`
       this.$http.post(ajaxUrl, {
         mobile: this.$util.trim(this.mobile),
         securecode: this.code

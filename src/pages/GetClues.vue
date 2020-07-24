@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="bg-white">
       <div class="header-img">
         <img src=""/>
       </div>
