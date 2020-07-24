@@ -261,7 +261,7 @@ const render = () => {
   vue.$mount('#app-box')
 }
 
-// clearCache()
+clearCache()
 
 // 页面入口
 // let queryParam = ''
@@ -338,10 +338,11 @@ if (lUrl.query.state === 'miniAccess' && lUrl.query.code) {
     })
   })
 } else {
+  render()
   // if (!User.get()) {
   //   router.replace({path: '/login', query: lUrl.query})
   //   render()
   // } else {
-    render()
+    // render()
   // }
 }
