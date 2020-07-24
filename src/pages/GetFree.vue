@@ -41,6 +41,7 @@
 </template>
 <script>
 import {XAddress, ChinaAddressV4Data, Value2nameFilter as value2name} from 'vux'
+import ENV from 'env'
 export default {
   components: {
     XAddress
@@ -104,7 +105,6 @@ export default {
           console.log(res)
           // let data = res.data
         })
-
       }
     },
     toStatement () {
