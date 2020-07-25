@@ -675,8 +675,6 @@ zh-CN:
   Apply: 申请
   Submit: 提交
   tIndex: 加载中
-  tLogin: 扫码登录
-  tCenter: 个人中心
   tCenterSales: 卖家中心
   tRetailerSales: 返点客
   tRetailerSaleview: 返点客
@@ -987,5 +985,7 @@ zh-CN:
   tExamStudy: 我要学习
   tExamTest: 我要考试
   tExamHome: 我要推广
+  tLogin: 登录
+  tCenter: 个人中心
   tGetClues: 文化创意
   tStatement: 个人信息授权与保护声明

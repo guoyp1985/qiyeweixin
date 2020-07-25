@@ -1,7 +1,7 @@
 <template>
     <div class="bg-white">
       <div class="header-img">
-        <img src=""/>
+        <img src="../assets/images/fromheaderimg.jpeg"/>
       </div>
       <div class="from bg-white">
         <div class="from-item">
@@ -17,7 +17,7 @@
         <div class="from-item">
           <div class="item-title">您的身份是<span>*</span></div>
           <div class="item-cell">
-            <select v-model="identity">
+            <select class="bg-white" v-model="identity">
               <option value="1">我是客户，需要制作视频</option>
               <option value="2">我是视频制作团队，求合作</option>
             </select>
@@ -32,19 +32,26 @@
             </x-address>
           </div>
         </div>
+        <div class="from-item">
+          <div class="">
+            <check-icon :value.sync="demo1">我已阅读《个人信息保护声明》</check-icon>
+          </div>
+        </div>
       </div>
       <div class="submit-bottom  bg-white">
-        <div class="btn submit-btn mb10" @click="submitEvent">立即提交表单免费获取制...</div>
+        <div v-if="!demo1" class="btn submit-btn1 mb10">立即提交</div>
+        <div v-else class="btn submit-btn mb10" @click="submitEvent">立即提交</div>
         <div class="agree-statement font12">提交即视为您已阅读并同意<span class="statement" @click="toStatement">《个人信息保护声明》</span></div>
       </div>
     </div>
 </template>
 <script>
-import {XAddress, ChinaAddressV4Data, Value2nameFilter as value2name} from 'vux'
+import {XAddress, CheckIcon, ChinaAddressV4Data, Value2nameFilter as value2name} from 'vux'
 import ENV from 'env'
 export default {
   components: {
-    XAddress
+    XAddress,
+    CheckIcon
   },
   data () {
     return {
@@ -57,7 +64,8 @@ export default {
       area: [],
       province: '',
       city: '',
-      issubmit: false
+      issubmit: false,
+      demo1: false
     }
   },
   methods: {
@@ -124,7 +132,7 @@ export default {
 <style lang="less">
 .header-img{
   width: 100%;
-  height: 200px;
+  // height: 200px;
 }
 .from{
   padding: 20px;
@@ -158,12 +166,15 @@ export default {
   height: 140px;
   color: #bcbcbc;
   text-align: center;
-  .submit-btn{
+  .submit-btn,.submit-btn1{
     width: 100%;
     height: 50px;
     line-height: 50px;
     background: red;
     color: #fff;
+  }
+  .submit-btn1 {
+    background: #ea9591;
   }
   .statement{
     color: #2e92f6;
