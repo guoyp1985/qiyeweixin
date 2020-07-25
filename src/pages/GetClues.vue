@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="bg-white">
       <div class="header-img">
         <img src=""/>
       </div>
@@ -18,8 +18,8 @@
           <div class="item-title">您的身份是<span>*</span></div>
           <div class="item-cell">
             <select v-model="identity">
-              <option>我是客户，需要制作视频</option>
-              <option>我是视频制作团队，求合作</option>
+              <option value="1">我是客户，需要制作视频</option>
+              <option value="2">我是视频制作团队，求合作</option>
             </select>
             </div>
         </div>
@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="submit-bottom  bg-white">
-        <div class="btn submit-btn mb5" @click="submitEvent">立即提交表单免费获取制...</div>
+        <div class="btn submit-btn mb10" @click="submitEvent">立即提交表单免费获取制...</div>
         <div class="agree-statement font12">提交即视为您已阅读并同意<span class="statement" @click="toStatement">《个人信息保护声明》</span></div>
       </div>
     </div>
@@ -56,7 +56,8 @@ export default {
       addressData: ChinaAddressV4Data,
       area: [],
       province: '',
-      city: ''
+      city: '',
+      issubmit: false
     }
   },
   methods: {
@@ -89,22 +90,26 @@ export default {
       //     }
       //   }
       // }
-
-      if (address === '' || this.linkman1 === '' || this.telephone1 === '' || this.identity === '') {
-        this.$vux.toast.text('必填项不能为空', 'middle')
-      } else if (!(/^1[3456789]\d{9}$/).test(this.telephone1)) {
-        this.$vux.toast.text('请输入正确的手机号', 'middle')
-      } else {
-        this.$http.post(`${ENV.BokaApi}/api/Visitor/addClues`, {
-          title: this.linkman1,
-          mobile: this.telephone1,
-          identity: this.identity,
-          province: address[0],
-          city: address[1]
-        }).then(res => {
-          console.log(res)
-          // let data = res.data
-        })
+      if (!this.issubmit){
+        if (address === '' || this.linkman1 === '' || this.telephone1 === '' || this.identity === '') {
+          this.$vux.toast.text('必填项不能为空', 'middle')
+        } else if (!(/^1[3456789]\d{9}$/).test(this.telephone1)) {
+          this.$vux.toast.text('请输入正确的手机号', 'middle')
+        } else {
+          this.issubmit = true
+          this.$http.post(`${ENV.BokaApi}/api/Visitor/addClues`, {
+            title: this.linkman1,
+            mobile: this.telephone1,
+            identity: this.identity,
+            province: address[0],
+            city: address[1]
+          }).then(res => {
+            console.log(res)
+            let data = res.data
+            this.$vux.toast.text(data.error, 'middle')
+            this.issubmit = false
+          })
+        }
       }
     },
     toStatement () {
@@ -112,6 +117,7 @@ export default {
     }
   },
   activated () {
+    this.issubmit = false
   }
 }
 </script>
@@ -122,7 +128,7 @@ export default {
 }
 .from{
   padding: 20px;
-  margin-bottom: 100px;
+  margin-bottom: 140px;
   .from-item{
     margin-bottom: 20px;
     .item-title{
@@ -149,7 +155,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100px;
+  height: 140px;
   color: #bcbcbc;
   text-align: center;
   .submit-btn{
