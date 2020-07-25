@@ -98,7 +98,7 @@ export default {
       //     }
       //   }
       // }
-      if (!this.issubmit){
+      if (!this.issubmit) {
         if (address === '' || this.linkman1 === '' || this.telephone1 === '' || this.identity === '') {
           this.$vux.toast.text('必填项不能为空', 'middle')
         } else if (!(/^1[3456789]\d{9}$/).test(this.telephone1)) {
