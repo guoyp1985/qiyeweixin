@@ -231,15 +231,15 @@ Vue.http.interceptors.response.use(response => {
 // }
 
 const clearCache = () => {
-  const url = location.href
-              .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
-                return `${p1}?${p3}${p2}`
-              })
-              .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
-                return `${p1}&${p3}${p2}`
-              })
-  const lUrl = urlParse(url, true)
-  const from = lUrl.query.from
+  // const url = location.href
+  //             .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+  //               return `${p1}?${p3}${p2}`
+  //             })
+  //             .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+  //               return `${p1}&${p3}${p2}`
+  //             })
+  // const lUrl = urlParse(url, true)
+  // const from = lUrl.query.from
   if (ENV.Version !== Version.get()) {
     console.log('进入到了清除缓存操作')
     Token.remove()
