@@ -17,16 +17,17 @@
         <div class="from-item">
           <div class="item-title">您的身份是<span>*</span></div>
           <div class="item-cell">
-            <select class="bg-white" v-model="identity">
+            <!-- <select class="bg-white" v-model="identity">
               <option value="1">我是客户，需要制作视频</option>
               <option value="2">我是视频制作团队，求合作</option>
-            </select>
+            </select> -->
+            <popup-picker class="popup-picker" :title="``" :data="identitys" v-model="identity" placeholder="请选择您的身份"></popup-picker>
             </div>
         </div>
         <div class="from-item">
           <div class="item-title">您所在的城市是<span>*</span></div>
           <div class="item-cell">
-            <x-address class="x-address" :title="``" style="width:100%;height:100%;" raw-value v-model="area" hide-district :list="addressData" :placeholder="`请选择您所在的城市`">
+            <x-address class="x-address" :title="``" raw-value v-model="area" hide-district :list="addressData" :placeholder="`请选择您所在的城市`">
               <template slot="title" slot-scope="props">
               </template>
             </x-address>
@@ -34,24 +35,25 @@
         </div>
         <div class="from-item">
           <div class="">
-            <check-icon :value.sync="demo1">我已阅读《个人信息保护声明》</check-icon>
+            <check-icon :value.sync="isagreecheckbox">我已阅读《个人信息保护声明》</check-icon>
           </div>
         </div>
       </div>
       <div class="submit-bottom  bg-white">
-        <div v-if="!demo1" class="btn submit-btn1 mb10">立即提交</div>
+        <div v-if="!isagreecheckbox" class="btn submit-btn1 mb10">立即提交</div>
         <div v-else class="btn submit-btn mb10" @click="submitEvent">立即提交</div>
         <div class="agree-statement font12">提交即视为您已阅读并同意<span class="statement" @click="toStatement">《个人信息保护声明》</span></div>
       </div>
     </div>
 </template>
 <script>
-import {XAddress, CheckIcon, ChinaAddressV4Data, Value2nameFilter as value2name} from 'vux'
+import {XAddress, PopupPicker, CheckIcon, ChinaAddressV4Data, Value2nameFilter as value2name} from 'vux'
 import ENV from 'env'
 export default {
   components: {
     XAddress,
-    CheckIcon
+    CheckIcon,
+    PopupPicker
   },
   data () {
     return {
@@ -59,13 +61,14 @@ export default {
       telephone: '',
       linkman1: '',
       telephone1: '',
-      identity: '',
+      identity: [],
       addressData: ChinaAddressV4Data,
       area: [],
       province: '',
       city: '',
       issubmit: false,
-      demo1: false
+      isagreecheckbox: false,
+      identitys: [['我是客户，需要制作视频','我是视频制作团队，求合作']]
     }
   },
   methods: {
@@ -151,9 +154,10 @@ export default {
         color: #999;
         font-size: 13px;
       }
-      input,select{
+      input,select,.popup-picker,.x-address{
         height: 100%;
         width: 100%;
+        font-size: 15px;
       }
     }
   }
@@ -180,11 +184,13 @@ export default {
     color: #2e92f6;
   }
 }
-.x-address{
+.x-address,.popup-picker {
   .weui-cell{height:100%;}
   .weui-cell__hd{display:none;}
   .vux-popup-picker-select-box{height:100%;}
   .vux-popup-picker-select{height:100%;text-align:left;display:flex;justify-content: flex-start;align-items: center;}
-  .vux-popup-picker-select span{color:initial !important;}
+  .vux-popup-picker-select .vux-cell-value{color:initial !important;}
+  .vux-cell-placeholder{color: #999 !important}
+  .vux-popup-picker-select span{font-size: 15px !important}
 }
 </style>
