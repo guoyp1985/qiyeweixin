@@ -151,7 +151,7 @@ const matchExclude = url => {
 Vue.http.interceptors.request.use(config => {
   console.log('执行ajax请求', config.url)
   console.log(Token.get())
-  if (!matchExclude(config.url) && config.url.indexOf('mobileLogin') < 0 && config.url.indexOf('verifyMobile') < 0 && config.url.indexOf('miniSetting') < 0 && config.url.indexOf('addClues') < 0) {
+  if (!matchExclude(config.url) && config.url.indexOf('mobileLogin') < 0 && config.url.indexOf('VerifyMobile') < 0 && config.url.indexOf('miniSetting') < 0 && config.url.indexOf('addClues') < 0) {
     config.cancelToken = new CancelToken(c => {
       pendings.push({ u: config.url + '&' + config.method, f: c })
     })
@@ -170,7 +170,7 @@ Vue.http.interceptors.request.use(config => {
       //             .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
       //               return `${p1}&${p3}${p2}`
       //             })
-      router.replace({path: '/login?appid=' + lUrl.query.appid})
+      router.replace({path: '/login'})
       // access((path) => {
       //   router.replace({path: path})
       // })
@@ -295,9 +295,6 @@ console.log(User.get())
 if (lUrl.query.state === 'miniAccess' && lUrl.query.code) {
   Vue.$vux.loading.show()
   let ajaxUrl = ENV.BokaApi
-  if (ENV.ApiVersion === 'V2' && lUrl.query.appid) {
-    ajaxUrl = `${ajaxUrl}${lUrl.query.appid}`
-  }
   ajaxUrl = `${ajaxUrl}/member/officialBind`
   // alert(ajaxUrl)
   // alert(lUrl.query.code)
@@ -309,7 +306,8 @@ if (lUrl.query.state === 'miniAccess' && lUrl.query.code) {
         title: '提示',
         content: `用户信息获取失败，请重新进入`,
         onHide () {
-          router.push(`/center?appid=${lUrl.query.appid}`)
+          // router.push(`/center?appid=${lUrl.query.appid}`)
+          router.push(`/center`)
           render()
         }
       })
@@ -319,7 +317,8 @@ if (lUrl.query.state === 'miniAccess' && lUrl.query.code) {
       title: '提示',
       content: `绑定公众号成功`,
       onHide () {
-        router.push(`/center?appid=${lUrl.query.appid}`)
+        // router.push(`/center?appid=${lUrl.query.appid}`)
+        router.push(`/center`)
         render()
       }
     })
@@ -332,7 +331,8 @@ if (lUrl.query.state === 'miniAccess' && lUrl.query.code) {
       title: '提示',
       content: `未获取到用户信息`,
       onHide () {
-        router.push(`/center?appid=${lUrl.query.appid}`)
+        // router.push(`/center?appid=${lUrl.query.appid}`)
+        router.push(`/center`)
         render()
       }
     })
