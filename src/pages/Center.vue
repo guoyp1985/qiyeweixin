@@ -28,9 +28,6 @@
         </grid>
       </div>
     </div>
-    <template v-if="showTip">
-      <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
-    </template>
   </div>
 </template>
 
@@ -40,54 +37,14 @@
 <script>
 import { Grid, GridItem, Group, Cell } from 'vux'
 import CTitle from '@/components/CTitle'
-import TipLayer from '@/components/TipLayer'
-import ENV from 'env'
-import Time from '#/time'
-import Reg from '#/reg'
-import { Token, User, FirstInfo } from '#/storage'
-let self = {}
+// import ENV from 'env'
+import {User} from '#/storage'
 export default {
   components: {
-    Grid, GridItem, CTitle, Group, Cell, TipLayer
-  },
-  filters: {
-    dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
-    }
+    Grid, GridItem, CTitle, Group, Cell
   },
   data () {
-    // const self = this
     return {
-      btns: [
-        {
-          name: 'All orders',
-          icon: 'al-daifukuan',
-          // color: 'rgba01',
-          link: '/orderSearch'
-        },
-        {
-          type: 'deliver',
-          name: 'To Be Delivered',
-          icon: 'al-wodedaifahuo3dtouchshangpinxiangqing',
-          // color: 'rgba02',
-          link: '/orderSearch?flag=2',
-          count: 0
-        },
-        {
-          type: 'receive',
-          name: 'Shipped',
-          icon: 'al-buoumaotubiao39',
-          // color: 'rgba05',
-          link: '/orderSearch?flag=3',
-          count: 0
-        },
-        {
-          name: 'Completed',
-          icon: 'al-buoumaotubiao48',
-          // color: 'rgba04',
-          link: '/orderSearch?flag=4'
-        }
-      ],
       avatarHref: 'https://tossharingsales.boka.cn/images/user.jpg',
       query: {},
       linkMan: '',
@@ -96,120 +53,25 @@ export default {
       profile: {},
       messages: 0,
       direct: '',
-      loginUser: {},
-      showCenter: false,
-      showFactory: false,
-      showManager: false,
-      showQuit: false,
-      showTip: false,
-      showApply: false,
-      showTestManager: ENV.showTestManager
+      loginUser: {}
     }
   },
   methods: {
-    closeTip () {
-      this.showTip = false
-    },
-    toApply () {
-      let params = this.$util.handleAppParams(this.query, {uid: ENV.FactoryManagerUid, fromModule: 'retailer'})
-      this.$router.push({path: '/chat', query: params})
-    },
-    initData () {
-      this.showCenter = false
-      this.showFactory = false
-      this.showManager = false
-      this.showQuit = false
-    },
-    buttonClick (btn) {
-      if (btn.link) {
-        this.$router.push({path: btn.link})
-      } else {
-        btn.react.call(this)
-      }
-    },
     toLink (link) {
       this.$router.push({path: link})
     },
-    clickManager () {
-      window.open(`${ENV.AdminUrl}?unionid=${self.loginUser.unionid}`)
-    },
-    clickQuit () {
-      Token.remove()
-      User.remove()
-      FirstInfo.remove()
-      this.$router.push({name: 'tLogin'})
-    },
-    clickFactoryCenter () {
-      if (this.loginUser.factory_expired === 1) {
-        this.showTip = true
-      } else {
-        this.$router.push('/centerFactory')
-      }
-    },
-    setUserInfo () {
-      const user = User.get()
+    refresh () {
+      this.loginUser = User.get()
+      const user = this.loginUser
       this.avatarHref = user.avatar
       this.linkMan = user.linkman
       this.userCredits = user.credit
       this.userLevels = user.levels
-      this.profile = {
-        linkman: user.linkman,
-        avatar: user.avatar,
-        sex: user.sex,
-        mobile: user.mobile,
-        company: user.company
-      }
-      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-        if (!res) return
-        let data = res.data
-        self.messages = data.data
-        for (let i = 0; i < self.btns.length; i++) {
-          const keyValue = data[`count_${self.btns[i].type}`]
-          if (keyValue) {
-            self.btns[i].count = keyValue
-          }
-        }
-      })
-    },
-    getData () {
-      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-        if (!res) return
-        self.loginUser = res.data
-        User.set(self.loginUser)
-        self.setUserInfo()
-        if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.moderate === 1) {
-          this.showFactory = true
-        }
-        this.showApply = true
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (this.loginUser.usergroup[i] === 1) {
-            this.showManager = true
-            break
-          }
-        }
-        if (this.loginUser.isretailer) {
-          for (let i = 0; i < ENV.UidArr.length; i++) {
-            if (ENV.UidArr[i] === this.loginUser.uid) {
-              this.showCenter = true
-              break
-            }
-          }
-        }
-      })
-    },
-    refresh () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.initData()
-      if (!Reg.rPlatfrom.test(navigator.userAgent)) {
-        this.showQuit = true
-      }
-      this.getData()
+      this.profile = this.loginUser
     }
   },
   activated () {
-    self = this
     this.refresh()
-    this.$util.miniPost()
   }
 }
 </script>

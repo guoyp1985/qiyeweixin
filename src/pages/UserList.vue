@@ -3,20 +3,15 @@
     <el-table
     :data="tableData"
     style="width: 100%">
-    <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
-    </el-table-column>
-    <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
-    </el-table-column>
-    <el-table-column
-        prop="address"
-        label="地址">
-    </el-table-column>
+        <el-table-column
+            prop="uid"
+            label="ID"
+            width="80">
+        </el-table-column>
+        <el-table-column
+            prop="linkman"
+            label="姓名">
+        </el-table-column>
     </el-table>
   </div>
 </template>
@@ -56,9 +51,11 @@ export default {
       this.$router.push({path: link})
     },
     getData () {
-      this.$http.get(`${ENV.BokaApi}/api/user/getList`).then(res => {
-        if (!res) return
-        this.loginUser = res.data
+      this.$http.post(`${ENV.BokaApi}/api/user/getList`).then(res => {
+        const data = res.data
+        if (data.flag) {
+            this.tableData = data.data
+        }
       })
     },
     refresh () {
