@@ -323,7 +323,6 @@ export default {
       if (!Reg.rPlatfrom.test(navigator.userAgent)) {
         this.showQuit = true
       }
-      this.$util.getSystemParams()
       this.getData()
     }
   },
