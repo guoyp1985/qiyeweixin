@@ -8,32 +8,7 @@
             :messages="messages">
     </c-title>
     <div class="pl12 pr12 posi_r pb10" style="top:65px;z-index:2;">
-      <div class="list-shadow border-box bg-white mb10 radius5">
-        <group>
-          <cell class="pl12 pr12 pt10 pb10 ">
-            <div slot="inline-desc">{{ $t('My orders') }}</div>
-          </cell>
-        </group>
-        <grid class="pt10 pb10" :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-          <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" @click.native="buttonClick(btn)">
-            <div slot="icon" class="color-blue12 align_center" style="width:50px;position:relative;margin:0 auto;">
-              <span :class="`al ${btn.icon} btn_icon`"></span>
-              <template v-if="btn.count && btn.count > 0">
-                <span class="icon_num" v-if="btn.count < 100">{{btn.count}}</span>
-                <span class="icon_num" v-else>..</span>
-              </template>
-            </div>
-          </grid-item>
-        </grid>
-      </div>
-      <template v-if="loginUser.whoseseller && loginUser.whoseseller.length > 0">
-        <group class="list-shadow radius5 no-after">
-          <cell :link="{path:'/recommend'}" class="pl12 pr12 pt10 pb10 border-box t-table bg-white list-shadow">
-            <div slot="inline-desc" class="color-orange2"><span>推荐购买赚佣金</span></div>
-          </cell>
-        </group>
-      </template>
-      <div class=" mt10 list-shadow radius5">
+      <div class=" list-shadow radius5">
         <group class="bg-white radius5">
           <cell>
             <div slot="inline-desc">{{ $t('Service') }}</div>
