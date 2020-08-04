@@ -82,9 +82,6 @@ export default {
       }
       this.$vux.loading.show()
       let ajaxUrl = ENV.BokaApi
-      if (ENV.ApiVersion === 'V2' && this.query.appid) {
-        ajaxUrl = `${ajaxUrl}${this.query.appid}`
-      }
       ajaxUrl = `${ajaxUrl}/api/Visitor/VerifyMobile`
       this.$http.post(ajaxUrl, {
         mobile: this.$util.trim(this.mobile)
@@ -141,9 +138,6 @@ export default {
       localStorage.setItem('mobile', this.mobile)
       this.$vux.loading.show()
       let ajaxUrl = ENV.BokaApi
-      if (ENV.ApiVersion === 'V2' && this.query.appid) {
-        ajaxUrl = `${ajaxUrl}${this.query.appid}`
-      }
       ajaxUrl = `${ajaxUrl}/api/Visitor/mobileLogin`
       this.$http.post(ajaxUrl, {
         mobile: this.$util.trim(this.mobile),
