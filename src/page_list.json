@@ -1,7 +1,8 @@
 [
   "Center",
-  "Login",
+  "CluesList",
   "GetClues",
+  "Login",
   "Statement",
   "UserList"
 ]
