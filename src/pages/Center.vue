@@ -15,101 +15,23 @@
           </cell>
         </group>
         <grid class="pt10 pb10" :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-          <grid-item label="朋友圈获客" @click.native="toLink('/friendRecommend')">
+          <grid-item label="用户管理" @click.native="toLink('/userList')">
             <div slot="icon" class="circle-icon-bg rgba09 color-white flex_center mb10">
               <span class="al al-pengyouquan font20"></span>
             </div>
           </grid-item>
-          <grid-item v-if="showCenter" label="卖家中心" @click.native="toLink('/centerSales')">
+          <grid-item label="线索管理" @click.native="toLink('/cluesList')">
             <div slot="icon" class="circle-icon-bg rgba01 color-white flex_center mb10">
               <span class="al al-fuwu font20"></span>
             </div>
           </grid-item>
-          <grid-item v-if="showFactory" label="厂家中心" @click.native="clickFactoryCenter">
-            <div slot="icon" class="circle-icon-bg rgba05 color-white flex_center mb10">
-              <span class="al al-kehu1 font20"></span>
-            </div>
-          </grid-item>
-          <grid-item v-if="showManager" label="厂家管理" @click.native="toLink('/factoryManage')">
-            <div slot="icon" class="circle-icon-bg rgba06 color-white flex_center mb10">
-              <span class="al al-guanlizhongxin1 font20"></span>
-            </div>
-          </grid-item>
-          <grid-item label="我的地址" @click.native="toLink('/address')">
-            <div slot="icon" class="circle-icon-bg rgba02 color-white flex_center mb10">
-              <span class="al al-wodedizhi font20"></span>
-            </div>
-          </grid-item>
-          <grid-item label="我的分享" @click.native="toLink('/share')">
-            <div slot="icon" class="circle-icon-bg rgba03 color-white flex_center mb10">
-              <span class="al al-ai-share font20"></span>
-            </div>
-          </grid-item>
-          <grid-item label="我的收藏" @click.native="toLink('/favorite')">
-            <div slot="icon" class="circle-icon-bg rgba04 color-white flex_center mb10">
-              <span class="al al-qietu19 font20"></span>
-            </div>
-          </grid-item>
-          <grid-item label="我的优惠券" @click.native="toLink('/cardList')">
-            <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
-              <span class="al al-tubiaozhizuomoban font20"></span>
-            </div>
-          </grid-item>
-          <grid-item label="群群推" @click.native="toLink('/roomList')">
-            <div slot="icon" class="circle-icon-bg rgba08 color-white flex_center mb10">
-              <span class="al al-banjiqunliao font20"></span>
-            </div>
-          </grid-item>
-          <grid-item label="找群推广" @click.native="toLink('/rooms')">
-            <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
-              <span class="al al-shouhouwuyou font20"></span>
-            </div>
-          </grid-item>
-          <grid-item v-if="showTestManager && showManager" label="测试管理" @click.native="toLink('/testClassList')">
-            <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
-              <span class="al al-shouhouwuyou font20"></span>
-            </div>
-          </grid-item>
-          <grid-item v-if="showApply && (!loginUser.fid || (loginUser.factoryinfo && loginUser.factoryinfo.moderate != 1))" label="申请厂家" @click.native="toLink('/centerFactory')">
-            <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
-              <span class="al al-shouhouwuyou font20"></span>
-            </div>
-          </grid-item>
-          <grid-item v-if="showManager" label="管理后台" @click.native="clickManager">
-            <div slot="icon" class="circle-icon-bg rgba06 color-white flex_center mb10">
-              <span class="al al-set font20"></span>
-            </div>
-          </grid-item>
-          <grid-item v-if="showQuit" label="退出" @click.native="clickQuit">
-            <div slot="icon" class="circle-icon-bg rgba05 color-white flex_center mb10">
-              <span class="al al-tuichu3 font20"></span>
-            </div>
-          </grid-item>
         </grid>
-        </div>
-        <el-table
-          :data="tableData"
-          style="width: 100%">
-          <el-table-column
-            prop="date"
-            label="日期"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="姓名"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="地址">
-          </el-table-column>
-        </el-table>
       </div>
-      <template v-if="showTip">
-        <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
-      </template>
     </div>
+    <template v-if="showTip">
+      <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+    </template>
+  </div>
 </template>
 
 <i18n>
@@ -181,24 +103,7 @@ export default {
       showQuit: false,
       showTip: false,
       showApply: false,
-      showTestManager: ENV.showTestManager,
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      showTestManager: ENV.showTestManager
     }
   },
   methods: {
