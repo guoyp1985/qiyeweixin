@@ -1,8 +1,3 @@
-/*
-* @description: 个人中心页
-* @auther: simon
-* @created_date: 2018-4-20
-*/
 <template>
   <div id="personal-center" class="bg-page font14" v-cloak>
     <c-title :avatar-href="avatarHref"
@@ -117,6 +112,24 @@
           </grid-item>
         </grid>
         </div>
+        <el-table
+          :data="tableData"
+          style="width: 100%">
+          <el-table-column
+            prop="date"
+            label="日期"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="姓名"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="地址">
+          </el-table-column>
+        </el-table>
       </div>
       <template v-if="showTip">
         <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
@@ -193,7 +206,24 @@ export default {
       showQuit: false,
       showTip: false,
       showApply: false,
-      showTestManager: ENV.showTestManager
+      showTestManager: ENV.showTestManager,
+      tableData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1517 弄'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄'
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1516 弄'
+      }]
     }
   },
   methods: {
