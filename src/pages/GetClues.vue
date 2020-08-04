@@ -68,7 +68,7 @@ export default {
       city: '',
       issubmit: false,
       isagreecheckbox: false,
-      identitys: [['我是客户，需要制作视频','我是视频制作团队，求合作']]
+      identitys: [['我是客户，需要制作视频', '我是视频制作团队，求合作']]
     }
   },
   methods: {
