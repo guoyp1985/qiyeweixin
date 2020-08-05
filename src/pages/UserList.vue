@@ -1,10 +1,10 @@
 <template>
   <div class="bg-page font14 user-list-page">
     <div class="vux-tab-wrap">用户列表</div>
-    <div class="" @click.native="toLink('/AddUser')">
-      新增
-    </div>
     <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
+      <div class="flex_right pb20 pr20">
+        <el-button type="primary" @click.native="toLink('/addUser')">新增</el-button>
+      </div>
       <template v-if="disTabData">
         <template v-if="!tableData.length">
           <div class="scroll_list">
@@ -22,24 +22,31 @@
             <el-table
             :data="tableData"
             stripe
-            style="width: 100%">
+            style="width: 100%"
+            :header-cell-style="{'text-align':'center'}"
+            :cell-style="{'text-align':'center'}">
                 <el-table-column
-                    prop="uid"
-                    label="ID"
-                    align="center"
-                    width="80">
+                  prop="uid"
+                  label="ID"
+                  width="80">
                 </el-table-column>
                 <el-table-column
-                    prop="linkman"
-                    align="center"
-                    label="姓名"
-                    min-width="100">
+                  prop="linkman"
+                  label="姓名"
+                  min-width="100">
                 </el-table-column>
                 <el-table-column
-                    prop="mobile"
-                    align="center"
-                    label="手机号码"
-                    min-width="120">
+                  label="手机号码"
+                  min-width="120">
+                    <template slot-scope="scope">
+                      <template v-if="!scope.row.mobile || scope.row.mobile == ''">无</template>
+                      <template v-else>{{scope.row.mobile}}</template>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                  label="身份"
+                  min-width="120">
+                    <template slot-scope="scope">{{scope.row.groupname}}</template>
                 </el-table-column>
             </el-table>
           </div>
