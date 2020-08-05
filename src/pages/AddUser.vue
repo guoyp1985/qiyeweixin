@@ -56,7 +56,7 @@ export default {
         } else {
           this.issubmit = true
           this.$http.post(`${ENV.BokaApi}/api/user/addMember`, {
-            title: this.linkman,
+            linkman: this.linkman,
             mobile: this.telephone,
             groupid: this.identity
           }).then(res => {

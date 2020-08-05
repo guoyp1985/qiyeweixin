@@ -131,6 +131,7 @@ export default {
       if (this.loginUser) {
         this.pageStart = 0
         this.disTabData = false
+        this.selectedIndex = 0
         this.tableData = []
         this.$vux.loading.show()
         this.getData()
