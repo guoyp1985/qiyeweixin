@@ -26,11 +26,6 @@
             :header-cell-style="{'text-align':'center'}"
             :cell-style="{'text-align':'center'}">
                 <el-table-column
-                  prop="uid"
-                  label="ID"
-                  width="80">
-                </el-table-column>
-                <el-table-column
                   prop="linkman"
                   label="姓名"
                   min-width="100">
