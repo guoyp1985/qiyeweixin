@@ -38,7 +38,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/clues/getList`).then(res => {
         const data = res.data
         if (data.flag) {
-            this.tableData = data.data
+          this.tableData = data.data
         }
       })
     },
