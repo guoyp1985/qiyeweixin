@@ -11,11 +11,11 @@
         <div class="card bg-white list-shadow02">
           <div class="content-box">
               <div class="user-info pt10 pb5">
-                <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
+                <!-- <router-link :to="{ name: 'tProfile', params: { profile: profile } }"> -->
                   <div class="c_pic">
                     <img :src="avatar" class="v_middle" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                   </div>
-                </router-link>
+                <!-- </router-link> -->
               </div>
               <div class="flex_center">
                 <div class="user-info pr5" style="color:#323232;">
@@ -39,11 +39,11 @@
             <div class="head_banner mt5"></div>
         </div>
       </div>
-      <router-link class="message-btn" :to="{ name: 'tMessages', params: { profile: profile } }">
+      <!-- <router-link class="message-btn" :to="{ name: 'tMessages', params: { profile: profile } }">
         <span class="al al-xiaoxi1 color-white font22"></span>
         <span class="msg-badge" v-if="messages > 0 && messages < 100">{{messages}}</span>
         <span class="msg-badge" v-if="messages >= 100">···</span>
-      </router-link>
+      </router-link> -->
     </div>
   </div>
 </template>

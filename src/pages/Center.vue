@@ -62,7 +62,8 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
-      const user = this.loginUser
+      console.log(this.loginUser);
+      const user = this.loginUser.data ? this.loginUser.data : this.loginUser
       this.avatarHref = user.avatar
       this.linkMan = user.linkman
       this.userCredits = user.credit
