@@ -1,6 +1,9 @@
 <template>
   <div class="bg-page font14 user-list-page">
     <div class="vux-tab-wrap">用户列表</div>
+    <div class="" @click.native="toLink('/AddUser')">
+      新增
+    </div>
     <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <template v-if="disTabData">
         <template v-if="!tableData.length">
@@ -31,6 +34,12 @@
                     align="center"
                     label="姓名"
                     min-width="100">
+                </el-table-column>
+                <el-table-column
+                    prop="mobile"
+                    align="center"
+                    label="手机号码"
+                    min-width="120">
                 </el-table-column>
             </el-table>
           </div>
