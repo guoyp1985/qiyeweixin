@@ -17,11 +17,11 @@
         <div class="from-item">
           <div class="item-title">您的身份是<span>*</span></div>
           <div class="item-cell">
-            <!-- <select class="bg-white" v-model="identity">
+            <select class="bg-white" v-model="identity">
               <option value="1">我是客户，需要制作视频</option>
               <option value="2">我是视频制作团队，求合作</option>
-            </select> -->
-            <popup-picker class="popup-picker" :title="``" :data="identitys" v-model="identity" placeholder="请选择您的身份"></popup-picker>
+            </select>
+            <!-- <popup-picker class="popup-picker" :title="``" :data="identitys" v-model="identity" placeholder="请选择您的身份"></popup-picker> -->
             </div>
         </div>
         <div class="from-item">
@@ -133,9 +133,10 @@ export default {
 }
 </script>
 <style lang="less">
-.header-img{
+.header-img img {
   width: 100%;
-  // height: 200px;
+  height: 400px;
+  object-fit: cover;
 }
 .from{
   padding: 20px;

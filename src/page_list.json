@@ -4,5 +4,6 @@
   "GetClues",
   "Login",
   "Statement",
-  "UserList"
+  "UserList",
+  "AddUser"
 ]
