@@ -29,7 +29,8 @@
                 <el-table-column
                     prop="linkman"
                     align="center"
-                    label="姓名">
+                    label="姓名"
+                    min-width="100">
                 </el-table-column>
             </el-table>
           </div>

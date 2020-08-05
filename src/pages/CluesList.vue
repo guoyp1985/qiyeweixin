@@ -29,22 +29,26 @@
                 <el-table-column
                     prop="title"
                     align="center"
-                    label="姓名">
+                    label="姓名"
+                    min-width="100">
                 </el-table-column>
                 <el-table-column
                     prop="mobile"
                     align="center"
-                    label="手机号码">
+                    label="手机号码"
+                    min-width="120">
                 </el-table-column>
                 <el-table-column
                     prop="identity"
                     align="center"
-                    label="身份">
+                    label="身份"
+                    min-width="180">
                 </el-table-column>
                 <el-table-column
                     prop="address"
                     align="center"
-                    label="地址">
+                    label="地址"
+                    min-width="120">
                 </el-table-column>
             </el-table>
           </div>
