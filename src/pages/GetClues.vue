@@ -17,21 +17,14 @@
         <div class="from-item">
           <div class="item-title">您的身份是<span>*</span></div>
           <div class="item-cell">
-            <!-- <select class="bg-white" v-model="identity">
-              <option value="1">我是客户，需要制作视频</option>
-              <option value="2">我是视频制作团队，求合作</option>
-            </select> -->
-            <!-- <popup-picker class="popup-picker" :title="``" :data="identitys" v-model="identity" placeholder="请选择您的身份"></popup-picker> -->
-            <el-dropdown @command="handleCommand" trigger="click">
-              <div class="el-dropdown-link">
-                {{groupname}}
-                <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
-              </div>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item :command="{name:'我是客户，需要制作视频',value:'1'}">我是客户，需要制作视频</el-dropdown-item>
-                <el-dropdown-item :command="{name:'我是视频制作团队，求合作',value:'2'}">我是视频制作团队，求合作</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+            <el-select v-model="groupid" placeholder="请选择您的身份">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
             </div>
         </div>
         <div class="from-item">
@@ -71,15 +64,20 @@ export default {
       telephone: '',
       linkman1: '',
       telephone1: '',
-      groupid: '0',
-      groupname: '请选择您的身份',
+      groupid: '',
       addressData: ChinaAddressV4Data,
       area: [],
       province: '',
       city: '',
       issubmit: false,
       isagreecheckbox: false,
-      identitys: [['我是客户，需要制作视频', '我是视频制作团队，求合作']]
+      options: [{
+        value: 1,
+        label: '我是客户，需要制作视频'
+      },{
+        value: 2,
+        label: '我是视频制作团队，求合作'
+      }]
     }
   },
   methods: {
@@ -113,7 +111,7 @@ export default {
       //   }
       // }
       if (!this.issubmit) {
-        if (address === '' || this.linkman1 === '' || this.telephone1 === '' || this.groupid === '0') {
+        if (address === '' || this.linkman1 === '' || this.telephone1 === '' || this.groupid === '') {
           this.$vux.toast.text('必填项不能为空', 'middle')
         } else if (!(/^1[3456789]\d{9}$/).test(this.telephone1)) {
           this.$vux.toast.text('请输入正确的手机号', 'middle')
@@ -150,7 +148,7 @@ export default {
 <style lang="less">
 .header-img img {
   width: 100%;
-  height: 400px;
+  max-height: 400px;
   object-fit: cover;
 }
 .from{
@@ -170,10 +168,12 @@ export default {
         color: #999;
         font-size: 13px;
       }
-      input,select,.popup-picker,.x-address,.el-dropdown ,.el-dropdown-link{
+      input,select,.popup-picker,.x-address,.el-select ,.el-input{
         height: 100%;
         width: 100%;
         font-size: 15px;
+        border: none !important;
+        padding-left: 0 !important;
       }
       .el-dropdown-link{
         line-height: 50px;
@@ -211,9 +211,5 @@ export default {
   .vux-popup-picker-select .vux-cell-value{color:initial !important;}
   .vux-cell-placeholder{color: #999 !important}
   .vux-popup-picker-select span{font-size: 15px !important}
-}
-.el-dropdown-menu{
-  width: 94%;
-  margin: 12px 20px;
 }
 </style>

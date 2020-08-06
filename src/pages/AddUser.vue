@@ -14,25 +14,14 @@
         <div class="from-item">
           <div class="item-title">身份<span>*</span></div>
           <div class="item-cell">
-            <!-- <select class="bg-white" v-model="identity">
-              <option value="0">请选择身份</option>
-              <option value="1">管理员</option>
-              <option value="2">客户</option>
-              <option value="3">供应商</option>
-              <option value="4">业务员</option>
-            </select> -->
-            <el-dropdown @command="handleCommand" trigger="click">
-              <div class="el-dropdown-link">
-                {{groupname}}
-                <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
-              </div>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item :command="{name:'管理员',value:'1'}">管理员</el-dropdown-item>
-                <el-dropdown-item :command="{name:'客户',value:'2'}">客户</el-dropdown-item>
-                <el-dropdown-item :command="{name:'供应商',value:'3'}">供应商</el-dropdown-item>
-                <el-dropdown-item :command="{name:'业务员',value:'4'}">业务员</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+            <el-select v-model="groupid" placeholder="请选择身份">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </div>
         </div>
       </div>
@@ -54,15 +43,27 @@ export default {
     return {
       linkman: '',
       telephone: '',
-      groupid: '0',
-      groupname: '请选择身份',
-      issubmit: false
+      groupid: '',
+      issubmit: false,
+      options: [{
+          value: '1',
+          label: '管理员'
+        }, {
+          value: '2',
+          label: '客户'
+        }, {
+          value: '3',
+          label: '供应商'
+        }, {
+          value: '4',
+          label: '业务员'
+        }],
     }
   },
   methods: {
     submitEvent () {
       if (!this.issubmit) {
-        if (this.linkman === '' || this.telephone === '' || this.groupid === '0') {
+        if (this.linkman === '' || this.telephone === '' || this.groupid === '') {
           this.$vux.toast.text('必填项不能为空', 'middle')
         } else if (!(/^1[3456789]\d{9}$/).test(this.telephone)) {
           this.$vux.toast.text('请输入正确的手机号', 'middle')
@@ -83,10 +84,6 @@ export default {
     },
     toStatement () {
       this.$router.push({path: '/statement'})
-    },
-    handleCommand(command) {
-      this.groupid = command.value;
-      this.groupname = command.name
     }
   },
   activated () {
@@ -116,13 +113,12 @@ export default {
         color: #999;
         font-size: 13px;
       }
-      input,select,.popup-picker,.x-address,.el-dropdown ,.el-dropdown-link{
+      input,select,.popup-picker,.x-address,.el-select ,.el-input{
         height: 100%;
         width: 100%;
         font-size: 15px;
-      }
-      .el-dropdown-link{
-        line-height: 50px;
+        border: none !important;
+        padding-left: 0 !important;
       }
     }
   }
@@ -157,9 +153,5 @@ export default {
   .vux-popup-picker-select .vux-cell-value{color:initial !important;}
   .vux-cell-placeholder{color: #999 !important}
   .vux-popup-picker-select span{font-size: 15px !important}
-}
-.el-dropdown-menu{
-  width: 94%;
-  margin: 12px 20px;
 }
 </style>
