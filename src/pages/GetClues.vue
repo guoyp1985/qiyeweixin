@@ -21,7 +21,17 @@
               <option value="1">我是客户，需要制作视频</option>
               <option value="2">我是视频制作团队，求合作</option>
             </select> -->
-            <popup-picker class="popup-picker" :title="``" :data="identitys" v-model="identity" placeholder="请选择您的身份"></popup-picker>
+            <!-- <popup-picker class="popup-picker" :title="``" :data="identitys" v-model="identity" placeholder="请选择您的身份"></popup-picker> -->
+            <el-dropdown @command="handleCommand" trigger="click">
+              <div class="el-dropdown-link">
+                {{groupname}}
+                <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
+              </div>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item :command="{name:'我是客户，需要制作视频',value:'1'}">我是客户，需要制作视频</el-dropdown-item>
+                <el-dropdown-item :command="{name:'我是视频制作团队，求合作',value:'2'}">我是视频制作团队，求合作</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
             </div>
         </div>
         <div class="from-item">
@@ -61,7 +71,8 @@ export default {
       telephone: '',
       linkman1: '',
       telephone1: '',
-      identity: [],
+      groupid: '0',
+      groupname: '请选择您的身份',
       addressData: ChinaAddressV4Data,
       area: [],
       province: '',
@@ -102,7 +113,7 @@ export default {
       //   }
       // }
       if (!this.issubmit) {
-        if (address === '' || this.linkman1 === '' || this.telephone1 === '' || this.identity === '') {
+        if (address === '' || this.linkman1 === '' || this.telephone1 === '' || this.groupid === '0') {
           this.$vux.toast.text('必填项不能为空', 'middle')
         } else if (!(/^1[3456789]\d{9}$/).test(this.telephone1)) {
           this.$vux.toast.text('请输入正确的手机号', 'middle')
@@ -111,7 +122,7 @@ export default {
           this.$http.post(`${ENV.BokaApi}/api/Visitor/addClues`, {
             title: this.linkman1,
             mobile: this.telephone1,
-            identity: this.identity,
+            identity: this.groupid,
             province: address[0],
             city: address[1]
           }).then(res => {
@@ -125,6 +136,10 @@ export default {
     },
     toStatement () {
       this.$router.push({path: '/statement'})
+    },
+    handleCommand(command) {
+      this.groupid = command.value;
+      this.groupname = command.name
     }
   },
   activated () {
@@ -133,9 +148,10 @@ export default {
 }
 </script>
 <style lang="less">
-.header-img{
+.header-img img {
   width: 100%;
-  // height: 200px;
+  height: 400px;
+  object-fit: cover;
 }
 .from{
   padding: 20px;
@@ -154,10 +170,13 @@ export default {
         color: #999;
         font-size: 13px;
       }
-      input,select,.popup-picker,.x-address{
+      input,select,.popup-picker,.x-address,.el-dropdown ,.el-dropdown-link{
         height: 100%;
         width: 100%;
         font-size: 15px;
+      }
+      .el-dropdown-link{
+        line-height: 50px;
       }
     }
   }
@@ -192,5 +211,9 @@ export default {
   .vux-popup-picker-select .vux-cell-value{color:initial !important;}
   .vux-cell-placeholder{color: #999 !important}
   .vux-popup-picker-select span{font-size: 15px !important}
+}
+.el-dropdown-menu{
+  width: 94%;
+  margin: 12px 20px;
 }
 </style>
