@@ -75,6 +75,7 @@ export default {
       this.$router.push({path: link})
     },
     clickTab (index, groupid) {
+      this.keyword = ''
       this.selectedIndex = index
       this.clickGroupid = groupid
       this.pagestart = 0
