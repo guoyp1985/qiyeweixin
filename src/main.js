@@ -224,7 +224,7 @@ const url = location.href
 const lUrl = urlParse(url, true)
 if (lUrl.query.state === 'miniAccess' && lUrl.query.code) {
   Vue.$vux.loading.show()
-  Vue.http.post(`${ENV.BokaApi}/member/officialBind`, {code: lUrl.query.code}).then(res => {
+  Vue.http.post(`${ENV.BokaApi}/user/officialBind`, {code: lUrl.query.code}).then(res => {
     Vue.$vux.loading.hide()
     if (!res || !res.data || res.data.errcode || !res.data.flag) {
       Vue.$vux.alert.show({
