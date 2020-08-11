@@ -74,7 +74,7 @@ export default {
       options: [{
         value: 1,
         label: '我是客户，需要制作视频'
-      },{
+      }, {
         value: 2,
         label: '我是视频制作团队，求合作'
       }]
@@ -134,10 +134,6 @@ export default {
     },
     toStatement () {
       this.$router.push({path: '/statement'})
-    },
-    handleCommand(command) {
-      this.groupid = command.value;
-      this.groupname = command.name
     }
   },
   activated () {

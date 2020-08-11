@@ -31,13 +31,9 @@
     </div>
 </template>
 <script>
-import {XAddress, PopupPicker, CheckIcon, ChinaAddressV4Data, Value2nameFilter as value2name} from 'vux'
 import ENV from 'env'
 export default {
   components: {
-    XAddress,
-    CheckIcon,
-    PopupPicker
   },
   data () {
     return {
@@ -46,18 +42,18 @@ export default {
       groupid: '',
       issubmit: false,
       options: [{
-          value: '1',
-          label: '管理员'
-        }, {
-          value: '2',
-          label: '客户'
-        }, {
-          value: '3',
-          label: '供应商'
-        }, {
-          value: '4',
-          label: '业务员'
-        }],
+        value: 1,
+        label: '管理员'
+      }, {
+        value: 2,
+        label: '客户'
+      }, {
+        value: 3,
+        label: '供应商'
+      }, {
+        value: 4,
+        label: '业务员'
+      }]
     }
   },
   methods: {
