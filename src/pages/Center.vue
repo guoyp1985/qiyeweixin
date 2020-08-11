@@ -17,7 +17,7 @@
           <div class="item" @click="toLink('/userList')">
             <div class="item-inner">
               <div class="w_100">
-                <div class="radius bg-invite"><span class="al al-set"></span></div>
+                <div class="radius bg-theme"><span class="al al-pengyouquan"></span></div>
                 <div class="align_center">用户管理</div>
               </div>
             </div>
