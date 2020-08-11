@@ -114,23 +114,23 @@ export default {
           const data = res.data
           const retdata = data.data ? data.data : data
           for (let i in retdata.duration) {
-            let item = {value:i, label: retdata.duration[i]}
+            let item = {value: i, label: retdata.duration[i]}
             this.durationOptions.push(item)
           }
           for (let i in retdata.ratio) {
-            let item = {value:i, label: retdata.ratio[i]}
+            let item = {value: i, label: retdata.ratio[i]}
             this.ratioOptions.push(item)
           }
           for (let i in retdata.videoclass) {
-            let item = {value:i, label: retdata.videoclass[i]}
+            let item = {value: i, label: retdata.videoclass[i]}
             this.videoclassOptions.push(item)
           }
           for (let i in retdata.logo_all) {
-            let item = {value:i, label: retdata.logo_all[i]}
+            let item = {value: i, label: retdata.logo_all[i]}
             this.logo_allOptions.push(item)
           }
           for (let i in retdata.logo_end) {
-            let item = {value:i, label: retdata.logo_end[i]}
+            let item = {value: i, label: retdata.logo_end[i]}
             this.logo_endOptions.push(item)
           }
         }

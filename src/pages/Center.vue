@@ -38,7 +38,7 @@
                 </div>
               </div>
           </div>
-          <div class="item" @click.native="toLink('/makeList')">
+          <div class="item" @click="toLink('/makeList')">
             <div class="item-inner">
               <div class="w_100">
                 <div class="radius bg-orange"><span class="al al-fuwu"></span></div>
