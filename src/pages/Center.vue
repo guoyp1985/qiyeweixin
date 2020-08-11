@@ -61,10 +61,10 @@ export default {
   },
   methods: {
     toBind () {
-      const originHref = encodeURIComponent(`${ENV.Host}/#/redirect?appid=${this.query.appid}`)
+      const originHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
       console.log('跳转绑定授权链接')
-      console.log(`${ENV.WxAuthUrl}appid=${this.miniInfo.official.appid}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
-      location.replace(`${ENV.WxAuthUrl}appid=${this.miniInfo.official.appid}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
+      console.log(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
+      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
     },
     toLink (link) {
       this.$router.push({path: link})
