@@ -1,31 +1,44 @@
 <template>
-  <div id="personal-center" class="bg-page font14" v-cloak>
-    <c-title :avatar-href="avatarHref"
-            :user-name="linkMan"
-            :user-credits="userCredits"
-            :user-level="userLevels"
-            :profile="profile"
-            :messages="messages">
-    </c-title>
-    <div class="pl12 pr12 posi_r pb10" style="top:65px;z-index:2;">
-      <div class=" list-shadow radius5">
-        <group class="bg-white radius5">
-          <cell>
-            <div slot="inline-desc">{{ $t('Service') }}</div>
-          </cell>
-        </group>
-        <grid class="pt10 pb10" :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-          <grid-item label="用户管理" @click.native="toLink('/userList')">
-            <div slot="icon" class="circle-icon-bg rgba09 color-white flex_center mb10">
-              <span class="al al-pengyouquan font20"></span>
+  <div id="personal-center" class="bg-page font14 center-page" v-cloak>
+    <div class="toparea">
+      <div class="box-area">
+        <div class="avatar">
+          <img :src="userInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+        </div>
+        <div class="txt">{{userInfo.linkman}}</div>
+      </div>
+    </div>
+    <div class="app-box-area part">
+      <div class="box-inner service">
+        <div class="txt-item b_bottom_after">
+          <div class="flex_cell">服务</div>
+        </div>
+        <div class="listicon list">
+          <div class="item" @click="toLink('/userList')">
+            <div class="item-inner">
+              <div class="w_100">
+                <div class="radius bg-invite"><span class="al al-pengyouquan"></span></div>
+                <div class="align_center">用户管理</div>
+              </div>
             </div>
-          </grid-item>
-          <grid-item label="线索管理" @click.native="toLink('/cluesList')">
-            <div slot="icon" class="circle-icon-bg rgba01 color-white flex_center mb10">
-              <span class="al al-fuwu font20"></span>
+          </div>
+          <div class="item" @click="toLink('/cluesList')">
+            <div class="item-inner">
+              <div class="w_100">
+                <div class="radius bg-orange"><span class="al al-fuwu"></span></div>
+                <div class="align_center">线索管理</div>
+              </div>
             </div>
-          </grid-item>
-        </grid>
+          </div>
+          <div class="item" @click="toBind">
+            <div class="item-inner">
+              <div class="w_100">
+                <div class="radius bg-blue"><span class="al al-set"></span></div>
+                <div class="align_center">绑定公众号</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -35,40 +48,29 @@
 </i18n>
 
 <script>
-import { Grid, GridItem, Group, Cell } from 'vux'
-import CTitle from '@/components/CTitle'
-// import ENV from 'env'
+import ENV from 'env'
 import {User} from '#/storage'
 export default {
   components: {
-    Grid, GridItem, CTitle, Group, Cell
   },
   data () {
     return {
-      avatarHref: 'https://tossharingsales.boka.cn/images/user.jpg',
-      query: {},
-      linkMan: '',
-      userCredits: 0,
-      userLevels: 0,
-      profile: {},
-      messages: 0,
-      direct: '',
-      loginUser: {}
+      userInfo: {},
+      query: {}
     }
   },
   methods: {
+    toBind () {
+      const originHref = encodeURIComponent(`${ENV.Host}/#/redirect?appid=${this.query.appid}`)
+      console.log('跳转绑定授权链接')
+      console.log(`${ENV.WxAuthUrl}appid=${this.miniInfo.official.appid}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
+      location.replace(`${ENV.WxAuthUrl}appid=${this.miniInfo.official.appid}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
+    },
     toLink (link) {
       this.$router.push({path: link})
     },
     refresh () {
-      this.loginUser = User.get()
-      console.log(this.loginUser);
-      const user = this.loginUser.data ? this.loginUser.data : this.loginUser
-      this.avatarHref = user.avatar
-      this.linkMan = user.linkman
-      this.userCredits = user.credit
-      this.userLevels = user.levels
-      this.profile = this.loginUser
+      this.userInfo = User.get()
     }
   },
   activated () {
@@ -78,66 +80,64 @@ export default {
 </script>
 
 <style lang="less">
-/* css extension */
-.grid-center {
-  display: block;
-  text-align: center;
-  color: #666;
-}
-.grid-title {
-  background-color: #efeff4;
-  color: #716f76;
-  padding: 5px 15px;
-  font-size: 14px;
-}
-
-/* vux css hack */
-#personal-center .weui-grid__icon {
-  height: auto;
-  width: auto;
-  text-align: center;
-}
-
-#personal-center .weui-grids::before {
-  border-top: none;
-  height: 0;
-}
-
-#personal-center .weui-grids {
-  background-color: #ffffff;
-}
-
-#personal-center .weui-grid:after {
-  height: 0px;
-  border-bottom: none;
-}
-#personal-center .v_tit{
-  border-bottom:1px solid #efeff4;
-  color:#323232;
-}
-#personal-center .v_order{
-  color: #323232;
-  border-bottom: 1px solid #efeff4;
-}
-#personal-center .al-buoumaotubiao48:before{
-  font-size: 24px;
-}
-#personal-center .weui-grid{padding: 5px;}
-
-#personal-center .weui-grid__label{font-size:12px !important;}
-#personal-center .weui-cells:before,#personal-center .no-after .weui-cells:after{display: none;}
-#personal-center .weui-cells{margin-top:0px !important;}
-#personal-center .radius5, #personal-center .weui-cells, #personal-center .weui-grids{
-  border-radius:@list-border-radius5;
-}
-#personal-center .weui-grid__icon + .weui-grid__label{margin-top:0;}
-#personal-center .weui-grid__label{color:#333;}
-#personal-center .btn_icon{line-height:32px;display: block;height:32px;margin-bottom: 3px;}
-
-#personal-center .icon_num{
-  position: absolute;top: -2px;right:0px;z-index:1;
-  text-align:center;background-color: #ea3a3a;color:#fff;font-size:8pt;
-  width: 20px;height: 20px;line-height:20px;border-radius: 50%;
-  display: block;padding: 0px;
+.center-page{
+  .toparea{
+    position:relative;padding:10px;box-sizing:border-box;
+    .bg{height:100px;position:absolute;left:0;top:0;right:0;z-index:1;/*background-color:#f64635;*/}
+    .box-area{
+      background: linear-gradient(#6f6e6e, #000);border-radius:10px;width:100%;color:#F5CD91;margin:0 auto;position:relative;z-index:2;
+      padding:10px;box-sizing: border-box;
+      .avatar{
+        margin:0 auto;width:65px;height:65px;border-radius:50%;border:#fff 3px solid;box-sizing: border-box;
+        img{width:100%;height:100%;border-radius:50%;}
+      }
+      .txt{text-align:center;margin-top:5px;}
+      .top-item{
+        margin-top:20px;border-top:#F5CD91 1px solid;padding-top:10px;padding-bottom:10px;
+        .txt_cell{width:60px;}
+        .btn_cell{
+          width:100px;
+          .btn{width:80px;height:30px;border-radius:20px;text-align: center;}
+        }
+      }
+    }
+  }
+  .part{
+    .box-inner{position:relative;padding:10px;}
+    .service{
+      .al{color:#fff !important;font-size:20px !important;}
+      .listicon .item{margin-top:20px;}
+    }
+    .box-item:not(:first-child){margin-top:10px;}
+    .box-item.money{padding:15px 10px;}
+    .box-item{
+      width:100%;padding:10px;box-sizing: border-box;font-size:12px;
+      position:relative;background-color:#fff;border-radius:8px;border: 1px solid #e4e4e4;
+    }
+    .txt-item{
+      color:#666;width:100%;padding-bottom:10px;display:flex;font-size:14px;color:#000;
+      .al{font-size:20px;}
+      .icon_cell{
+        width:100px;text-align:right;color:rgba(0,0,0,0.8);
+        .al{color:rgba(0,0,0,0.8) !important;}
+      }
+    }
+    .listicon{
+      width:100%;display:flex;flex-wrap: wrap;
+      .item{
+        width:33.3333%;
+        .item-inner{
+          display:flex;justify-content: center; align-items: center;
+          .al{color:#ff6a61;font-size:25px;}
+        }
+        .inner{width:60px;position:relative;}
+        .radius{
+          display:flex;justify-content: center; align-items: center;
+          width:43px;height:43px;border-radius:50%;color:#fff;
+          margin:0 auto 5px;
+        }
+      }
+    }
+  }
 }
 </style>
