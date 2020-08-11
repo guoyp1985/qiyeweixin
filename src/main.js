@@ -4,7 +4,7 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
-// import urlParse from 'url-parse'
+import urlParse from 'url-parse'
 import store from './store'
 import App from './App'
 import objectAssign from 'object-assign'
@@ -211,6 +211,29 @@ const render = () => {
 }
 
 clearCache()
+
+const url = location.href
+          .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+            // queryParam = p3
+            return `${p1}?${p3}${p2}` // '$1?$3$2'
+          })
+          .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+            // queryParam = p3
+            return `${p1}&${p3}${p2}` // '$1&$3$2'
+          })
+const lUrl = urlParse(url, true)
+if (lUrl.hash.toLowerCase() === '#/login' || lUrl.hash.toLowerCase() === '#/getclues') {
+  render()
+} else {
+  if (!User.get() || !Token.get()) {
+    router.replace({path: '/login', query: lUrl.query})
+    render()
+  } else {
+    render()
+  }
+}
+console.log('页面路径')
+console.log(lUrl)
 
 // 页面入口
 render()
