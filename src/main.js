@@ -222,18 +222,52 @@ const url = location.href
             return `${p1}&${p3}${p2}` // '$1&$3$2'
           })
 const lUrl = urlParse(url, true)
-if (lUrl.hash.toLowerCase() === '#/login' || lUrl.hash.toLowerCase() === '#/getclues') {
-  render()
+if (lUrl.query.state === 'miniAccess' && lUrl.query.code) {
+  Vue.$vux.loading.show()
+  Vue.http.post(`${ENV.BokaApi}/member/officialBind`, {code: lUrl.query.code}).then(res => {
+    Vue.$vux.loading.hide()
+    if (!res || !res.data || res.data.errcode || !res.data.flag) {
+      Vue.$vux.alert.show({
+        title: '提示',
+        content: `用户信息获取失败，请重新进入`,
+        onHide () {
+          router.push(`/center`)
+          render()
+        }
+      })
+      return
+    }
+    Vue.$vux.alert.show({
+      title: '提示',
+      content: `绑定公众号成功`,
+      onHide () {
+        router.push(`/center`)
+        render()
+      }
+    })
+    render()
+  }, res => {
+    Vue.$vux.loading.hide()
+    console.log('绑定')
+    console.log(res)
+    Vue.$vux.alert.show({
+      title: '提示',
+      content: `未获取到用户信息`,
+      onHide () {
+        router.push(`/center`)
+        render()
+      }
+    })
+  })
 } else {
-  if (!User.get() || !Token.get()) {
-    router.replace({path: '/login', query: lUrl.query})
+  if (lUrl.hash.toLowerCase() === '#/login' || lUrl.hash.toLowerCase() === '#/getclues') {
     render()
   } else {
-    render()
+    if (!User.get() || !Token.get()) {
+      router.replace({path: '/login', query: lUrl.query})
+      render()
+    } else {
+      render()
+    }
   }
 }
-console.log('页面路径')
-console.log(lUrl)
-
-// 页面入口
-render()
