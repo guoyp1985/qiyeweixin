@@ -4,7 +4,7 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
-// import urlParse from 'url-parse'
+import urlParse from 'url-parse'
 import store from './store'
 import App from './App'
 import objectAssign from 'object-assign'
@@ -212,5 +212,62 @@ const render = () => {
 
 clearCache()
 
-// 页面入口
-render()
+const url = location.href
+          .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+            // queryParam = p3
+            return `${p1}?${p3}${p2}` // '$1?$3$2'
+          })
+          .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+            // queryParam = p3
+            return `${p1}&${p3}${p2}` // '$1&$3$2'
+          })
+const lUrl = urlParse(url, true)
+if (lUrl.query.state === 'miniAccess' && lUrl.query.code) {
+  Vue.$vux.loading.show()
+  Vue.http.post(`${ENV.BokaApi}/api/user/officialBind`, {code: lUrl.query.code}).then(res => {
+    Vue.$vux.loading.hide()
+    if (!res || !res.data || res.data.errcode || !res.data.flag) {
+      Vue.$vux.alert.show({
+        title: '提示',
+        content: `用户信息获取失败，请重新进入`,
+        onHide () {
+          router.push(`/center`)
+          render()
+        }
+      })
+      return
+    }
+    Vue.$vux.alert.show({
+      title: '提示',
+      content: `绑定公众号成功`,
+      onHide () {
+        router.push(`/center`)
+        render()
+      }
+    })
+    render()
+  }, res => {
+    Vue.$vux.loading.hide()
+    console.log('绑定')
+    console.log(res)
+    Vue.$vux.alert.show({
+      title: '提示',
+      content: `未获取到用户信息`,
+      onHide () {
+        router.push(`/center`)
+        render()
+      }
+    })
+  })
+} else {
+  if (lUrl.hash.toLowerCase() === '#/login' || lUrl.hash.toLowerCase() === '#/getclues') {
+    render()
+  } else {
+    if (!User.get() || !Token.get()) {
+      router.replace({path: '/login', query: lUrl.query})
+      render()
+    } else {
+      render()
+    }
+  }
+}
