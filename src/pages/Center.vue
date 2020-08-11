@@ -25,6 +25,11 @@
               <span class="al al-fuwu font20"></span>
             </div>
           </grid-item>
+          <grid-item label="制作需求单" @click.native="toLink('/makeList')">
+            <div slot="icon" class="circle-icon-bg rgba01 color-white flex_center mb10">
+              <span class="al al-fuwu font20"></span>
+            </div>
+          </grid-item>
         </grid>
       </div>
     </div>

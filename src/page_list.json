@@ -5,5 +5,7 @@
   "Login",
   "Statement",
   "UserList",
-  "AddUser"
+  "AddUser",
+  "MakeList",
+  "AddMake"
 ]
