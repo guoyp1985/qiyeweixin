@@ -80,7 +80,7 @@ export default {
       videotype: '',
       product: '',
       target: '',
-      videocount: 1,
+      videocount: '',
       linkurl: '',
       customerdemand: '',
       customerinfo: '',
@@ -88,7 +88,7 @@ export default {
       sellerpoint: '',
       keyinfo: '',
       otherdemand: '',
-      price: 0.00,
+      price: '',
       starttime: '',
       endtime: '',
       duration: '',
@@ -175,6 +175,27 @@ export default {
         this.videoclassOptions = []
         this.logo_allOptions = []
         this.logo_endOptions = []
+        this.title = ''
+        this.brand = ''
+        this.videotype = ''
+        this.product = ''
+        this.target = ''
+        this.videocount = ''
+        this.linkurl = ''
+        this.customerdemand = ''
+        this.customerinfo = ''
+        this.productorientation = ''
+        this.sellerpoint = ''
+        this.keyinfo = ''
+        this.otherdemand = ''
+        this.price = ''
+        this.starttime = ''
+        this.endtime = ''
+        this.duration = ''
+        this.ratio = ''
+        this.videoclass = ''
+        this.logo_all = ''
+        this.logo_end = ''
         this.issubmit = false
         this.$vux.loading.show()
         this.getData()
