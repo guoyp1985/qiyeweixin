@@ -20,7 +20,7 @@
         :header-cell-style="{'text-align':'center'}"
         :cell-style="{'text-align':'center'}">
             <el-table-column
-              prop="id"
+              prop="demandno"
               label="项目编号"
               min-width="100">
             </el-table-column>
