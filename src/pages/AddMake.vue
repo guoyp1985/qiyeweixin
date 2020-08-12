@@ -4,6 +4,12 @@
      <tr>
        <th colspan="4" class="align_center font20 padding15">制作需求单</th>
      </tr>
+     <tr v-if="query.id">
+       <td class="title">项目编号</td>
+       <td colspan="3">
+         <el-input readonly="true" v-model="demandno"></el-input>
+       </td>
+     </tr>
      <tr>
        <td class="title">项目名称<span>*</span></td>
        <td colspan="3">
@@ -151,6 +157,12 @@
        </td>
      </tr>
      <tr>
+       <td class="title">创意思路</td>
+       <td colspan="3">
+         <el-input type="textarea" v-model="customeridea" placeholder="请输入关键创意思路"></el-input>
+       </td>
+     </tr>
+     <tr>
        <td class="title">其他要求</td>
        <td>
          <el-input v-model="otherdemand" placeholder="请输入其他要求"></el-input>
@@ -178,6 +190,7 @@ export default {
     return {
       loginUser: {},
       query: {},
+      demandno: '',
       title: '',
       brand: '',
       videotype: '',
@@ -199,6 +212,7 @@ export default {
       videoclass: '',
       logo_all: '',
       logo_end: '',
+      customeridea: '',
       durationOptions: [],
       ratioOptions: [],
       videoclassOptions: [],
@@ -266,6 +280,8 @@ export default {
         this.videoclass = retdata.videoclass
         this.logo_all = retdata.logo_all
         this.logo_end = retdata.logo_end
+        this.customeridea = retdata.customeridea
+        this.demandno = retdata.demandno
       })
     },
     refresh () {
@@ -299,6 +315,7 @@ export default {
         this.videoclass = ''
         this.logo_all = ''
         this.logo_end = ''
+        this.customeridea = ''
         this.issubmit = false
         this.$vux.loading.show()
         this.getData()
@@ -320,6 +337,7 @@ export default {
       if (this.sellerpoint !== '') params.sellerpoint = this.sellerpoint
       if (this.keyinfo !== '') params.keyinfo = this.keyinfo
       if (this.otherdemand !== '') params.otherdemand = this.otherdemand
+      if (this.customeridea !== '') params.customeridea = this.customeridea
       if (this.query.id) params.id = parseInt(this.query.id)
       var rule1 = /^(0+)|[^\d]+/g
       if (!this.issubmit) {

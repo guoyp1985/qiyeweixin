@@ -1,6 +1,12 @@
 <template>
   <div class="bg-page font14 user-list-page">
-    <div class="vux-tab-wrap">制作需求单</div>
+    <tab class="b-tab" v-model="selectedIndex">
+      <tab-item :selected="selectedIndex == 0" @on-item-click="clickTab(0,0)">新订单</tab-item>
+      <tab-item :selected="selectedIndex == 1" @on-item-click="clickTab(1,1)">待分发</tab-item>
+      <tab-item :selected="selectedIndex == 2" @on-item-click="clickTab(2,4)">创意期</tab-item>
+      <tab-item :selected="selectedIndex == 3" @on-item-click="clickTab(3,5)">分镜脚本期</tab-item>
+      <tab-item :selected="selectedIndex == 4" @on-item-click="clickTab(4,3)">样片期</tab-item>
+    </tab>
     <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <el-row class="padding10">
         <el-col :span="18">
@@ -65,17 +71,17 @@ export default {
       disTabData: false,
       keyword: '',
       selectedIndex: 0,
-      clickGroupid: 0
+      clickStatus: 0
     }
   },
   methods: {
     toLink (link) {
       this.$router.push({path: link})
     },
-    clickTab (index, groupid) {
+    clickTab (index, status) {
       this.keyword = ''
       this.selectedIndex = index
-      this.clickGroupid = groupid
+      this.clickStatus = status
       this.pagestart = 0
       this.disTabData = false
       this.tableData = []
@@ -97,8 +103,8 @@ export default {
       if (this.keyword && this.keyword !== '') {
         params.keyword = this.keyword
       }
-      if (this.clickGroupid) {
-        params.groupid = this.clickGroupid
+      if (this.clickStatus) {
+        params.status = this.clickStatus
       }
       this.$http.post(`${ENV.BokaApi}/api/demands/getList`, params).then(res => {
         const data = res.data
