@@ -58,7 +58,7 @@
      <tr><td class="title">客户投诉</td><td colspan="3"><el-input v-model="customerdemand" placeholder="请输入投诉内容"></el-input></td></tr>
      <tr><td class="title">客户信息</td><td colspan="3"><el-input v-model="customerinfo" placeholder="请输入客户信息"></el-input></td></tr>
      <tr><td class="title">产品定位</td><td colspan="3"><el-input v-model="productorientation" placeholder="请输入产品定位"></el-input></td></tr>
-     <tr rowspan="2"><td class="title">产品买点<text class="font12">（核心买点需标注）</text></td><td colspan="3"><el-input type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input></td></tr>
+     <tr rowspan="2"><td class="title">产品买点<span class="font12 color-gray5">（核心买点需标注）</span></td><td colspan="3"><el-input type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input></td></tr>
      <tr rowspan="2"><td class="title">视频内必须展示的关键信息</td><td colspan="3"><el-input type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input></td></tr>
      <tr><td class="title">其他要求</td><td><el-input v-model="otherdemand" placeholder="请输入其他要求"></el-input></td><td>制作价格</td><td><el-input v-model="price" placeholder="请输入制作价格"></el-input></td></tr>
      <tr><td class="padding10" colspan="4"><el-button type="primary" @click="onSubmit">立即提交</el-button></td></tr>
