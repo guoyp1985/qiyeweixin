@@ -20,7 +20,7 @@
         :header-cell-style="{'text-align':'center'}"
         :cell-style="{'text-align':'center'}">
             <el-table-column
-              prop="linkman"
+              prop="id"
               label="项目编号"
               min-width="100">
             </el-table-column>
@@ -30,8 +30,16 @@
               min-width="120">
             </el-table-column>
             <el-table-column
+              prop="ratio"
               label="视频比例"
               min-width="120">
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  @click="handleEdit(scope.row.id)">编辑</el-button>
+              </template>
             </el-table-column>
         </el-table>
       </template>
@@ -116,6 +124,10 @@ export default {
           }
         }
       })
+    },
+    handleEdit: function (id) {
+      console.log(id);
+      this.$router.push({path: '/addMake', query: {id}})
     },
     refresh () {
       this.loginUser = User.get()
