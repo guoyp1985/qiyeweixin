@@ -7,7 +7,7 @@
      <tr v-if="query.id">
        <td class="title">项目编号</td>
        <td colspan="3">
-         <el-input readonly=true v-model="demandno"></el-input>
+         <el-input readonly v-model="demandno"></el-input>
        </td>
      </tr>
      <tr>
