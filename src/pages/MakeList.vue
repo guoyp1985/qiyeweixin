@@ -22,7 +22,7 @@
             <el-table-column
               prop="demandno"
               label="项目编号"
-              min-width="100">
+              min-width="120">
             </el-table-column>
             <el-table-column
               prop="title"
