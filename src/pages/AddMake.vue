@@ -159,7 +159,7 @@
      <tr>
        <td class="title">创意思路</td>
        <td colspan="3">
-         <el-input type="textarea" v-model="customeridea" placeholder="请输入关键创意思路"></el-input>
+         <el-input type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
        </td>
      </tr>
      <tr>
