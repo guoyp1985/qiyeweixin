@@ -154,7 +154,7 @@ export default {
     },
     handleEdit (row) {
       let id = row.id
-      this.$router.push({path: '/makeDetails', query: {id}})
+      this.$router.push({path: '/makeDetails', query: {id: id, status: this.clickStatus}})
     },
     refresh () {
       this.loginUser = User.get()

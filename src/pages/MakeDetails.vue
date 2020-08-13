@@ -179,6 +179,30 @@
          <el-input v-model="price" placeholder="请输入制作价格"></el-input>
        </td>
      </tr>
+     <tr v-if="query.status === '1'">
+       <td class="title">项目来源<span>*</span></td>
+       <td>
+         <el-select v-model="comefrom" placeholder="请选择项目来源">
+           <el-option
+              v-for="item in durationOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+           </el-option>
+          </el-select>
+        </td>
+        <td class="title">视频价格<span>*</span></td>
+        <td>
+          <el-select v-model="pricetype" placeholder="请选择视频价格">
+            <el-option
+              v-for="item in pricetypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </td>
+     </tr>
      <tr>
        <td class="padding10" colspan="4">
          <el-button
@@ -190,8 +214,9 @@
            type="primary"
            @click="handleExamine">审核</el-button>
          <el-button
+           v-if="query.status === '1'"
            type="primary"
-           @click="chooseUser">选择用户</el-button>
+           @click="onSubmit">分发</el-button>
        </td>
      </tr>
    </table>
@@ -278,12 +303,16 @@ export default {
       logo_all: '',
       logo_end: '',
       customeridea: '',
+      comefrom: '',
+      pricetype: '',
       durationOptions: [],
       ratioOptions: [],
       videoclassOptions: [],
       logo_allOptions: [],
       logo_endOptions: [],
       videotypeOptions: [],
+      comefromOptions: [],
+      pricetypeOptions: [],
       issubmit: false,
       canedit: 0,
       cancensor: 0,
@@ -336,6 +365,14 @@ export default {
             let item = {value: i, label: retdata.videotype[i]}
             this.videotypeOptions.push(item)
           }
+          for (let i in retdata.comefrom) {
+            let item = {value: i, label: retdata.comefrom[i]}
+            this.comefromOptions.push(item)
+          }
+          for (let i in retdata.pricetype) {
+            let item = {value: i, label: retdata.pricetype[i]}
+            this.pricetypeOptions.push(item)
+          }
         }
       })
     },
@@ -368,12 +405,15 @@ export default {
         this.demandno = retdata.demandno
         this.canedit = retdata.canedit
         this.cancensor = retdata.cancensor
+        this.comefrom = retdata.comefrom
+        this.pricetype = retdata.pricetype
       })
     },
     refresh () {
       this.loginUser = User.get()
       if (this.loginUser) {
         this.query = this.$route.query
+        console.log(this.query.status);
         this.pageStart = 0
         this.disTabData = false
         this.tableData = []
@@ -383,6 +423,8 @@ export default {
         this.logo_allOptions = []
         this.logo_endOptions = []
         this.videotypeOptions = []
+        this.comefromOptions = []
+        this.pricetypeOptions = []
         this.title = ''
         this.brand = ''
         this.videotype = ''
@@ -405,6 +447,8 @@ export default {
         this.logo_all = ''
         this.logo_end = ''
         this.customeridea = ''
+        this.comefrom = ''
+        this.pricetype = ''
         this.issubmit = false
         this.$vux.loading.show()
         this.getData()
@@ -414,7 +458,20 @@ export default {
       }
     },
     onSubmit () {
-      let params = {title: this.title, starttime: this.starttime, endtime: this.endtime, duration: this.duration, ratio: this.ratio, videoclass: this.videoclass, logo_all: this.logo_all, logo_end: this.logo_end, price: this.price, videocount: this.videocount, videotype: this.videotype}
+      let params = {title: this.title,
+        starttime: this.starttime,
+        endtime: this.endtime,
+        duration: this.duration,
+        ratio: this.ratio,
+        videoclass: this.videoclass,
+        logo_all: this.logo_all,
+        logo_end: this.logo_end,
+        price: this.price,
+        videocount: this.videocount,
+        videotype: this.videotype,
+        comefrom: this.comefrom,
+        pricetype: this.pricetype
+      }
       if (this.brand !== '') params.brand = this.brand
       if (this.product !== '') params.product = this.product
       if (this.target !== '') params.target = this.target
@@ -427,16 +484,16 @@ export default {
       if (this.otherdemand !== '') params.otherdemand = this.otherdemand
       if (this.customeridea !== '') params.customeridea = this.customeridea
       if (this.query.id) params.id = parseInt(this.query.id)
-      var rule1 = /^(0+)|[^\d]+/g
+      var rule1 = /^(0|[1-9][0-9]*)$/
       if (!this.issubmit) {
         if (this.title === '' || this.starttime === '' || this.endtime === '' || this.duration === '' || this.ratio === '' || this.videoclass === '' ||
-      this.logo_all === '' || this.logo_end === '' || this.videotype === '') {
+      this.logo_all === '' || this.logo_end === '' || this.videotype === '' || (this.query.status === '1' && (this.pricetype === '' || this.comefrom === ''))) {
           this.$vux.toast.text('必填项不能为空', 'middle')
         } else if (this.endtime <= this.starttime) {
           this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
         } else if (this.price !== '' && (isNaN(this.price) || parseFloat(this.price) < 0 || parseFloat(this.price).length > 7)) {
           this.$vux.toast.text('请输入正确的制作价格', 'middle')
-        } else if (this.videocount !== '' && (isNaN(this.videocount) || parseInt(this.videocount) < 0 || rule1.test(this.videocount))) {
+        } else if (this.videocount !== '' && (isNaN(this.videocount) || parseFloat(this.videocount) < 0 || !rule1.test(this.videocount))) {
           this.$vux.toast.text('请输入正确的视频数量', 'middle')
         } else {
           this.issubmit = true
