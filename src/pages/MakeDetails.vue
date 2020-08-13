@@ -332,9 +332,8 @@ export default {
             let item = {value: parseInt(i), label: retdata.logo_end[i]}
             this.logo_endOptions.push(item)
           }
-          let index = 0
           for (let i in retdata.videotype) {
-            let item = {value: index++, label: retdata.videotype[i]}
+            let item = {value: i, label: retdata.videotype[i]}
             this.videotypeOptions.push(item)
           }
         }
