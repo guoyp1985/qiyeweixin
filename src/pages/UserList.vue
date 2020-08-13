@@ -133,6 +133,7 @@ export default {
         this.pageStart = 0
         this.disTabData = false
         this.selectedIndex = 0
+        this.clickGroupid = 0
         this.tableData = []
         this.$vux.loading.show()
         this.getData()

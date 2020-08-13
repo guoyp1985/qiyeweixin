@@ -170,9 +170,9 @@
        </td>
      </tr>
      <tr>
-       <td class="title">特殊备注</td>
+       <td class="title">其他要求</td>
        <td>
-         <el-input v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
+         <el-input v-model="otherdemand" placeholder="请输入其他要求"></el-input>
        </td>
        <td>制作价格</td>
        <td>
@@ -181,10 +181,68 @@
      </tr>
      <tr>
        <td class="padding10" colspan="4">
-         <el-button type="primary" @click="onSubmit">立即提交</el-button>
+         <el-button
+           v-if="canedit === 1"
+           type="primary"
+           @click="onSubmit">编辑</el-button>
+         <el-button
+           v-if="cancensor === 1"
+           type="primary"
+           @click="handleExamine">审核</el-button>
+         <el-button
+           type="primary"
+           @click="chooseUser">选择用户</el-button>
        </td>
      </tr>
    </table>
+   <div class="auto-modal flex_center" style="position:fixed;" v-if="showExamine">
+     <div class="modal-inner">
+       <div class="modal-content padding20">
+           <div class="modal-header mb20">
+             <el-radio-group v-model="radio" @change="changeExamine">
+               <el-radio :label= "1">审批通过</el-radio>
+               <el-radio :label= "2">审批不通过</el-radio>
+             </el-radio-group>
+           </div>
+           <div class="modal-body mb20">
+             <div class="from-item">
+               <el-input type="textarea" v-model="reason" :placeholder="showReason" size="50"></el-input>
+             </div>
+           </div>
+           <div class="modal-footer flex_right">
+             <el-button @click="closeModal">取消</el-button>
+             <el-button class="" type="primary" @click="submitModal">提交</el-button>
+           </div>
+       </div>
+     </div>
+   </div>
+   <div class="auto-modal flex_center" style="position:fixed;" v-if="showChooseUser">
+     <div class="modal-inner">
+       <div class="modal-content padding20">
+           <div class="modal-header mb20">
+             选择用户
+           </div>
+           <div class="modal-body mb20">
+             <div class="users-box scroll-container" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
+               <template v-if="disTabData">
+                 <div v-if="!tableData.length" class="rw-item flex_center">暂无数据</div>
+                 <el-checkbox-group v-else v-model="checkList">
+                   <div v-for="(item,index) in tableData" :key="index">
+                     <div class="rw-item flex_left">
+                       <el-checkbox :label="item.uid">{{item.linkman}}</el-checkbox>
+                     </div>
+                   </div>
+                 </el-checkbox-group>
+               </template>
+             </div>
+           </div>
+           <div class="modal-footer flex_right">
+             <el-button @click="closeUserModal">取消</el-button>
+             <el-button class="" type="primary" @click="submitUserModal">提交</el-button>
+           </div>
+       </div>
+     </div>
+   </div>
   </div>
 </template>
 <script>
@@ -226,7 +284,21 @@ export default {
       logo_allOptions: [],
       logo_endOptions: [],
       videotypeOptions: [],
-      issubmit: false
+      issubmit: false,
+      canedit: 0,
+      cancensor: 0,
+      limit: 10,
+      tableData: [],
+      pageStart: 0,
+      disTabData: false,
+      keyword: '',
+      showExamine: false,
+      showReason: '请输入审批通过原因',
+      radio: 1,
+      reason: '',
+      examineIndex: '',
+      showChooseUser: false,
+      checkList: []
     }
   },
   methods: {
@@ -268,18 +340,78 @@ export default {
         }
       })
     },
+    getInfo (id) {
+      this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: id}).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        this.title = retdata.title
+        this.brand = retdata.brand
+        this.videotype = retdata.videotype
+        this.product = retdata.product
+        this.target = retdata.target
+        this.videocount = retdata.videocount
+        this.linkurl = retdata.linkurl
+        this.customerdemand = retdata.customerdemand
+        this.customerinfo = retdata.customerinfo
+        this.productorientation = retdata.productorientation
+        this.sellerpoint = retdata.sellerpoint
+        this.keyinfo = retdata.keyinfo
+        this.otherdemand = retdata.otherdemand
+        this.price = retdata.price
+        this.starttime = new Date(retdata.starttime * 1000)
+        this.endtime = new Date(retdata.endtime * 1000)
+        this.duration = retdata.duration
+        this.ratio = retdata.ratio
+        this.videoclass = retdata.videoclass
+        this.logo_all = retdata.logo_all
+        this.logo_end = retdata.logo_end
+        this.customeridea = retdata.customeridea
+        this.demandno = retdata.demandno
+        this.canedit = retdata.canedit
+        this.cancensor = retdata.cancensor
+      })
+    },
     refresh () {
       this.loginUser = User.get()
       if (this.loginUser) {
+        this.query = this.$route.query
+        this.pageStart = 0
+        this.disTabData = false
+        this.tableData = []
         this.durationOptions = []
         this.ratioOptions = []
         this.videoclassOptions = []
         this.logo_allOptions = []
         this.logo_endOptions = []
         this.videotypeOptions = []
+        this.title = ''
+        this.brand = ''
+        this.videotype = ''
+        this.product = ''
+        this.target = ''
+        this.videocount = ''
+        this.linkurl = ''
+        this.customerdemand = ''
+        this.customerinfo = ''
+        this.productorientation = ''
+        this.sellerpoint = ''
+        this.keyinfo = ''
+        this.otherdemand = ''
+        this.price = ''
+        this.starttime = ''
+        this.endtime = ''
+        this.duration = ''
+        this.ratio = ''
+        this.videoclass = ''
+        this.logo_all = ''
+        this.logo_end = ''
+        this.customeridea = ''
         this.issubmit = false
         this.$vux.loading.show()
         this.getData()
+        if (this.query.id) {
+          this.getInfo(this.query.id)
+        }
       }
     },
     onSubmit () {
@@ -295,6 +427,7 @@ export default {
       if (this.keyinfo !== '') params.keyinfo = this.keyinfo
       if (this.otherdemand !== '') params.otherdemand = this.otherdemand
       if (this.customeridea !== '') params.customeridea = this.customeridea
+      if (this.query.id) params.id = parseInt(this.query.id)
       var rule1 = /^(0+)|[^\d]+/g
       if (!this.issubmit) {
         if (this.title === '' || this.starttime === '' || this.endtime === '' || this.duration === '' || this.ratio === '' || this.videoclass === '' ||
@@ -316,6 +449,87 @@ export default {
           })
         }
       }
+    },
+    handleExamine () {
+      this.showExamine = true
+    },
+    changeExamine () {
+      if (this.radio === 2) {
+        this.showReason = '请输入审批不通过原因'
+      } else {
+        this.showReason = '请输入审批通过原因'
+      }
+      this.reason = ''
+    },
+    closeModal () {
+      this.showExamine = false
+      this.reason = ''
+      this.radio = 1
+      this.showReason = '请输入审批通过原因'
+    },
+    submitModal () {
+      if (this.radio === 2 && this.reason === '') {
+        this.$vux.toast.text('请填写审批不通过原因', 'middle')
+        return false
+      }
+      let params = {id: this.query.id, agree: this.radio}
+      if (this.reason) params.reason = this.reason
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/censor`, params).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          this.closeModal()
+          this.getInfo()
+        }
+      })
+    },
+    chooseUser () {
+      if (!this.tableData.length) {
+        this.getData2()
+      }
+      this.showChooseUser = true
+    },
+    closeUserModal () {
+      this.showChooseUser = false
+      this.checkList = []
+    },
+    submitUserModal () {
+      if (!this.checkList.length) {
+        this.$vux.toast.text('请选择用户', 'middle')
+        return false
+      }
+    },
+    handleScroll (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          if (self.tableData.length === (self.pageStart + 1) * self.limit) {
+            self.pageStart++
+            self.$vux.loading.show()
+            self.getData2()
+          }
+        }
+      })
+    },
+    getData2 () {
+      let params = {pagestart: this.pageStart, limit: this.limit, groupid: 3}
+      if (this.keyword && this.keyword !== '') {
+        params.keyword = this.keyword
+      }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/user/getList`, params).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          this.tableData = this.tableData.concat(retdata)
+          this.disTabData = true
+        }
+      })
     }
   },
   activated () {
@@ -350,6 +564,24 @@ export default {
       border: none !important;
       min-width: 200px;
     }
+  }
+}
+.users-box{
+  max-height: 200px;
+  overflow-y: scroll;
+}
+@media (min-width: 768px) {
+  .modal-inner{
+    width: 400px !important;
+  }
+}
+.from-item{
+  height: 100px;
+  border:1px solid #bcbcbc;
+  border-radius: 4px;
+  .el-textarea,.el-textarea__inner{
+    height: 100%;
+    border: none !important;
   }
 }
 </style>

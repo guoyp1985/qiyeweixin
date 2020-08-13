@@ -7,5 +7,6 @@
   "UserList",
   "AddUser",
   "MakeList",
-  "AddMake"
+  "AddMake",
+  "MakeDetails"
 ]
