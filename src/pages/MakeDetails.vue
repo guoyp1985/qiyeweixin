@@ -436,6 +436,7 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
+      console.log(this.loginUser);
       if (this.loginUser !== '') {
         this.query = this.$route.query
         this.status = parseInt(this.query.status)
