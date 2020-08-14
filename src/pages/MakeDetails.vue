@@ -13,17 +13,17 @@
      <tr>
        <td class="title">项目名称<span>*</span></td>
        <td colspan="3">
-         <el-input :disabled="status === 1" v-model="title" placeholder="请输入项目名称"></el-input>
+         <el-input :disabled="status !== 0" v-model="title" placeholder="请输入项目名称"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">品牌名称</td>
        <td>
-         <el-input :disabled="status === 1" v-model="brand" placeholder="请输入品牌名称"></el-input>
+         <el-input :disabled="status !== 0" v-model="brand" placeholder="请输入品牌名称"></el-input>
        </td>
        <td class="title">视频类型<span>*</span></td>
        <td>
-         <el-select :disabled="status === 1" v-model="videotype" placeholder="请选择视频类型">
+         <el-select :disabled="status !== 0" v-model="videotype" placeholder="请选择视频类型">
            <el-option
               v-for="item in videotypeOptions"
               :key="item.value"
@@ -36,17 +36,17 @@
      <tr>
        <td class="title">产品名称</td>
        <td>
-         <el-input :disabled="status === 1" v-model="product" placeholder="请输入产品名称"></el-input>
+         <el-input :disabled="status !== 0" v-model="product" placeholder="请输入产品名称"></el-input>
        </td>
        <td class="title">效果目标</td>
        <td>
-         <el-input :disabled="status === 1" v-model="target" placeholder="请输入效果目标"></el-input>
+         <el-input :disabled="status !== 0" v-model="target" placeholder="请输入效果目标"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">视频时长<span>*</span></td>
        <td>
-         <el-select :disabled="status === 1" v-model="duration" placeholder="请选择视频时长">
+         <el-select :disabled="status !== 0" v-model="duration" placeholder="请选择视频时长">
            <el-option
               v-for="item in durationOptions"
               :key="item.value"
@@ -57,7 +57,7 @@
         </td>
         <td class="title">视频比例<span>*</span></td>
         <td>
-          <el-select :disabled="status === 1" v-model="ratio" placeholder="请选择视频比例">
+          <el-select :disabled="status !== 0" v-model="ratio" placeholder="请选择视频比例">
             <el-option
               v-for="item in ratioOptions"
               :key="item.value"
@@ -70,11 +70,11 @@
      <tr>
        <td class="title">视频数量</td>
        <td>
-         <el-input :disabled="status === 1" v-model="videocount" placeholder="请输入视频数量"></el-input>
+         <el-input :disabled="status !== 0" v-model="videocount" placeholder="请输入视频数量"></el-input>
        </td>
        <td class="title">视频分类<span>*</span></td>
        <td>
-         <el-select :disabled="status === 1" v-model="videoclass" placeholder="请选择视频分类">
+         <el-select :disabled="status !== 0" v-model="videoclass" placeholder="请选择视频分类">
             <el-option
               v-for="item in videoclassOptions"
               :key="item.value"
@@ -88,7 +88,7 @@
        <td class="title">立项日期<span>*</span></td>
        <td>
          <el-date-picker
-            :disabled="status === 1"
+            :disabled="status !== 0"
             v-model="starttime"
             type="date"
             value-format="yyyy-MM-dd"
@@ -98,7 +98,7 @@
         <td class="title">交付日期<span>*</span></td>
         <td>
           <el-date-picker
-            :disabled="status === 1"
+            :disabled="status !== 0"
             v-model="endtime"
             type="date"
             value-format="yyyy-MM-dd"
@@ -109,7 +109,7 @@
     <tr>
       <td class="title">全片LOGO<span>*</span></td>
       <td>
-        <el-select :disabled="status === 1" v-model="logo_all" placeholder="请选择全片LOGO">
+        <el-select :disabled="status !== 0" v-model="logo_all" placeholder="请选择全片LOGO">
           <el-option
             v-for="item in logo_allOptions"
             :key="item.value"
@@ -120,7 +120,7 @@
       </td>
       <td class="title">片尾LOGO<span>*</span></td>
       <td>
-        <el-select :disabled="status === 1" v-model="logo_end" placeholder="请选择片尾LOGO">
+        <el-select :disabled="status !== 0" v-model="logo_end" placeholder="请选择片尾LOGO">
           <el-option
             v-for="item in logo_endOptions"
             :key="item.value"
@@ -133,55 +133,55 @@
      <tr>
        <td class="title">相关链接</td>
        <td colspan="3">
-         <el-input :disabled="status === 1" v-model="linkurl" placeholder="请输入相关链接"></el-input>
+         <el-input :disabled="status !== 0" v-model="linkurl" placeholder="请输入相关链接"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户投诉</td>
        <td colspan="3">
-         <el-input :disabled="status === 1" v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input :disabled="status !== 0" v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户信息</td>
        <td colspan="3">
-         <el-input :disabled="status === 1" v-model="customerinfo" placeholder="请输入客户信息"></el-input>
+         <el-input :disabled="status !== 0" v-model="customerinfo" placeholder="请输入客户信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">产品定位</td>
-       <td colspan="3"><el-input :disabled="status === 1" v-model="productorientation" placeholder="请输入产品定位"></el-input>
+       <td colspan="3"><el-input :disabled="status !== 0" v-model="productorientation" placeholder="请输入产品定位"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">产品买点<span class="font12 color-gray5">（核心买点需标注）</span></td>
        <td colspan="3">
-         <el-input :disabled="status === 1" type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input>
+         <el-input :disabled="status !== 0" type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">视频内必须展示的关键信息</td>
        <td colspan="3">
-         <el-input :disabled="status === 1" type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input>
+         <el-input :disabled="status !== 0" type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">创意思路</td>
        <td colspan="3">
-         <el-input :disabled="status === 1" type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
+         <el-input :disabled="status !== 0" type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">特殊备注</td>
        <td>
-         <el-input :disabled="status === 1" v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
+         <el-input :disabled="status !== 0" v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
        </td>
        <td>制作价格</td>
        <td>
-         <el-input :disabled="status === 1" v-model="price" placeholder="请输入制作价格"></el-input>
+         <el-input :disabled="status !== 0" v-model="price" placeholder="请输入制作价格"></el-input>
        </td>
      </tr>
-     <tr v-if="query.status == 1">
+     <tr v-if="status !== 0">
        <td class="title">项目来源<span>*</span></td>
        <td>
          <el-select v-model="comefrom" placeholder="请选择项目来源">
@@ -205,7 +205,7 @@
           </el-select>
         </td>
      </tr>
-     <tr v-if="status === 1">
+     <tr v-if="status !== 0">
        <td class="title">拍摄价格<span>*</span></td>
        <td>
          <el-input v-model="price_out" placeholder="请输入拍摄价格"></el-input>
