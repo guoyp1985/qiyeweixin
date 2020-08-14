@@ -14,22 +14,50 @@
           <div class="flex_cell">服务</div>
         </div>
         <div class="listicon list">
-          <div class="item" @click="toLink('/userList')">
-            <div class="item-inner">
-              <div class="w_100">
-                <div class="radius bg-blue"><span class="fa fa-user font18" style="font-weight:bold;"></span></div>
-                <div class="align_center">用户管理</div>
+          <template v-if="groupid == 1 || groupid == 4">
+            <div class="item" @click="toLink('/userList')">
+              <div class="item-inner">
+                <div class="w_100">
+                  <div class="radius bg-blue"><span class="fa fa-user font18" style="font-weight:bold;"></span></div>
+                  <div class="align_center">用户管理</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="item" @click="toLink('/cluesList')">
-            <div class="item-inner">
-              <div class="w_100">
-                <div class="radius bg-theme"><span class="al al-fuwu"></span></div>
-                <div class="align_center">线索管理</div>
+            <div class="item" @click="toLink('/cluesList')">
+              <div class="item-inner">
+                <div class="w_100">
+                  <div class="radius bg-theme"><span class="al al-fuwu"></span></div>
+                  <div class="align_center">线索管理</div>
+                </div>
               </div>
             </div>
-          </div>
+            <div class="item" @click="toLink('/makeList')">
+              <div class="item-inner">
+                <div class="w_100">
+                  <div class="radius bg-orange"><span class="al al-fuwu"></span></div>
+                  <div class="align_center">制作需求单</div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template v-if="groupid == 2 || groupid == 3">
+            <div class="item" @click="toLink('/myNeed')">
+              <div class="item-inner">
+                <div class="w_100">
+                  <div class="radius bg-blue"><span class="fa fa-user font18" style="font-weight:bold;"></span></div>
+                  <div class="align_center">我的需求</div>
+                </div>
+              </div>
+            </div>
+            <div class="item" @click="toLink('/myOrder')">
+              <div class="item-inner">
+                <div class="w_100">
+                  <div class="radius bg-theme"><span class="al al-fuwu"></span></div>
+                  <div class="align_center">我的订单</div>
+                </div>
+              </div>
+            </div>
+          </template>
           <div class="item" @click="toBind">
               <div class="item-inner">
                 <div class="w_100">
@@ -37,14 +65,6 @@
                   <div class="align_center">绑定公众号</div>
                 </div>
               </div>
-          </div>
-          <div class="item" @click="toLink('/makeList')">
-            <div class="item-inner">
-              <div class="w_100">
-                <div class="radius bg-orange"><span class="al al-fuwu"></span></div>
-                <div class="align_center">制作需求单</div>
-              </div>
-            </div>
           </div>
           <div class="item" @click="quitEvent">
             <div class="item-inner">
@@ -72,7 +92,8 @@ export default {
   data () {
     return {
       userInfo: {},
-      query: {}
+      query: {},
+      groupid: 0
     }
   },
   methods: {
@@ -91,6 +112,14 @@ export default {
     },
     refresh () {
       this.userInfo = User.get()
+      this.groupid = this.userInfo.usergroup[0]
+      // let usergroup = this.userInfo.usergroup
+      // for (let i = 0; i < usergroup.length; i ++) {
+      //   if (usergroup[i] === 1) this.groupid1 = true
+      //   if (usergroup[i] === 2) this.groupid2 = true
+      //   if (usergroup[i] === 3) this.groupid3 = true
+      //   if (usergroup[i] === 4) this.groupid4 = true
+      // }
     }
   },
   activated () {

@@ -8,5 +8,7 @@
   "AddUser",
   "MakeList",
   "AddMake",
-  "MakeDetails"
+  "MakeDetails",
+  "MyOrder",
+  "MyNeed"
 ]
