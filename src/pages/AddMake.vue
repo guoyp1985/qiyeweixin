@@ -21,7 +21,7 @@
        <td>
          <el-input v-model="brand" placeholder="请输入品牌名称"></el-input>
        </td>
-       <td class="title">视频类型</td>
+       <td class="title">视频类型<span>*</span></td>
        <td>
          <el-select v-model="videotype" placeholder="请选择视频类型">
            <el-option

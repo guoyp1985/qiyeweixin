@@ -131,7 +131,7 @@ export default {
             let endyear = enddate.getFullYear()
             let endmonth = enddate.getMonth() + 1
             let endday = enddate.getDate()
-            curd.datetime = startyear + ' ' + startmonth + ' ' + startday + ' - ' + endyear + ' ' + endmonth + ' ' + endday
+            curd.datetime = startyear + '/' + startmonth + '/' + startday + ' - ' + endyear + '/' + endmonth + '/' + endday
           }
           this.tableData = this.tableData.concat(retdata)
           this.disTabData = true
@@ -159,11 +159,16 @@ export default {
     refresh () {
       this.loginUser = User.get()
       if (this.loginUser) {
+        this.query = this.$route.query
         this.pageStart = 0
         this.disTabData = false
         this.selectedIndex = 0
         this.clickStatus = 0
         this.tableData = []
+        if (this.query.status) {
+          this.selectedIndex = status
+          this.clickStatus = status
+        }
         this.$vux.loading.show()
         this.getData()
       }

@@ -13,17 +13,17 @@
      <tr>
        <td class="title">项目名称<span>*</span></td>
        <td colspan="3">
-         <el-input v-model="title" placeholder="请输入项目名称"></el-input>
+         <el-input :disabled="status === 1" v-model="title" placeholder="请输入项目名称"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">品牌名称</td>
        <td>
-         <el-input v-model="brand" placeholder="请输入品牌名称"></el-input>
+         <el-input :disabled="status === 1" v-model="brand" placeholder="请输入品牌名称"></el-input>
        </td>
-       <td class="title">视频类型</td>
+       <td class="title">视频类型<span>*</span></td>
        <td>
-         <el-select v-model="videotype" placeholder="请选择视频类型">
+         <el-select :disabled="status === 1" v-model="videotype" placeholder="请选择视频类型">
            <el-option
               v-for="item in videotypeOptions"
               :key="item.value"
@@ -36,17 +36,17 @@
      <tr>
        <td class="title">产品名称</td>
        <td>
-         <el-input v-model="product" placeholder="请输入产品名称"></el-input>
+         <el-input :disabled="status === 1" v-model="product" placeholder="请输入产品名称"></el-input>
        </td>
        <td class="title">效果目标</td>
        <td>
-         <el-input v-model="target" placeholder="请输入效果目标"></el-input>
+         <el-input :disabled="status === 1" v-model="target" placeholder="请输入效果目标"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">视频时长<span>*</span></td>
        <td>
-         <el-select v-model="duration" placeholder="请选择视频时长">
+         <el-select :disabled="status === 1" v-model="duration" placeholder="请选择视频时长">
            <el-option
               v-for="item in durationOptions"
               :key="item.value"
@@ -57,7 +57,7 @@
         </td>
         <td class="title">视频比例<span>*</span></td>
         <td>
-          <el-select v-model="ratio" placeholder="请选择视频比例">
+          <el-select :disabled="status === 1" v-model="ratio" placeholder="请选择视频比例">
             <el-option
               v-for="item in ratioOptions"
               :key="item.value"
@@ -70,11 +70,11 @@
      <tr>
        <td class="title">视频数量</td>
        <td>
-         <el-input v-model="videocount" placeholder="请输入视频数量"></el-input>
+         <el-input :disabled="status === 1" v-model="videocount" placeholder="请输入视频数量"></el-input>
        </td>
        <td class="title">视频分类<span>*</span></td>
        <td>
-         <el-select v-model="videoclass" placeholder="请选择视频分类">
+         <el-select :disabled="status === 1" v-model="videoclass" placeholder="请选择视频分类">
             <el-option
               v-for="item in videoclassOptions"
               :key="item.value"
@@ -88,6 +88,7 @@
        <td class="title">立项日期<span>*</span></td>
        <td>
          <el-date-picker
+            :disabled="status === 1"
             v-model="starttime"
             type="date"
             value-format="yyyy-MM-dd"
@@ -97,6 +98,7 @@
         <td class="title">交付日期<span>*</span></td>
         <td>
           <el-date-picker
+            :disabled="status === 1"
             v-model="endtime"
             type="date"
             value-format="yyyy-MM-dd"
@@ -107,7 +109,7 @@
     <tr>
       <td class="title">全片LOGO<span>*</span></td>
       <td>
-        <el-select v-model="logo_all" placeholder="请选择全片LOGO">
+        <el-select :disabled="status === 1" v-model="logo_all" placeholder="请选择全片LOGO">
           <el-option
             v-for="item in logo_allOptions"
             :key="item.value"
@@ -118,7 +120,7 @@
       </td>
       <td class="title">片尾LOGO<span>*</span></td>
       <td>
-        <el-select v-model="logo_end" placeholder="请选择片尾LOGO">
+        <el-select :disabled="status === 1" v-model="logo_end" placeholder="请选择片尾LOGO">
           <el-option
             v-for="item in logo_endOptions"
             :key="item.value"
@@ -131,55 +133,55 @@
      <tr>
        <td class="title">相关链接</td>
        <td colspan="3">
-         <el-input v-model="linkurl" placeholder="请输入相关链接"></el-input>
+         <el-input :disabled="status === 1" v-model="linkurl" placeholder="请输入相关链接"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户投诉</td>
        <td colspan="3">
-         <el-input v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input :disabled="status === 1" v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户信息</td>
        <td colspan="3">
-         <el-input v-model="customerinfo" placeholder="请输入客户信息"></el-input>
+         <el-input :disabled="status === 1" v-model="customerinfo" placeholder="请输入客户信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">产品定位</td>
-       <td colspan="3"><el-input v-model="productorientation" placeholder="请输入产品定位"></el-input>
+       <td colspan="3"><el-input :disabled="status === 1" v-model="productorientation" placeholder="请输入产品定位"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">产品买点<span class="font12 color-gray5">（核心买点需标注）</span></td>
        <td colspan="3">
-         <el-input type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input>
+         <el-input :disabled="status === 1" type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">视频内必须展示的关键信息</td>
        <td colspan="3">
-         <el-input type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input>
+         <el-input :disabled="status === 1" type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">创意思路</td>
        <td colspan="3">
-         <el-input type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
+         <el-input :disabled="status === 1" type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">特殊备注</td>
        <td>
-         <el-input v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
+         <el-input :disabled="status === 1" v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
        </td>
        <td>制作价格</td>
        <td>
-         <el-input v-model="price" placeholder="请输入制作价格"></el-input>
+         <el-input :disabled="status === 1" v-model="price" placeholder="请输入制作价格"></el-input>
        </td>
      </tr>
-     <tr v-if="query.status === '1'">
+     <tr v-if="query.status == 1">
        <td class="title">项目来源<span>*</span></td>
        <td>
          <el-select v-model="comefrom" placeholder="请选择项目来源">
@@ -203,9 +205,14 @@
           </el-select>
         </td>
      </tr>
-     <tr v-if="query.status === '1'">
-       <td class="title">分发用户</td>
-       <td colspan="3" @click="chooseUser"><el-input readonly v-model="checkList" placeholder="请输入选择分发用户"></el-input>
+     <tr v-if="status === 1">
+       <td class="title">拍摄价格<span>*</span></td>
+       <td>
+         <el-input v-model="price_out" placeholder="请输入拍摄价格"></el-input>
+       </td>
+       <td class="title">分发用户<span>*</span></td>
+       <td @click="chooseUser">
+         <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input>
        </td>
      </tr>
      <tr>
@@ -219,9 +226,9 @@
            type="primary"
            @click="handleExamine">审核</el-button>
          <el-button
-           v-if="query.status === '1'"
+           v-if="status === 1"
            type="primary"
-           @click="onSubmit">分发</el-button>
+           @click="onInvite">分发</el-button>
        </td>
      </tr>
    </table>
@@ -246,30 +253,38 @@
        </div>
      </div>
    </div>
-   <div class="auto-modal flex_center" style="position:fixed;" v-if="showChooseUser">
-     <div class="modal-inner">
-       <div class="modal-content padding20">
-           <div class="modal-header mb20">
-             选择用户
-           </div>
-           <div class="modal-body mb20">
-             <div class="users-box scroll-container" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
-               <template v-if="disTabData">
-                 <div v-if="!tableData.length" class="rw-item flex_center">暂无数据</div>
-                 <el-checkbox-group v-else v-model="checkList">
-                   <div v-for="(item,index) in tableData" :key="index">
-                     <div class="rw-item flex_left">
-                       <el-checkbox :label="item.uid">{{item.linkman}}</el-checkbox>
-                     </div>
-                   </div>
-                 </el-checkbox-group>
-               </template>
+   <div v-if="showChooseUser">
+     <div class="auto-modal flex_center" style="position:fixed;">
+       <div class="modal-inner">
+         <div class="modal-content padding20">
+             <div class="modal-header mb20 align_center">
+               选择用户
              </div>
-           </div>
-           <div class="modal-footer flex_right">
-             <el-button @click="closeUserModal">取消</el-button>
-             <el-button class="" type="primary" @click="submitUserModal">提交</el-button>
-           </div>
+             <div class="modal-body mb20">
+               <div class="mb20">
+                 <el-input placeholder="请输入用户名称搜索" v-model="keyword" @keyup.enter.native="kwChange">
+                   <el-button slot="append" icon="el-icon-search" @click="searchEvent"></el-button>
+                 </el-input>
+               </div>
+               <div class="users-box scroll-container" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
+                 <template v-if="disTabData">
+                   <div v-if="!tableData.length" class="rw-item flex_center">暂无数据</div>
+                   <el-checkbox-group v-else v-model="checkList">
+                     <div v-for="(item,index) in tableData" :key="index">
+                       <div class="rw-item flex_left">
+                         <el-checkbox :label="item.uid">{{item.linkman}}</el-checkbox>
+                       </div>
+                     </div>
+                   </el-checkbox-group>
+                 </template>
+                 <div class="load-end-area loading" v-if="isLoading"></div>
+               </div>
+             </div>
+             <div class="modal-footer flex_right">
+               <el-button @click="closeUserModal">取消</el-button>
+               <el-button class="" type="primary" @click="submitUserModal">提交</el-button>
+             </div>
+         </div>
        </div>
      </div>
    </div>
@@ -310,6 +325,7 @@ export default {
       customeridea: '',
       comefrom: '',
       pricetype: '',
+      price_out: '',
       durationOptions: [],
       ratioOptions: [],
       videoclassOptions: [],
@@ -332,7 +348,10 @@ export default {
       reason: '',
       examineIndex: '',
       showChooseUser: false,
-      checkList: []
+      checkList: [],
+      users: '',
+      status: 0,
+      isLoading: false
     }
   },
   methods: {
@@ -412,13 +431,14 @@ export default {
         this.cancensor = retdata.cancensor
         this.comefrom = retdata.comefrom
         this.pricetype = retdata.pricetype
+        this.price_out = retdata.price_out
       })
     },
     refresh () {
       this.loginUser = User.get()
       if (this.loginUser) {
         this.query = this.$route.query
-        console.log(this.query.status);
+        this.status = parseInt(this.query.status)
         this.pageStart = 0
         this.disTabData = false
         this.tableData = []
@@ -454,6 +474,7 @@ export default {
         this.customeridea = ''
         this.comefrom = ''
         this.pricetype = ''
+        this.price_out = ''
         this.issubmit = false
         this.$vux.loading.show()
         this.getData()
@@ -475,7 +496,9 @@ export default {
         videocount: this.videocount,
         videotype: this.videotype,
         comefrom: this.comefrom,
-        pricetype: this.pricetype
+        pricetype: this.pricetype,
+        price_out: this.price_out,
+        uids: this.checkList
       }
       if (this.brand !== '') params.brand = this.brand
       if (this.product !== '') params.product = this.product
@@ -492,7 +515,7 @@ export default {
       var rule1 = /^(0|[1-9][0-9]*)$/
       if (!this.issubmit) {
         if (this.title === '' || this.starttime === '' || this.endtime === '' || this.duration === '' || this.ratio === '' || this.videoclass === '' ||
-      this.logo_all === '' || this.logo_end === '' || this.videotype === '' || (this.query.status === '1' && (this.pricetype === '' || this.comefrom === ''))) {
+      this.logo_all === '' || this.logo_end === '' || this.videotype === '' || (this.status === 1 && (this.pricetype === '' || this.comefrom === '' || this.users === '' || this.price_out === ''))) {
           this.$vux.toast.text('必填项不能为空', 'middle')
         } else if (this.endtime <= this.starttime) {
           this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
@@ -546,10 +569,23 @@ export default {
       })
     },
     chooseUser () {
+      this.showChooseUser = true
       if (!this.tableData.length) {
+        this.isLoading = true
         this.getData2()
       }
-      this.showChooseUser = true
+    },
+    kwChange () {
+      if (event.keyCode === 13) {
+        this.searchEvent()
+      }
+    },
+    searchEvent () {
+      this.pagestart = 0
+      this.disTabData = false
+      this.tableData = []
+      this.isLoading = true
+      this.getData2()
     },
     closeUserModal () {
       this.showChooseUser = false
@@ -560,6 +596,15 @@ export default {
         this.$vux.toast.text('请选择用户', 'middle')
         return false
       }
+      this.users = ''
+      for (let i = 0; i < this.tableData.length; i++) {
+        for (let u = 0; u < this.checkList.length; u++) {
+          if (this.tableData[i].uid === this.checkList[u]) {
+            this.users = this.users + this.tableData[i].linkman
+          }
+        }
+      }
+      this.showChooseUser = false
     },
     handleScroll (refname) {
       const self = this
@@ -569,7 +614,7 @@ export default {
         callback: () => {
           if (self.tableData.length === (self.pageStart + 1) * self.limit) {
             self.pageStart++
-            self.$vux.loading.show()
+            self.isLoading = true
             self.getData2()
           }
         }
@@ -580,17 +625,40 @@ export default {
       if (this.keyword && this.keyword !== '') {
         params.keyword = this.keyword
       }
-      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/user/getList`, params).then(res => {
         const data = res.data
         if (data.flag) {
-          this.$vux.loading.hide()
+          this.isLoading = false
           const data = res.data
           const retdata = data.data ? data.data : data
           this.tableData = this.tableData.concat(retdata)
           this.disTabData = true
         }
       })
+    },
+    onInvite () {
+      let params = {
+        comefrom: this.comefrom,
+        pricetype: this.pricetype,
+        price_out: this.price_out,
+        uids: this.checkList,
+        id: parseInt(this.query.id)
+      }
+      if (!this.issubmit) {
+        if (this.pricetype === '' || this.comefrom === '' || this.users === '' || this.price_out === '') {
+          this.$vux.toast.text('必填项不能为空', 'middle')
+        } else if (this.price_out !== '' && (isNaN(this.price_out) || parseFloat(this.price_out) < 0 || parseFloat(this.price_out).length > 7)) {
+          this.$vux.toast.text('请输入正确的拍摄价格', 'middle')
+        } else {
+          this.issubmit = true
+          this.$http.post(`${ENV.BokaApi}/api/demands/invite`, params).then(res => {
+            let data = res.data
+            this.$vux.toast.text(data.error, 'middle')
+            this.$router.push({path: '/makeList', query: {status: this.status}})
+            this.issubmit = false
+          })
+        }
+      }
     }
   },
   activated () {
@@ -625,10 +693,14 @@ export default {
       border: none !important;
       min-width: 200px;
     }
+    .el-input.is-disabled .el-input__inner,.el-textarea.is-disabled .el-textarea__inner{
+      background-color: #fff !important;
+      color: #606266 !important;
+    }
   }
 }
 .users-box{
-  max-height: 200px;
+  height: 200px;
   overflow-y: scroll;
 }
 @media (min-width: 768px) {
