@@ -44,7 +44,7 @@
             <div class="item" @click="toLink('/myNeed')">
               <div class="item-inner">
                 <div class="w_100">
-                  <div class="radius bg-blue"><span class="fa fa-user font18" style="font-weight:bold;"></span></div>
+                  <div class="radius bg-blue"><span class="al al-fuwu font18" style="font-weight:bold;"></span></div>
                   <div class="align_center">我的需求</div>
                 </div>
               </div>
@@ -52,7 +52,7 @@
             <div class="item" @click="toLink('/myOrder')">
               <div class="item-inner">
                 <div class="w_100">
-                  <div class="radius bg-theme"><span class="al al-fuwu"></span></div>
+                  <div class="radius bg-theme"><span class="al al-order"></span></div>
                   <div class="align_center">我的订单</div>
                 </div>
               </div>
@@ -184,6 +184,7 @@ export default {
           display:flex;justify-content: center; align-items: center;
           width:43px;height:43px;border-radius:50%;color:#fff;
           margin:0 auto 5px;
+          .al-order:after{content: '\e6b6'}
         }
       }
     }
