@@ -3,9 +3,9 @@
     <tab class="b-tab" v-model="selectedIndex">
       <tab-item :selected="selectedIndex == 0" @on-item-click="clickTab(0,0)">新订单</tab-item>
       <tab-item :selected="selectedIndex == 1" @on-item-click="clickTab(1,1)">待分发</tab-item>
-      <tab-item :selected="selectedIndex == 2" @on-item-click="clickTab(2,4)">创意期</tab-item>
-      <tab-item :selected="selectedIndex == 3" @on-item-click="clickTab(3,5)">分镜脚本期</tab-item>
-      <tab-item :selected="selectedIndex == 4" @on-item-click="clickTab(4,3)">样片期</tab-item>
+      <tab-item :selected="selectedIndex == 2" @on-item-click="clickTab(2,2)">创意期</tab-item>
+      <tab-item :selected="selectedIndex == 3" @on-item-click="clickTab(3,3)">分镜脚本期</tab-item>
+      <tab-item :selected="selectedIndex == 4" @on-item-click="clickTab(4,4)">样片期</tab-item>
     </tab>
     <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <el-row class="padding10">
@@ -165,9 +165,10 @@ export default {
         this.selectedIndex = 0
         this.clickStatus = 0
         this.tableData = []
+        console.log();
         if (this.query.status) {
-          this.selectedIndex = status
-          this.clickStatus = status
+          this.selectedIndex = parseInt(this.query.status)
+          this.clickStatus = parseInt(this.query.status)
         }
         this.$vux.loading.show()
         this.getData()

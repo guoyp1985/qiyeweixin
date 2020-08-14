@@ -654,7 +654,7 @@ export default {
           this.$http.post(`${ENV.BokaApi}/api/demands/invite`, params).then(res => {
             let data = res.data
             this.$vux.toast.text(data.error, 'middle')
-            this.$router.push({path: '/makeList', query: {status: this.status}})
+            this.$router.push({path: '/makeList', query: {status: 2}})
             this.issubmit = false
           })
         }
