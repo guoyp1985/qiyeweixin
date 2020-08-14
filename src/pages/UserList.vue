@@ -4,7 +4,7 @@
       <tab-item :selected="selectedIndex == 0" @on-item-click="clickTab(0,0)">全部</tab-item>
       <tab-item :selected="selectedIndex == 1" @on-item-click="clickTab(1,1)">管理员</tab-item>
       <tab-item :selected="selectedIndex == 2" @on-item-click="clickTab(2,4)">业务员</tab-item>
-      <tab-item :selected="selectedIndex == 3" @on-item-click="clickTab(3,5)">客户</tab-item>
+      <tab-item :selected="selectedIndex == 3" @on-item-click="clickTab(3,2)">客户</tab-item>
       <tab-item :selected="selectedIndex == 4" @on-item-click="clickTab(4,3)">供应商</tab-item>
     </tab>
     <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
