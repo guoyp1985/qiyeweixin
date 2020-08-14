@@ -17,7 +17,7 @@
           <div class="item" @click="toLink('/userList')">
             <div class="item-inner">
               <div class="w_100">
-                <div class="radius bg-theme"><span class="al al-pengyouquan"></span></div>
+                <div class="radius bg-blue"><span class="fa fa-user font18" style="font-weight:bold;"></span></div>
                 <div class="align_center">用户管理</div>
               </div>
             </div>
@@ -25,7 +25,7 @@
           <div class="item" @click="toLink('/cluesList')">
             <div class="item-inner">
               <div class="w_100">
-                <div class="radius bg-orange"><span class="al al-fuwu"></span></div>
+                <div class="radius bg-theme"><span class="al al-fuwu"></span></div>
                 <div class="align_center">线索管理</div>
               </div>
             </div>
@@ -43,6 +43,14 @@
               <div class="w_100">
                 <div class="radius bg-orange"><span class="al al-fuwu"></span></div>
                 <div class="align_center">制作需求单</div>
+              </div>
+            </div>
+          </div>
+          <div class="item" @click="quitEvent">
+            <div class="item-inner">
+              <div class="w_100">
+                <div class="radius bg-blue"><span class="al al-tuichu3"></span></div>
+                <div class="align_center">退出</div>
               </div>
             </div>
           </div>
@@ -73,6 +81,10 @@ export default {
       console.log('跳转绑定授权链接')
       console.log(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
       location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
+    },
+    quitEvent () {
+      User.remove()
+      this.$router.push('/login')
     },
     toLink (link) {
       this.$router.push({path: link})
