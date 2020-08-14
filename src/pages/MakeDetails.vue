@@ -170,9 +170,9 @@
        </td>
      </tr>
      <tr>
-       <td class="title">其他要求</td>
+       <td class="title">特殊备注</td>
        <td>
-         <el-input v-model="otherdemand" placeholder="请输入其他要求"></el-input>
+         <el-input v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
        </td>
        <td>制作价格</td>
        <td>
@@ -184,7 +184,7 @@
        <td>
          <el-select v-model="comefrom" placeholder="请选择项目来源">
            <el-option
-              v-for="item in durationOptions"
+              v-for="item in comefromOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -202,6 +202,11 @@
             </el-option>
           </el-select>
         </td>
+     </tr>
+     <tr v-if="query.status === '1'">
+       <td class="title">分发用户</td>
+       <td colspan="3" @click="chooseUser"><el-input readonly v-model="checkList" placeholder="请输入选择分发用户"></el-input>
+       </td>
      </tr>
      <tr>
        <td class="padding10" colspan="4">
