@@ -184,7 +184,7 @@
      <tr v-if="status !== 0">
        <td class="title">项目来源<span>*</span></td>
        <td>
-         <el-select v-model="comefrom" placeholder="请选择项目来源">
+         <el-select :disabled="status !== 1" v-model="comefrom" placeholder="请选择项目来源">
            <el-option
               v-for="item in comefromOptions"
               :key="item.value"
@@ -195,7 +195,7 @@
         </td>
         <td class="title">视频价格<span>*</span></td>
         <td>
-          <el-select v-model="pricetype" placeholder="请选择视频价格">
+          <el-select :disabled="status !== 1" v-model="pricetype" placeholder="请选择视频价格">
             <el-option
               v-for="item in pricetypeOptions"
               :key="item.value"
@@ -207,11 +207,11 @@
      </tr>
      <tr v-if="status !== 0">
        <td class="title">拍摄价格<span>*</span></td>
-       <td>
-         <el-input v-model="price_out" placeholder="请输入拍摄价格"></el-input>
+       <td :colspan="status !== 0||status !== 1 ? 3 : ''">
+         <el-input :disabled="status !== 1" v-model="price_out" placeholder="请输入拍摄价格"></el-input>
        </td>
-       <td class="title">分发用户<span>*</span></td>
-       <td @click="chooseUser">
+       <td v-if="status === 1" class="title">分发用户<span>*</span></td>
+       <td v-if="status === 1" @click="chooseUser">
          <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input>
        </td>
      </tr>
@@ -224,14 +224,56 @@
          <el-button
            v-if="cancensor === 1"
            type="primary"
-           @click="handleExamine">审核</el-button>
+           @click="handleExamine">审批</el-button>
          <el-button
            v-if="status === 1"
            type="primary"
            @click="onInvite">分发</el-button>
+         <el-button
+           v-if="status === 2"
+           type="primary"
+           @click="chooseUser">新增邀请</el-button>
        </td>
      </tr>
    </table>
+   <div class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
+     <template v-if="disTabData2">
+       <el-table
+       :data="tableData2"
+       stripe
+       style="width: 100%"
+       :header-cell-style="{'text-align':'center'}"
+       :cell-style="{'text-align':'center'}">
+           <el-table-column
+             prop="linkman"
+             label="姓名"
+             min-width="100">
+           </el-table-column>
+           <el-table-column
+             label="手机号码"
+             width="120">
+               <template slot-scope="scope">
+                 <template v-if="!scope.row.mobile || scope.row.mobile == ''">无</template>
+                 <template v-else>{{scope.row.mobile}}</template>
+               </template>
+           </el-table-column>
+           <el-table-column
+             label="创意梗概"
+             min-width="120">
+             <template slot-scope="scope">
+               <template v-if="!scope.row.idea || scope.row.idea == ''">无</template>
+               <template v-else>{{scope.row.idea}}</template>
+             </template>
+           </el-table-column>
+           <el-table-column
+             label="操作"
+             min-width="120">
+             <!-- <el-button @click="handleExamine(uid)">审批</el-button> -->
+             <el-button @click="">审批</el-button>
+           </el-table-column>
+       </el-table>
+     </template>
+   </div>
    <div class="auto-modal flex_center" style="position:fixed;" v-if="showExamine">
      <div class="modal-inner">
        <div class="modal-content padding20">
@@ -272,7 +314,7 @@
                    <el-checkbox-group v-else v-model="checkList">
                      <div v-for="(item,index) in tableData" :key="index">
                        <div class="rw-item flex_left">
-                         <el-checkbox :label="item.uid">{{item.linkman}}</el-checkbox>
+                         <el-checkbox :disabled="item.checked" :label="item.uid">{{item.linkman}}</el-checkbox>
                        </div>
                      </div>
                    </el-checkbox-group>
@@ -341,6 +383,9 @@ export default {
       tableData: [],
       pageStart: 0,
       disTabData: false,
+      tableData2: [],
+      pageStart2: 0,
+      disTabData2: false,
       keyword: '',
       showExamine: false,
       showReason: '请输入审批通过原因',
@@ -351,7 +396,9 @@ export default {
       checkList: [],
       users: '',
       status: 0,
-      isLoading: false
+      isLoading: false,
+      uids: [],
+      uid: ''
     }
   },
   methods: {
@@ -436,13 +483,15 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
-      console.log(this.loginUser);
       if (this.loginUser !== '') {
         this.query = this.$route.query
         this.status = parseInt(this.query.status)
         this.pageStart = 0
         this.disTabData = false
         this.tableData = []
+        this.pageStart2 = 0
+        this.disTabData2 = false
+        this.tableData2 = []
         this.durationOptions = []
         this.ratioOptions = []
         this.videoclassOptions = []
@@ -481,6 +530,9 @@ export default {
         this.getData()
         if (this.query.id) {
           this.getInfo(this.query.id)
+        }
+        if (this.status === 2) {
+          this.getData3()
         }
       }
     },
@@ -535,8 +587,9 @@ export default {
         }
       }
     },
-    handleExamine () {
+    handleExamine (uid) {
       this.showExamine = true
+      if (uid) this.uid = uid
     },
     changeExamine () {
       if (this.radio === 2) {
@@ -559,6 +612,7 @@ export default {
       }
       let params = {id: this.query.id, agree: this.radio}
       if (this.reason) params.reason = this.reason
+      if (this.uid) params.uid = this.uid
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/demands/censor`, params).then(res => {
         const data = res.data
@@ -594,7 +648,7 @@ export default {
     },
     submitUserModal () {
       if (!this.checkList.length) {
-        this.$vux.toast.text('请选择用户', 'middle')
+        this.$vux.toast.text('请选择一个用户', 'middle')
         return false
       }
       this.users = ''
@@ -604,6 +658,13 @@ export default {
             this.users = this.users + this.tableData[i].linkman
           }
         }
+      }
+      if (this.checkList.length === this.uids.length) {
+        this.$vux.toast.text('请选一个新用户', 'middle')
+        return false
+      }
+      if (this.checkList.length !== this.uids.length) {
+        this.onInvite2()
       }
       this.showChooseUser = false
     },
@@ -632,8 +693,45 @@ export default {
           this.isLoading = false
           const data = res.data
           const retdata = data.data ? data.data : data
+          for (let i = 0; i < retdata.length; i++) {
+            let curd = retdata[i]
+            for (let u = 0; u < this.checkList; u++) {
+              if (curd.uid === this.checkList[u]) {
+                curd.checked = true
+              }
+            }
+          }
           this.tableData = this.tableData.concat(retdata)
           this.disTabData = true
+        }
+      })
+    },
+    handleScroll2 (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          if (self.tableData2.length === (self.pageStart2 + 1) * self.limit) {
+            self.pageStart2++
+            self.$vux.loading.show()
+            self.getData3()
+          }
+        }
+      })
+    },
+    getData3 () {
+      let params = {pagestart: this.pageStart2, limit: this.limit, id: parseInt(this.query.id)}
+      this.$http.post(`${ENV.BokaApi}/api/demands/inviteInfo`, params).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          this.checkList = data.uids
+          this.uids = data.uids
+          this.tableData2 = this.tableData2.concat(retdata)
+          this.disTabData2 = true
         }
       })
     },
@@ -659,6 +757,24 @@ export default {
             this.issubmit = false
           })
         }
+      }
+    },
+    onInvite2 () {
+      let params = {
+        uids: this.checkList,
+        id: parseInt(this.query.id)
+      }
+      if (!this.issubmit) {
+        this.issubmit = true
+        this.$http.post(`${ENV.BokaApi}/api/demands/invite`, params).then(res => {
+          let data = res.data
+          this.$vux.toast.text(data.error, 'middle')
+          this.pagestart2 = 0
+          this.disTabData2 = false
+          this.tableData2 = []
+          this.getData3()
+          this.issubmit = false
+        })
       }
     }
   },
@@ -698,6 +814,9 @@ export default {
       background-color: #fff !important;
       color: #606266 !important;
     }
+  }
+  .user-table{
+    margin: 50px 0;
   }
 }
 .users-box{
