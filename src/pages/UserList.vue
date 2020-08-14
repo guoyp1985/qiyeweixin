@@ -32,7 +32,7 @@
             </el-table-column>
             <el-table-column
               label="手机号码"
-              width="120">
+              min-width="120">
                 <template slot-scope="scope">
                   <template v-if="!scope.row.mobile || scope.row.mobile == ''">无</template>
                   <template v-else>{{scope.row.mobile}}</template>
@@ -40,7 +40,7 @@
             </el-table-column>
             <el-table-column
               label="身份"
-              width="120">
+              min-width="120">
                 <template slot-scope="scope">{{scope.row.groupname}}</template>
             </el-table-column>
         </el-table>
