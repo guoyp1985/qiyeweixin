@@ -14,7 +14,7 @@
           <div class="flex_cell">服务</div>
         </div>
         <div class="listicon list">
-          <template v-if="groupid == 1 || groupid == 4">
+          <template v-if="groupid == 2 || groupid == 4">
             <div class="item" @click="toLink('/userList')">
               <div class="item-inner">
                 <div class="w_100">

@@ -1,17 +1,17 @@
 <template>
     <div class="bg-white">
       <div class="from bg-white">
-        <div class="from-item">
+        <div class="from-items">
           <div class="item-title">姓名<span>*</span></div>
           <div class="item-cell"><input v-model="linkman" placeholder="请输入姓名" /></div>
         </div>
-        <div class="from-item">
+        <div class="from-items">
           <div class="item-title">手机号<span>*</span></div>
           <div class="item-cell">
             <input v-model="telephone" placeholder="请输入手机号"/>
           </div>
         </div>
-        <div class="from-item">
+        <div class="from-items">
           <div class="item-title">身份<span>*</span></div>
           <div class="item-cell">
             <el-select v-model="groupid" placeholder="请选择身份">
@@ -95,7 +95,7 @@ export default {
 .from{
   padding: 20px;
   margin-bottom: 140px;
-  .from-item{
+  .from-items{
     margin-bottom: 20px;
     .item-title{
       span{

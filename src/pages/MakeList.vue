@@ -165,7 +165,6 @@ export default {
         this.selectedIndex = 0
         this.clickStatus = 0
         this.tableData = []
-        console.log();
         if (this.query.status) {
           this.selectedIndex = parseInt(this.query.status)
           this.clickStatus = parseInt(this.query.status)

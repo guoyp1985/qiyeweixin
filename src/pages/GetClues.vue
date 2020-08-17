@@ -4,17 +4,17 @@
         <img src="../assets/images/fromheaderimg.jpeg"/>
       </div>
       <div class="from bg-white">
-        <div class="from-item">
+        <div class="from-items">
           <div class="item-title">您的姓名（已加密）<span>*</span></div>
           <div class="item-cell"><input @blur="blurName" @focus="focusName" v-model="linkman" placeholder="请输入" /></div>
         </div>
-        <div class="from-item">
+        <div class="from-items">
           <div class="item-title">您的电话（已加密）<span>*</span></div>
           <div class="item-cell">
             <input @blur="blurTelephone" @focus="focusTelephone" v-model="telephone" placeholder="请输入"/>
           </div>
         </div>
-        <div class="from-item">
+        <div class="from-items">
           <div class="item-title">您的身份是<span>*</span></div>
           <div class="item-cell">
             <el-select v-model="groupid" placeholder="请选择您的身份">
@@ -27,7 +27,7 @@
             </el-select>
             </div>
         </div>
-        <div class="from-item">
+        <div class="from-items">
           <div class="item-title">您所在的城市是<span>*</span></div>
           <div class="item-cell">
             <x-address class="x-address" :title="``" raw-value v-model="area" hide-district :list="addressData" :placeholder="`请选择您所在的城市`">
@@ -36,7 +36,7 @@
             </x-address>
           </div>
         </div>
-        <div class="from-item">
+        <div class="from-items">
           <div class="">
             <check-icon :value.sync="isagreecheckbox">我已阅读《个人信息保护声明》</check-icon>
           </div>
@@ -150,7 +150,7 @@ export default {
 .from{
   padding: 20px;
   margin-bottom: 140px;
-  .from-item{
+  .from-items{
     margin-bottom: 20px;
     .item-title{
       span{

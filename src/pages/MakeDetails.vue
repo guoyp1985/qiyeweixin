@@ -13,17 +13,17 @@
      <tr>
        <td class="title">项目名称<span>*</span></td>
        <td colspan="3">
-         <el-input :disabled="status !== 0" v-model="title" placeholder="请输入项目名称"></el-input>
+         <el-input :disabled="isDisabled" v-model="title" placeholder="请输入项目名称"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">品牌名称</td>
        <td>
-         <el-input :disabled="status !== 0" v-model="brand" placeholder="请输入品牌名称"></el-input>
+         <el-input :disabled="isDisabled" v-model="brand" placeholder="请输入品牌名称"></el-input>
        </td>
        <td class="title">视频类型<span>*</span></td>
        <td>
-         <el-select :disabled="status !== 0" v-model="videotype" placeholder="请选择视频类型">
+         <el-select :disabled="isDisabled" v-model="videotype" placeholder="请选择视频类型">
            <el-option
               v-for="item in videotypeOptions"
               :key="item.value"
@@ -36,17 +36,17 @@
      <tr>
        <td class="title">产品名称</td>
        <td>
-         <el-input :disabled="status !== 0" v-model="product" placeholder="请输入产品名称"></el-input>
+         <el-input :disabled="isDisabled" v-model="product" placeholder="请输入产品名称"></el-input>
        </td>
        <td class="title">效果目标</td>
        <td>
-         <el-input :disabled="status !== 0" v-model="target" placeholder="请输入效果目标"></el-input>
+         <el-input :disabled="isDisabled" v-model="target" placeholder="请输入效果目标"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">视频时长<span>*</span></td>
        <td>
-         <el-select :disabled="status !== 0" v-model="duration" placeholder="请选择视频时长">
+         <el-select :disabled="isDisabled" v-model="duration" placeholder="请选择视频时长">
            <el-option
               v-for="item in durationOptions"
               :key="item.value"
@@ -57,7 +57,7 @@
         </td>
         <td class="title">视频比例<span>*</span></td>
         <td>
-          <el-select :disabled="status !== 0" v-model="ratio" placeholder="请选择视频比例">
+          <el-select :disabled="isDisabled" v-model="ratio" placeholder="请选择视频比例">
             <el-option
               v-for="item in ratioOptions"
               :key="item.value"
@@ -70,11 +70,11 @@
      <tr>
        <td class="title">视频数量</td>
        <td>
-         <el-input :disabled="status !== 0" v-model="videocount" placeholder="请输入视频数量"></el-input>
+         <el-input :disabled="isDisabled" v-model="videocount" placeholder="请输入视频数量"></el-input>
        </td>
        <td class="title">视频分类<span>*</span></td>
        <td>
-         <el-select :disabled="status !== 0" v-model="videoclass" placeholder="请选择视频分类">
+         <el-select :disabled="isDisabled" v-model="videoclass" placeholder="请选择视频分类">
             <el-option
               v-for="item in videoclassOptions"
               :key="item.value"
@@ -88,7 +88,7 @@
        <td class="title">立项日期<span>*</span></td>
        <td>
          <el-date-picker
-            :disabled="status !== 0"
+            :disabled="isDisabled"
             v-model="starttime"
             type="date"
             value-format="yyyy-MM-dd"
@@ -98,7 +98,7 @@
         <td class="title">交付日期<span>*</span></td>
         <td>
           <el-date-picker
-            :disabled="status !== 0"
+            :disabled="isDisabled"
             v-model="endtime"
             type="date"
             value-format="yyyy-MM-dd"
@@ -109,7 +109,7 @@
     <tr>
       <td class="title">全片LOGO<span>*</span></td>
       <td>
-        <el-select :disabled="status !== 0" v-model="logo_all" placeholder="请选择全片LOGO">
+        <el-select :disabled="isDisabled" v-model="logo_all" placeholder="请选择全片LOGO">
           <el-option
             v-for="item in logo_allOptions"
             :key="item.value"
@@ -120,7 +120,7 @@
       </td>
       <td class="title">片尾LOGO<span>*</span></td>
       <td>
-        <el-select :disabled="status !== 0" v-model="logo_end" placeholder="请选择片尾LOGO">
+        <el-select :disabled="isDisabled" v-model="logo_end" placeholder="请选择片尾LOGO">
           <el-option
             v-for="item in logo_endOptions"
             :key="item.value"
@@ -133,55 +133,55 @@
      <tr>
        <td class="title">相关链接</td>
        <td colspan="3">
-         <el-input :disabled="status !== 0" v-model="linkurl" placeholder="请输入相关链接"></el-input>
+         <el-input :disabled="isDisabled" v-model="linkurl" placeholder="请输入相关链接"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户投诉</td>
        <td colspan="3">
-         <el-input :disabled="status !== 0" v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input :disabled="isDisabled" v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户信息</td>
        <td colspan="3">
-         <el-input :disabled="status !== 0" v-model="customerinfo" placeholder="请输入客户信息"></el-input>
+         <el-input :disabled="isDisabled" v-model="customerinfo" placeholder="请输入客户信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">产品定位</td>
-       <td colspan="3"><el-input :disabled="status !== 0" v-model="productorientation" placeholder="请输入产品定位"></el-input>
+       <td colspan="3"><el-input :disabled="isDisabled" v-model="productorientation" placeholder="请输入产品定位"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">产品买点<span class="font12 color-gray5">（核心买点需标注）</span></td>
        <td colspan="3">
-         <el-input :disabled="status !== 0" type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input>
+         <el-input :disabled="isDisabled" type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">视频内必须展示的关键信息</td>
        <td colspan="3">
-         <el-input :disabled="status !== 0" type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input>
+         <el-input :disabled="isDisabled" type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">创意思路</td>
        <td colspan="3">
-         <el-input :disabled="status !== 0" type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
+         <el-input :disabled="isDisabled" type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">特殊备注</td>
-       <td>
-         <el-input :disabled="status !== 0" v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
+       <td :colspan="query.type ? 3 : ''">
+         <el-input :disabled="isDisabled" v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
        </td>
-       <td>制作价格</td>
-       <td>
-         <el-input :disabled="status !== 0" v-model="price" placeholder="请输入制作价格"></el-input>
+       <td v-if="!query.type">制作价格</td>
+       <td v-if="!query.type">
+         <el-input :disabled="isDisabled" v-model="price" placeholder="请输入制作价格"></el-input>
        </td>
      </tr>
-     <tr v-if="status !== 0">
+     <tr v-if="isDisabled">
        <td class="title">项目来源<span>*</span></td>
        <td>
          <el-select :disabled="status !== 1" v-model="comefrom" placeholder="请选择项目来源">
@@ -205,7 +205,7 @@
           </el-select>
         </td>
      </tr>
-     <tr v-if="status !== 0">
+     <tr v-if="isDisabled">
        <td class="title">拍摄价格<span>*</span></td>
        <td :colspan="status !== 0||status !== 1 ? 3 : ''">
          <el-input :disabled="status !== 1" v-model="price_out" placeholder="请输入拍摄价格"></el-input>
@@ -213,6 +213,12 @@
        <td v-if="status === 1" class="title">分发用户<span>*</span></td>
        <td v-if="status === 1" @click="chooseUser">
          <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input>
+       </td>
+     </tr>
+     <tr v-if="query.type">
+       <td class="title">创意梗概</td>
+       <td colspan="3">
+         <el-input type="textarea" v-model="idea" placeholder="请输入创意梗概"></el-input>
        </td>
      </tr>
      <tr>
@@ -233,6 +239,10 @@
            v-if="status === 2"
            type="primary"
            @click="chooseUser">新增邀请</el-button>
+           <el-button
+             v-if="query.type === 'new'"
+             type="primary"
+             @click="onInvite3">确认订单</el-button>
        </td>
      </tr>
    </table>
@@ -251,7 +261,7 @@
            </el-table-column>
            <el-table-column
              label="手机号码"
-             width="120">
+             min-width="120">
                <template slot-scope="scope">
                  <template v-if="!scope.row.mobile || scope.row.mobile == ''">无</template>
                  <template v-else>{{scope.row.mobile}}</template>
@@ -259,7 +269,7 @@
            </el-table-column>
            <el-table-column
              label="创意梗概"
-             min-width="120">
+             min-width="500">
              <template slot-scope="scope">
                <template v-if="!scope.row.idea || scope.row.idea == ''">无</template>
                <template v-else>{{scope.row.idea}}</template>
@@ -368,6 +378,7 @@ export default {
       comefrom: '',
       pricetype: '',
       price_out: '',
+      idea: '',
       durationOptions: [],
       ratioOptions: [],
       videoclassOptions: [],
@@ -398,7 +409,8 @@ export default {
       status: 0,
       isLoading: false,
       uids: [],
-      uid: ''
+      uid: '',
+      isDisabled: false
     }
   },
   methods: {
@@ -479,6 +491,7 @@ export default {
         this.comefrom = retdata.comefrom
         this.pricetype = retdata.pricetype
         this.price_out = retdata.price_out
+        this.idea = retdata.myidea
       })
     },
     refresh () {
@@ -525,6 +538,7 @@ export default {
         this.comefrom = ''
         this.pricetype = ''
         this.price_out = ''
+        this.idea = ''
         this.issubmit = false
         this.$vux.loading.show()
         this.getData()
@@ -533,6 +547,9 @@ export default {
         }
         if (this.status === 2) {
           this.getData3()
+        }
+        if (this.query.type || this.query.status !== 0) {
+          this.isDisabled = true
         }
       }
     },
@@ -695,7 +712,7 @@ export default {
           const retdata = data.data ? data.data : data
           for (let i = 0; i < retdata.length; i++) {
             let curd = retdata[i]
-            for (let u = 0; u < this.checkList; u++) {
+            for (let u = 0; u < this.checkList.length; u++) {
               if (curd.uid === this.checkList[u]) {
                 curd.checked = true
               }
@@ -775,6 +792,25 @@ export default {
           this.getData3()
           this.issubmit = false
         })
+      }
+    },
+    onInvite3 () {
+      let params = {
+        idea: this.idea,
+        id: parseInt(this.query.id)
+      }
+      if (!this.issubmit) {
+        if (this.idea === '') {
+          this.$vux.toast.text('请填写创意梗概', 'middle')
+        } else {
+          this.issubmit = true
+          this.$http.post(`${ENV.BokaApi}/api/demands/addIdea`, params).then(res => {
+            let data = res.data
+            this.$vux.toast.text(data.error, 'middle')
+            this.$router.push({path: '/myOrder'})
+            this.issubmit = false
+          })
+        }
       }
     }
   },
