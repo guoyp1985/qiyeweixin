@@ -41,7 +41,7 @@
             </div>
           </template>
           <template v-if="groupid == 2 || groupid == 3">
-            <div class="item" @click="toLink('/myNeed')">
+            <div class="item" @click="toLink('/makeList')">
               <div class="item-inner">
                 <div class="w_100">
                   <div class="radius bg-blue"><span class="al al-fuwu font18" style="font-weight:bold;"></span></div>

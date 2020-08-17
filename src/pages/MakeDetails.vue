@@ -207,7 +207,7 @@
      </tr>
      <tr v-if="isDisabled">
        <td class="title">拍摄价格<span>*</span></td>
-       <td :colspan="status !== 0||status !== 1 ? 3 : ''">
+       <td :colspan="status !== 0 && status !== 1 ? 3 : ''">
          <el-input :disabled="status !== 1" v-model="price_out" placeholder="请输入拍摄价格"></el-input>
        </td>
        <td v-if="status === 1" class="title">分发用户<span>*</span></td>
@@ -221,29 +221,29 @@
          <el-input type="textarea" v-model="idea" placeholder="请输入创意梗概"></el-input>
        </td>
      </tr>
-     <tr>
+     <tr v-if="status !== 2 && status !== 3">
        <td class="padding10" colspan="4">
          <el-button
            v-if="canedit === 1"
            type="primary"
-           @click="onSubmit">编辑</el-button>
+           @click="onSubmit">修改</el-button>
          <el-button
            v-if="cancensor === 1"
            type="primary"
-           @click="handleExamine">审批</el-button>
+           @click="handleExamine(parseInt(query.id))">审批</el-button>
          <el-button
            v-if="status === 1"
            type="primary"
            @click="onInvite">分发</el-button>
-         <el-button
-           v-if="status === 2"
-           type="primary"
-           @click="chooseUser">新增邀请</el-button>
            <el-button
              v-if="query.type === 'new'"
              type="primary"
              @click="onInvite3">确认订单</el-button>
-       </td>
+           <el-button
+             v-if="query.type === 'ongoing'"
+             type="primary"
+             @click="onInvite3">修改订单</el-button>
+     </td>
      </tr>
    </table>
    <div class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
@@ -284,16 +284,67 @@
                <template v-else>{{scope.row.idea}}</template>
              </template>
            </el-table-column>
-           <!-- <el-table-column
-             label="操作"
-             min-width="120">
-             <el-button @click="handleExamine(uid)">审批</el-button>
-           </el-table-column> -->
        </el-table>
-        <div class="align_center mt20">
+        <div class="align_center mt20" v-if="status === 2">
           <el-button
             type="primary"
-            @click="onSubmit2">提交</el-button>
+            @click="onSubmit2">提交选择</el-button>
+          <el-button
+            type="primary"
+            @click="chooseUser">新增邀请</el-button>
+        </div>
+     </template>
+   </div>
+   <div class="scroll-container user-table">
+     <template v-if="disTabData3 && (status === 3 || query.type === 'ongoing')">
+       <el-table
+         :data="ideas"
+         stripe
+         style="width: 100%"
+         :header-cell-style="{'text-align':'center'}"
+         :cell-style="{'text-align':'center'}">
+           <el-table-column
+             prop="datetime"
+             label="日期"
+             min-width="100">
+           </el-table-column>
+           <el-table-column
+             prop="version"
+             label="版本号"
+             min-width="100">
+           </el-table-column>
+           <el-table-column
+             label="创意梗概"
+             min-width="500">
+             <template slot-scope="scope">
+               <template v-if="!scope.row.content || scope.row.content == ''">无</template>
+               <template v-else>{{scope.row.content}}</template>
+             </template>
+           </el-table-column>
+           <el-table-column
+             label="审核意见"
+             min-width="120">
+               <template slot-scope="scope">
+                 <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
+                 <template v-else>{{scope.row.checkresult}}</template>
+               </template>
+           </el-table-column>
+           <el-table-column
+             v-if="status === 3"
+             label="操作"
+             min-width="120">
+             <template slot-scope="scope">
+               <template v-if="scope.row.cancheck === 1"><el-button @click="handleExamine(scope.row.id)">审批</el-button></template>
+             </template>
+           </el-table-column>
+       </el-table>
+        <div class="align_center mt20" v-if="status === 2">
+          <el-button
+            type="primary"
+            @click="onSubmit2">提交选择</el-button>
+          <el-button
+            type="primary"
+            @click="chooseUser">新增邀请</el-button>
         </div>
      </template>
    </div>
@@ -422,9 +473,11 @@ export default {
       status: 0,
       isLoading: false,
       uids: [],
-      uid: '',
+      id: '',
       isDisabled: false,
-      ideaRadio: ''
+      ideaRadio: '',
+      ideas: '',
+      disTabData3: false
     }
   },
   methods: {
@@ -505,7 +558,18 @@ export default {
         this.comefrom = retdata.comefrom
         this.pricetype = retdata.pricetype
         this.price_out = retdata.price_out
-        this.idea = retdata.myidea
+        this.ideas = retdata.ideas
+        if (retdata.ideas) {
+          for (var i = 0; i < this.ideas.length; i++) {
+            let curd = this.ideas[i]
+            let startdate = new Date(curd.dateline * 1000)
+            let startyear = startdate.getFullYear()
+            let startmonth = startdate.getMonth() + 1
+            let startday = startdate.getDate()
+            curd.datetime = startyear + '/' + startmonth + '/' + startday
+          }
+        }
+        this.disTabData3 = true
       })
     },
     refresh () {
@@ -519,6 +583,8 @@ export default {
         this.pageStart2 = 0
         this.disTabData2 = false
         this.tableData2 = []
+        this.disTabData3 = false
+        this.ideas = []
         this.durationOptions = []
         this.ratioOptions = []
         this.videoclassOptions = []
@@ -579,11 +645,7 @@ export default {
         logo_end: this.logo_end,
         price: this.price,
         videocount: this.videocount,
-        videotype: this.videotype,
-        comefrom: this.comefrom,
-        pricetype: this.pricetype,
-        price_out: this.price_out,
-        uids: this.checkList
+        videotype: this.videotype
       }
       if (this.brand !== '') params.brand = this.brand
       if (this.product !== '') params.product = this.product
@@ -600,7 +662,7 @@ export default {
       var rule1 = /^(0|[1-9][0-9]*)$/
       if (!this.issubmit) {
         if (this.title === '' || this.starttime === '' || this.endtime === '' || this.duration === '' || this.ratio === '' || this.videoclass === '' ||
-      this.logo_all === '' || this.logo_end === '' || this.videotype === '' || (this.status === 1 && (this.pricetype === '' || this.comefrom === '' || this.users === '' || this.price_out === ''))) {
+      this.logo_all === '' || this.logo_end === '' || this.videotype === '') {
           this.$vux.toast.text('必填项不能为空', 'middle')
         } else if (this.endtime <= this.starttime) {
           this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
@@ -619,9 +681,9 @@ export default {
         }
       }
     },
-    handleExamine (uid) {
+    handleExamine (id) {
       this.showExamine = true
-      if (uid) this.uid = uid
+      if (id) this.id = id
     },
     changeExamine () {
       if (this.radio === 2) {
@@ -642,16 +704,21 @@ export default {
         this.$vux.toast.text('请填写审批不通过原因', 'middle')
         return false
       }
-      let params = {id: this.query.id, agree: this.radio}
+      let params = {id: this.id, agree: this.radio}
       if (this.reason) params.reason = this.reason
-      if (this.uid) params.uid = this.uid
+      if (this.status === 3) {
+        params.module = 'ideas'
+      }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/demands/censor`, params).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
           this.closeModal()
-          this.getInfo()
+          this.getInfo(this.query.id)
+          if (this.status === 0) {
+            this.$router.push({path: '/makeList', query: {status: 1}})
+          }
         }
       })
     },
@@ -814,15 +881,16 @@ export default {
         idea: this.idea,
         id: parseInt(this.query.id)
       }
+      console.log(this.idea);
       if (!this.issubmit) {
-        if (this.idea === '') {
+        if (this.idea === '' || !this.idea) {
           this.$vux.toast.text('请填写创意梗概', 'middle')
         } else {
           this.issubmit = true
           this.$http.post(`${ENV.BokaApi}/api/demands/addIdea`, params).then(res => {
             let data = res.data
             this.$vux.toast.text(data.error, 'middle')
-            this.$router.push({path: '/myOrder'})
+            this.$router.push({path: '/myOrder', query: {type: this.query.type}})
             this.issubmit = false
           })
         }
@@ -833,6 +901,25 @@ export default {
     },
     onSubmit2 () {
       console.log(this.ideaRadio);
+      let params = {
+        suid: this.ideaRadio,
+        id: parseInt(this.query.id)
+      }
+      if (!this.issubmit) {
+        if (this.ideaRadio === '') {
+          this.$vux.toast.text('请选择一条创意梗概', 'middle')
+        } else {
+          this.issubmit = true
+          this.$http.post(`${ENV.BokaApi}/api/demands/selectIdea`, params).then(res => {
+            let data = res.data
+            this.$vux.toast.text(data.error, 'middle')
+            if (data.flag === 1) {
+              this.$router.push({path: '/makeList', query: {status: 3}})
+            }
+            this.issubmit = false
+          })
+        }
+      }
     }
   },
   activated () {
