@@ -7,7 +7,7 @@
       <tab-item :selected="selectedIndex == 3" @on-item-click="clickTab(3,3)">分镜脚本期</tab-item>
       <tab-item :selected="selectedIndex == 4" @on-item-click="clickTab(4,4)">样片期</tab-item>
     </tab>
-    <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
+    <div class="s-container scroll-container makeList-page" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <el-row class="padding10">
         <el-col :span="18">
           <el-input placeholder="请输入项目名称搜索" v-model="keyword" @keyup.enter.native="kwChange">
@@ -182,45 +182,8 @@ export default {
 
 <style lang="less">
 .user-list-page{
-  .vux-tab-wrap{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 44px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 44px;
+  .makeList-page .el-table__row,.vux-tab-item{
+    cursor: pointer;
   }
-  .scroll_item{overflow:hidden;position:relative;}
-    .btnicon{
-      display: inline-block;
-      color: #ea3a3a;
-      border: 1px solid #ea3a3a;
-      text-align: center;
-      border-radius: 30px;
-      letter-spacing: 0px;
-      height: 21px;
-      width: 41px;
-      line-height: 21px;
-    }
-    .pro_list_top{
-      width:100%;padding-bottom:9%;
-      background: url(../assets/images/product_list_top.png);
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 100%;
-    }
-    .doBtn{height: 44px;line-height: 44px;width: 33.3%;text-align: center;}
-    .flex_around{
-      display: flex;
-      flex-flow: wrap;
-      align-items: center;
-      .btn-item{
-        width: 50%;
-      }
-      .el-button{margin: 5px 0px;}
-    }
 }
 </style>

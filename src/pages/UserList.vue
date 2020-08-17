@@ -148,37 +148,8 @@ export default {
 
 <style lang="less">
 .user-list-page{
-  .vux-tab-wrap{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 44px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 44px;
+  .vux-tab-item{
+    cursor: pointer;
   }
-  .scroll_item{overflow:hidden;position:relative;}
-    .btnicon{
-      display: inline-block;
-      color: #ea3a3a;
-      border: 1px solid #ea3a3a;
-      text-align: center;
-      border-radius: 30px;
-      letter-spacing: 0px;
-      height: 21px;
-      width: 41px;
-      line-height: 21px;
-    }
-    .pro_list_top{
-      width:100%;padding-bottom:9%;
-      background: url(../assets/images/product_list_top.png);
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 100%;
-    }
-    .doBtn{height: 44px;line-height: 44px;width: 33.3%;text-align: center;}
-    .flex_around{display: flex;justify-content: space-around; align-items: center;}
 }
 </style>

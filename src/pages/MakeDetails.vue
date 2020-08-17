@@ -249,11 +249,20 @@
    <div class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
      <template v-if="disTabData2">
        <el-table
-       :data="tableData2"
-       stripe
-       style="width: 100%"
-       :header-cell-style="{'text-align':'center'}"
-       :cell-style="{'text-align':'center'}">
+         :data="tableData2"
+         stripe
+         style="width: 100%"
+         highlight-current-row
+         @current-change="handleCurrentChange"
+         :header-cell-style="{'text-align':'center'}"
+         :cell-style="{'text-align':'center'}">
+           <el-table-column
+             label="选择"
+             min-width="60">
+               <template slot-scope="scope">
+                 <el-radio size="medium" v-model="ideaRadio" :label="scope.row.uid"><i></i></el-radio>
+               </template>
+           </el-table-column>
            <el-table-column
              prop="linkman"
              label="姓名"
@@ -275,13 +284,17 @@
                <template v-else>{{scope.row.idea}}</template>
              </template>
            </el-table-column>
-           <el-table-column
+           <!-- <el-table-column
              label="操作"
              min-width="120">
-             <!-- <el-button @click="handleExamine(uid)">审批</el-button> -->
-             <el-button @click="">审批</el-button>
-           </el-table-column>
+             <el-button @click="handleExamine(uid)">审批</el-button>
+           </el-table-column> -->
        </el-table>
+        <div class="align_center mt20">
+          <el-button
+            type="primary"
+            @click="onSubmit2">提交</el-button>
+        </div>
      </template>
    </div>
    <div class="auto-modal flex_center" style="position:fixed;" v-if="showExamine">
@@ -390,7 +403,7 @@ export default {
       issubmit: false,
       canedit: 0,
       cancensor: 0,
-      limit: 10,
+      limit: 20,
       tableData: [],
       pageStart: 0,
       disTabData: false,
@@ -410,7 +423,8 @@ export default {
       isLoading: false,
       uids: [],
       uid: '',
-      isDisabled: false
+      isDisabled: false,
+      ideaRadio: ''
     }
   },
   methods: {
@@ -539,6 +553,7 @@ export default {
         this.pricetype = ''
         this.price_out = ''
         this.idea = ''
+        this.ideaRadio = ''
         this.issubmit = false
         this.$vux.loading.show()
         this.getData()
@@ -812,6 +827,12 @@ export default {
           })
         }
       }
+    },
+    handleCurrentChange (val) {
+      this.ideaRadio = val.uid
+    },
+    onSubmit2 () {
+      console.log(this.ideaRadio);
     }
   },
   activated () {
@@ -853,6 +874,9 @@ export default {
   }
   .user-table{
     margin: 50px 0;
+    .el-table__row{
+      cursor: pointer;
+    }
   }
 }
 .users-box{
