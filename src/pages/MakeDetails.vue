@@ -215,13 +215,13 @@
          <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input>
        </td>
      </tr>
-     <tr v-if="query.type">
+     <tr v-if="query.type || status === 4">
        <td class="title">创意梗概</td>
        <td colspan="3">
          <el-input type="textarea" v-model="idea" placeholder="请输入创意梗概"></el-input>
        </td>
      </tr>
-     <tr v-if="status !== 2 && status !== 3">
+     <tr v-if="query.type || status === 1 || status === 0">
        <td class="padding10" colspan="4">
          <el-button
            v-if="canedit === 1"
@@ -236,13 +236,13 @@
            type="primary"
            @click="onInvite">分发</el-button>
            <el-button
-             v-if="query.type === 'new'"
+             v-if="query.type === 'new' && status === 2"
              type="primary"
-             @click="onInvite3">确认订单</el-button>
+             @click="onInvite3(0)">确认订单</el-button>
            <el-button
-             v-if="query.type === 'ongoing'"
+             v-if="query.type === 'ongoing' && status === 3"
              type="primary"
-             @click="onInvite3">修改订单</el-button>
+             @click="onInvite3(1)">修改创意梗概</el-button>
      </td>
      </tr>
    </table>
@@ -295,7 +295,7 @@
         </div>
      </template>
    </div>
-   <div class="scroll-container user-table">
+   <div class="scroll-container">
      <template v-if="disTabData3 && (status === 3 || query.type === 'ongoing')">
        <el-table
          :data="ideas"
@@ -333,8 +333,8 @@
              label="审核状态"
              min-width="120">
                <template slot-scope="scope">
-                 <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
-                 <template v-else>{{scope.row.checkresult}}</template>
+                 <template v-if="!scope.row.modstr || scope.row.modstr == ''">无</template>
+                 <template v-else>{{scope.row.modstr}}</template>
                </template>
            </el-table-column>
            <el-table-column
@@ -366,7 +366,7 @@
              </el-radio-group>
            </div>
            <div class="modal-body mb20">
-             <div class="from-item">
+             <div class="from-item-textarea">
                <el-input type="textarea" v-model="reason" :placeholder="showReason" size="50"></el-input>
              </div>
            </div>
@@ -579,6 +579,16 @@ export default {
           }
           this.disTabData3 = true
         }
+        if (retdata.confirmedidea) {
+          this.idea = retdata.confirmedidea
+        }
+        if (retdata.status === 2 && !this.query.type) {
+          this.getData3()
+        }
+        if (this.query.type || retdata.status !== 0) {
+          console.log(retdata.status);
+          this.isDisabled = true
+        }
       })
     },
     refresh () {
@@ -629,16 +639,11 @@ export default {
         this.idea = ''
         this.ideaRadio = ''
         this.issubmit = false
+        this.isDisabled = false
         this.$vux.loading.show()
         this.getData()
         if (this.query.id) {
           this.getInfo(this.query.id)
-        }
-        if (this.status === 2) {
-          this.getData3()
-        }
-        if (this.query.type || this.query.status !== 0) {
-          this.isDisabled = true
         }
       }
     },
@@ -726,6 +731,8 @@ export default {
           this.getInfo(this.query.id)
           if (this.status === 0) {
             this.$router.push({path: '/makeList', query: {status: 1}})
+          } else {
+            this.$router.push({path: '/makeList', query: {status: 4}})
           }
         }
       })
@@ -770,7 +777,7 @@ export default {
         this.$vux.toast.text('请选一个新用户', 'middle')
         return false
       }
-      if (this.checkList.length !== this.uids.length) {
+      if (this.checkList.length !== this.uids.length && status === 2) {
         this.onInvite2()
       }
       this.showChooseUser = false
@@ -884,7 +891,7 @@ export default {
         })
       }
     },
-    onInvite3 () {
+    onInvite3 (selectedIndex) {
       let params = {
         idea: this.idea,
         id: parseInt(this.query.id)
@@ -897,7 +904,7 @@ export default {
           this.$http.post(`${ENV.BokaApi}/api/demands/addIdea`, params).then(res => {
             let data = res.data
             this.$vux.toast.text(data.error, 'middle')
-            this.$router.push({path: '/myOrder', query: {type: this.query.type}})
+            this.$router.push({path: '/myOrder', query: {type: this.query.type, selectedIndex: selectedIndex}})
             this.issubmit = false
           })
         }
@@ -921,7 +928,7 @@ export default {
             let data = res.data
             this.$vux.toast.text(data.error, 'middle')
             if (data.flag === 1) {
-              this.$router.push({path: '/makeList', query: {status: 3}})
+              this.$router.push({path: '/makeList', query: {status: 2}})
             }
             this.issubmit = false
           })
@@ -982,7 +989,7 @@ export default {
     width: 400px !important;
   }
 }
-.from-item{
+.from-item-textarea{
   height: 100px;
   border:1px solid #bcbcbc;
   border-radius: 4px;

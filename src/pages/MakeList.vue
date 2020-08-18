@@ -4,8 +4,8 @@
       <tab-item :selected="selectedIndex == 0" @on-item-click="clickTab(0,0)">新订单</tab-item>
       <tab-item :selected="selectedIndex == 1" @on-item-click="clickTab(1,1)">待分发</tab-item>
       <tab-item :selected="selectedIndex == 2" @on-item-click="clickTab(2,2)">创意期</tab-item>
-      <tab-item :selected="selectedIndex == 3" @on-item-click="clickTab(3,4)">分镜脚本期</tab-item>
-      <tab-item :selected="selectedIndex == 4" @on-item-click="clickTab(4,5)">样片期</tab-item>
+      <tab-item :selected="selectedIndex == 4" @on-item-click="clickTab(4,4)">分镜脚本期</tab-item>
+      <tab-item :selected="selectedIndex == 5" @on-item-click="clickTab(5,5)">样片期</tab-item>
     </tab>
     <div class="s-container scroll-container makeList-page" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <el-row class="padding10">
@@ -156,7 +156,11 @@ export default {
     },
     handleEdit (row) {
       let id = row.id
-      this.$router.push({path: '/makeDetails', query: {id: id, status: this.clickStatus}})
+      if (this.clickStatus === 4) {
+        this.$router.push({path: '/fenJing', query: {id: id}})
+      } else {
+        this.$router.push({path: '/makeDetails', query: {id: id}})
+      }
     },
     refresh () {
       this.loginUser = User.get()
