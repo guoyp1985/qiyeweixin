@@ -181,10 +181,10 @@
          <el-input :disabled="isDisabled" v-model="price" placeholder="请输入制作价格"></el-input>
        </td>
      </tr>
-     <tr v-if="isDisabled">
+     <tr v-if="status === 1">
        <td class="title">项目来源<span>*</span></td>
        <td>
-         <el-select :disabled="status !== 1" v-model="comefrom" placeholder="请选择项目来源">
+         <el-select v-model="comefrom" placeholder="请选择项目来源">
            <el-option
               v-for="item in comefromOptions"
               :key="item.value"
@@ -195,7 +195,7 @@
         </td>
         <td class="title">视频价格<span>*</span></td>
         <td>
-          <el-select :disabled="status !== 1" v-model="pricetype" placeholder="请选择视频价格">
+          <el-select v-model="pricetype" placeholder="请选择视频价格">
             <el-option
               v-for="item in pricetypeOptions"
               :key="item.value"
@@ -323,6 +323,14 @@
            </el-table-column>
            <el-table-column
              label="审核意见"
+             min-width="120">
+               <template slot-scope="scope">
+                 <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
+                 <template v-else>{{scope.row.checkresult}}</template>
+               </template>
+           </el-table-column>
+           <el-table-column
+             label="审核状态"
              min-width="120">
                <template slot-scope="scope">
                  <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
@@ -558,6 +566,7 @@ export default {
         this.comefrom = retdata.comefrom
         this.pricetype = retdata.pricetype
         this.price_out = retdata.price_out
+        this.status = retdata.status
         this.ideas = retdata.ideas
         if (retdata.ideas) {
           for (var i = 0; i < this.ideas.length; i++) {
@@ -568,15 +577,14 @@ export default {
             let startday = startdate.getDate()
             curd.datetime = startyear + '/' + startmonth + '/' + startday
           }
+          this.disTabData3 = true
         }
-        this.disTabData3 = true
       })
     },
     refresh () {
       this.loginUser = User.get()
       if (this.loginUser !== '') {
         this.query = this.$route.query
-        this.status = parseInt(this.query.status)
         this.pageStart = 0
         this.disTabData = false
         this.tableData = []

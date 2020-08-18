@@ -4,8 +4,8 @@
       <tab-item :selected="selectedIndex == 0" @on-item-click="clickTab(0,0)">新订单</tab-item>
       <tab-item :selected="selectedIndex == 1" @on-item-click="clickTab(1,1)">待分发</tab-item>
       <tab-item :selected="selectedIndex == 2" @on-item-click="clickTab(2,2)">创意期</tab-item>
-      <tab-item :selected="selectedIndex == 3" @on-item-click="clickTab(3,3)">分镜脚本期</tab-item>
-      <tab-item :selected="selectedIndex == 4" @on-item-click="clickTab(4,4)">样片期</tab-item>
+      <tab-item :selected="selectedIndex == 3" @on-item-click="clickTab(3,4)">分镜脚本期</tab-item>
+      <tab-item :selected="selectedIndex == 4" @on-item-click="clickTab(4,5)">样片期</tab-item>
     </tab>
     <div class="s-container scroll-container makeList-page" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <el-row class="padding10">
@@ -97,6 +97,7 @@ export default {
       this.pagestart = 0
       this.disTabData = false
       this.tableData = []
+      this.$vux.loading.show()
       this.getData()
     },
     kwChange () {
@@ -108,6 +109,7 @@ export default {
       this.pagestart = 0
       this.disTabData = false
       this.tableData = []
+      this.$vux.loading.show()
       this.getData()
     },
     getData () {
