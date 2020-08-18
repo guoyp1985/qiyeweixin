@@ -881,7 +881,6 @@ export default {
         idea: this.idea,
         id: parseInt(this.query.id)
       }
-      console.log(this.idea);
       if (!this.issubmit) {
         if (this.idea === '' || !this.idea) {
           this.$vux.toast.text('请填写创意梗概', 'middle')
