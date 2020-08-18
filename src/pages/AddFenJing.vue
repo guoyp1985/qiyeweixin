@@ -113,6 +113,16 @@ export default {
       if (this.loginUser) {
         this.query = this.$route.query
         this.issubmit = false
+        this.daynight = ''
+        this.scene = ''
+        this.photography = ''
+        this.fieldofview = ''
+        this.seconds = ''
+        this.pictures = ''
+        this.actorsline = ''
+        this.costumes = ''
+        this.postproduction = ''
+        this.memo = ''
       }
     }
   },

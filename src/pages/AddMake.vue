@@ -4,12 +4,6 @@
      <tr>
        <th colspan="4" class="align_center font20 padding15">制作需求单</th>
      </tr>
-     <tr v-if="query.id">
-       <td class="title">项目编号</td>
-       <td colspan="3">
-         <el-input readonly v-model="demandno"></el-input>
-       </td>
-     </tr>
      <tr>
        <td class="title">项目名称<span>*</span></td>
        <td colspan="3">
@@ -197,7 +191,6 @@ export default {
     return {
       loginUser: {},
       query: {},
-      demandno: '',
       title: '',
       brand: '',
       videotype: '',
@@ -276,6 +269,28 @@ export default {
         this.logo_allOptions = []
         this.logo_endOptions = []
         this.videotypeOptions = []
+        this.title = ''
+        this.brand = ''
+        this.videotype = ''
+        this.product = ''
+        this.target = ''
+        this.videocount = ''
+        this.linkurl = ''
+        this.customerdemand = ''
+        this.customerinfo = ''
+        this.productorientation = ''
+        this.sellerpoint = ''
+        this.keyinfo = ''
+        this.otherdemand = ''
+        this.price = ''
+        this.starttime = ''
+        this.endtime = ''
+        this.duration = ''
+        this.ratio = ''
+        this.videoclass = ''
+        this.logo_all = ''
+        this.logo_end = ''
+        this.customeridea = ''
         this.issubmit = false
         this.$vux.loading.show()
         this.getData()
