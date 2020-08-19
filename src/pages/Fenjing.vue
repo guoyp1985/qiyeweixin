@@ -13,7 +13,7 @@
             label="《制作需求单》附件："
             min-width="100">
             <el-table-column
-              prop="version"
+              prop="id"
               label="镜号"
               min-width="100">
             </el-table-column>
@@ -117,7 +117,7 @@
               min-width="120">
               <template slot-scope="scope">
                 <template v-if="query.type"><el-button size="mini" @click="addFenJing(scope.row.id)">修改</el-button></template>
-                <template v-if="!query.type"><el-button size="mini" @click="handleExamine(scope.row.id)">审批</el-button></template>
+                <!-- <template v-if="!query.type"><el-button size="mini" @click="handleExamine(scope.row.id)">审批</el-button></template> -->
               </template>
             </el-table-column>
         </el-table>
@@ -126,6 +126,10 @@
              v-if="query.type"
              type="primary"
              @click="addFenJing">新增分镜脚本</el-button>
+             <el-button
+               v-if="!query.type"
+               type="primary"
+               @click="handleExamine">审批</el-button>
          </div>
       </template>
     </div>
@@ -178,8 +182,10 @@ export default {
     }
   },
   methods: {
-    addFenJing () {
-      this.$router.push({path: '/addFenJing', query: {id: this.query.id}})
+    addFenJing (id) {
+      let params = {id: this.query.id}
+      if (!isNaN(id)) params.fenjingId = id
+      this.$router.push({path: '/addFenJing', query: params})
     },
     getData1 () {
       this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {
@@ -302,6 +308,20 @@ export default {
   }
   .pre-wrap{
     white-space: pre-wrap;
+  }
+  @media (min-width: 768px) {
+    .modal-inner{
+      width: 400px !important;
+    }
+  }
+  .from-item-textarea{
+    height: 100px;
+    border:1px solid #bcbcbc;
+    border-radius: 4px;
+    .el-textarea,.el-textarea__inner{
+      height: 100%;
+      border: none !important;
+    }
   }
 }
 </style>

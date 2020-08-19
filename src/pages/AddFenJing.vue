@@ -71,8 +71,29 @@ export default {
     }
   },
   methods: {
+    getInfo () {
+      this.$http.post(`${ENV.BokaApi}/api/demands/getStoryBoard`, {demandid: parseInt(this.query.id)}).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          const curd = retdata[i]
+          if (curd.id === parseInt(this.query.fenjingId)) {
+            this.daynight = curd.daynight
+            this.scene = curd.scene
+            this.photography = curd.photography
+            this.fieldofview = curd.fieldofview
+            this.seconds = curd.seconds
+            this.pictures = curd.pictures
+            this.actorsline = curd.actorsline
+            this.costumes = curd.costumes
+            this.postproduction = curd.postproduction
+            this.memo = curd.memo
+            break;
+          }
+        }
+      })
+    },
     onSubmit () {
-      console.log(parseInt(this.query.id));
       if (!this.issubmit) {
         if (this.daynight === '' ||
         this.scene === '' ||
@@ -98,11 +119,12 @@ export default {
             actorsline: this.actorsline,
             costumes: this.costumes,
             postproduction: this.postproduction,
-            memo: this.memo
+            memo: this.memo,
+            id: this.query.fenjingId
           }).then(res => {
             let data = res.data
             this.$vux.toast.text(data.error, 'middle')
-            this.$router.push({path: '/fenJing', query: {id: this.query.id}})
+            this.$router.push({path: '/fenJing', query: {id: this.query.id, type: 'ongoing'}})
             this.issubmit = false
           })
         }
@@ -123,6 +145,7 @@ export default {
         this.costumes = ''
         this.postproduction = ''
         this.memo = ''
+        this.getInfo()
       }
     }
   },
