@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="bg-page font14 user-list-page">
+  <div class="bg-page font14 fenjing-list-page">
     <div class="vux-tab-wrap">分镜脚本</div>
     <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <template v-if="disTabData">
@@ -50,6 +50,10 @@
               prop="pictures"
               label="画面描述"
               min-width="200">
+              <template slot-scope="scope">
+                <div v-if="!scope.row.pictures || scope.row.pictures == ''">无</div>
+                <div class="align_left pre-wrap" v-else>{{scope.row.pictures}}</div>
+              </template>
             </el-table-column>
           </el-table-column>
           <el-table-column
@@ -59,8 +63,8 @@
               label="台词/解说词"
               min-width="200">
               <template slot-scope="scope">
-                <template v-if="!scope.row.actorsline || scope.row.actorsline == ''">无</template>
-                <template v-else>{{scope.row.actorsline}}</template>
+                <div v-if="!scope.row.actorsline || scope.row.actorsline == ''">无</div>
+                <div class="align_left pre-wrap" v-else>{{scope.row.actorsline}}</div>
               </template>
             </el-table-column>
           </el-table-column>
@@ -284,7 +288,7 @@ export default {
 </script>
 
 <style lang="less">
-.user-list-page{
+.fenjing-list-page{
   .vux-tab-wrap{
     position: fixed;
     top: 0;
@@ -295,6 +299,9 @@ export default {
     font-size: 16px;
     font-weight: bold;
     line-height: 44px;
+  }
+  .pre-wrap{
+    white-space: pre-wrap;
   }
 }
 </style>
