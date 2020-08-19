@@ -39,7 +39,7 @@
             </el-table-column>
           </el-table-column>
           <el-table-column
-            label="title"
+            :label="title"
             min-width="100">
             <el-table-column
               prop="seconds"
@@ -65,7 +65,7 @@
             </el-table-column>
           </el-table-column>
           <el-table-column
-            label="ratio"
+            :label="ratioOptions[ratio]"
             min-width="100">
             <el-table-column
               label="服装道具"
@@ -97,14 +97,14 @@
             </el-table-column>
           </el-table-column>
           <el-table-column
-            label="demandno"
+            :label="demandno"
             min-width="100">
             <el-table-column
               label="审核意见"
               min-width="200">
                 <template slot-scope="scope">
-                  <template v-if="!scope.row.modstr || scope.row.modstr == ''">无</template>
-                  <template v-else>{{scope.row.modstr}}</template>
+                  <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
+                  <template v-else>{{scope.row.checkresult}}</template>
                 </template>
             </el-table-column>
           </el-table-column>
@@ -167,11 +167,36 @@ export default {
       examineIndex: '',
       showExamine: false,
       showReason: '请输入审批通过原因',
+      title: '',
+      demandno: '',
+      ratioOptions: '',
+      ratio: ''
     }
   },
   methods: {
     addFenJing () {
       this.$router.push({path: '/addFenJing', query: {id: this.query.id}})
+    },
+    getData1 () {
+      this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          this.ratioOptions = retdata.ratio
+          console.log(this.ratioOptions);
+        }
+      })
+    },
+    getInfo (id) {
+      this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: id}).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        this.title = retdata.title
+        this.demandno = retdata.demandno
+        this.ratio = retdata.ratio
+      })
     },
     getData () {
       let params = {pagestart: this.pageStart, limit: this.limit, demandid: parseInt(this.query.id)}
@@ -247,6 +272,8 @@ export default {
         this.tableData = []
         this.$vux.loading.show()
         this.getData()
+        this.getData1()
+        this.getInfo(parseInt(this.query.id))
       }
     }
   },

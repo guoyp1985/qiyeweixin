@@ -39,9 +39,6 @@
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'

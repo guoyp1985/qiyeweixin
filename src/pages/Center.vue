@@ -79,10 +79,6 @@
     </div>
   </div>
 </template>
-
-<i18n>
-</i18n>
-
 <script>
 import ENV from 'env'
 import {User} from '#/storage'
