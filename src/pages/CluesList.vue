@@ -20,12 +20,6 @@
             :data="tableData"
             stripe
             style="width: 100%">
-                <!-- <el-table-column
-                    prop="id"
-                    label="ID"
-                    align="center"
-                    width="80">
-                </el-table-column> -->
                 <el-table-column
                     prop="title"
                     align="center"

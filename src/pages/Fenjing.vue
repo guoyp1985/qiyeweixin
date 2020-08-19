@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="bg-page font14 fenjing-list-page">
     <div class="vux-tab-wrap">分镜脚本</div>
-    <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
+    <div class="s-container scroll-container" style="top:44px;">
       <template v-if="disTabData">
         <el-table
           :data="tableData"
@@ -114,9 +114,10 @@
           </el-table-column>
             <el-table-column
               label="操作"
+              v-if="query.type"
               min-width="120">
               <template slot-scope="scope">
-                <template v-if="query.type"><el-button size="mini" @click="addFenJing(scope.row.id)">修改</el-button></template>
+                <template v-if="query.type"><el-button size="mini" @click="addFenJing(scope.row)">修改</el-button></template>
                 <!-- <template v-if="!query.type"><el-button size="mini" @click="handleExamine(scope.row.id)">审批</el-button></template> -->
               </template>
             </el-table-column>
@@ -132,6 +133,53 @@
                @click="handleExamine">审批</el-button>
          </div>
       </template>
+      <div class="bg-white mt20" v-if="isAddFenJing">
+        <div class="from bg-white from-list">
+          <div class="from-item flex_left">
+            <div class="item-title">日外/夜内<span>*</span></div>
+            <div class="item-cell"><el-input v-model="daynight" placeholder="请输入日外/夜内"></el-input></div>
+          </div>
+          <div class="from-item flex_left">
+            <div class="item-title">场景<span>*</span></div>
+            <div class="item-cell"><el-input v-model="scene" placeholder="请输入场景"></el-input></div>
+          </div>
+          <div class="from-item flex_left">
+            <div class="item-title">拍摄手法<span>*</span></div>
+            <div class="item-cell"><el-input v-model="photography" placeholder="请输入拍摄手法"></el-input></div>
+          </div>
+          <div class="from-item flex_left">
+            <div class="item-title">景别<span>*</span></div>
+            <div class="item-cell"><el-input v-model="fieldofview" placeholder="请输入景别"></el-input></div>
+          </div>
+          <div class="from-item flex_left">
+            <div class="item-title">时长<span>*</span></div>
+            <div class="item-cell"><el-input v-model="seconds" placeholder="请输入时长"></el-input></div>
+          </div>
+          <div class="from-item flex_left">
+            <div class="item-title">画面描述<span>*</span></div>
+            <div class="item-cell"><el-input type="textarea" v-model="pictures" placeholder="请输入画面描述"></el-input></div>
+          </div>
+          <div class="from-item flex_left">
+            <div class="item-title">台词/解说词<span>*</span></div>
+            <div class="item-cell"><el-input type="textarea" v-model="actorsline" placeholder="请输入台词/解说词"></el-input></div>
+          </div>
+          <div class="from-item flex_left">
+            <div class="item-title">服装道具<span>*</span></div>
+            <div class="item-cell"><el-input v-model="costumes" placeholder="请输入服装道具"></el-input></div>
+          </div>
+          <div class="from-item flex_left">
+            <div class="item-title">后期制作<span>*</span></div>
+            <div class="item-cell"><el-input v-model="postproduction" placeholder="请输入后期制作"></el-input></div>
+          </div>
+          <div class="from-item flex_left">
+            <div class="item-title">备注<span>*</span></div>
+            <div class="item-cell"><el-input v-model="memo" placeholder="请输入备注"></el-input></div>
+          </div>
+          <div class="align_center">
+             <el-button type="primary" @click="onSubmit">{{addText}}</el-button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="auto-modal flex_center" style="position:fixed;" v-if="showExamine">
       <div class="modal-inner">
@@ -178,14 +226,50 @@ export default {
       title: '',
       demandno: '',
       ratioOptions: '',
-      ratio: ''
+      ratio: '',
+      demandid: '',
+      daynight: '',
+      scene: '',
+      photography: '',
+      fieldofview: '',
+      seconds: '',
+      pictures: '',
+      actorsline: '',
+      costumes: '',
+      postproduction: '',
+      memo: '',
+      addText: '立即提交',
+      isAddFenJing: false
     }
   },
   methods: {
-    addFenJing (id) {
-      let params = {id: this.query.id}
-      if (!isNaN(id)) params.fenjingId = id
-      this.$router.push({path: '/addFenJing', query: params})
+    addFenJing (row) {
+      this.isAddFenJing = true
+      if (row.daynight) {
+        this.daynight = row.daynight
+        this.scene = row.scene
+        this.photography = row.photography
+        this.fieldofview = row.fieldofview
+        this.seconds = row.seconds
+        this.pictures = row.pictures
+        this.actorsline = row.actorsline
+        this.costumes = row.costumes
+        this.postproduction = row.postproduction
+        this.memo = row.memo
+        this.addText = '修改'
+      } else {
+        this.daynight = ''
+        this.scene = ''
+        this.photography = ''
+        this.fieldofview = ''
+        this.seconds = ''
+        this.pictures = ''
+        this.actorsline = ''
+        this.costumes = ''
+        this.postproduction = ''
+        this.memo = ''
+        this.addText = '立即提交'
+      }
     },
     getData1 () {
       this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {
@@ -209,8 +293,7 @@ export default {
       })
     },
     getData () {
-      let params = {pagestart: this.pageStart, limit: this.limit, demandid: parseInt(this.query.id)}
-      this.$http.post(`${ENV.BokaApi}/api/demands/getStoryBoard`, params).then(res => {
+      this.$http.post(`${ENV.BokaApi}/api/demands/getStoryBoard`, {demandid: parseInt(this.query.id)}).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
@@ -221,19 +304,43 @@ export default {
         }
       })
     },
-    handleScroll: function (refname) {
-      const self = this
-      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      self.$util.scrollEvent({
-        element: scrollarea,
-        callback: () => {
-          if (self.tableData.length === (self.pageStart + 1) * self.limit) {
-            self.pageStart++
-            self.$vux.loading.show()
-            self.getData()
-          }
+    onSubmit () {
+      if (!this.issubmit) {
+        if (this.daynight === '' ||
+        this.scene === '' ||
+        this.photography === '' ||
+        this.fieldofview === '' ||
+        this.seconds === '' ||
+        this.pictures === '' ||
+        this.actorsline === '' ||
+        this.costumes === '' ||
+        this.postproduction === '' ||
+        this.memo === '') {
+          this.$vux.toast.text('必填项不能为空', 'middle')
+        } else {
+          this.issubmit = true
+          this.$http.post(`${ENV.BokaApi}/api/demands/addStoryBoard`, {
+            demandid: parseInt(this.query.id),
+            daynight: this.daynight,
+            scene: this.scene,
+            photography: this.photography,
+            fieldofview: this.fieldofview,
+            seconds: this.seconds,
+            pictures: this.pictures,
+            actorsline: this.actorsline,
+            costumes: this.costumes,
+            postproduction: this.postproduction,
+            memo: this.memo,
+            id: this.query.fenjingId
+          }).then(res => {
+            let data = res.data
+            this.$vux.toast.text(data.error, 'middle')
+            this.getData()
+            this.isAddFenJing = false
+            this.issubmit = false
+          })
         }
-      })
+      }
     },
     handleExamine (id) {
       this.showExamine = true
@@ -275,11 +382,9 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser) {
         this.query = this.$route.query
-        this.pageStart = 0
-        this.disTabData = false
-        this.selectedIndex = 0
-        this.clickGroupid = 0
         this.tableData = []
+        this.isAddFenJing = false
+        this.issubmit = false
         this.$vux.loading.show()
         this.getData()
         this.getData1()
@@ -321,6 +426,42 @@ export default {
     .el-textarea,.el-textarea__inner{
       height: 100%;
       border: none !important;
+    }
+  }
+  .from-list{
+    padding: 20px;
+    padding-bottom: 40px;
+    .from-item{
+      margin-bottom: 20px;
+      .item-title{
+        width: 100px;
+        span{
+          color: red;
+        }
+      }
+      .item-cell{
+        border-bottom: 1px solid #bcbcbc;
+        flex: 1;
+        span{
+          color: #999;
+          font-size: 13px;
+        }
+        .el-select,.el-input{
+          width: 100%;
+        }
+        .el-textarea__inner{
+          height: 80px;
+        }
+        .el-input__inner,.el-textarea__inner{
+          border: none !important;
+          min-width: 200px;
+        }
+      }
+      .con-row{
+        .item-cell{
+          border-bottom: 1px solid #bcbcbc;
+        }
+      }
     }
   }
 }
