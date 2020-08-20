@@ -131,6 +131,29 @@
       </td>
      </tr>
      <tr>
+       <td class="title">上传附件</td>
+       <td colspan="3" class="align_left">
+         <div class="align_left padding10" style="display:inline-block;">
+            <el-upload
+            class="upload-demo"
+            ref="upload"
+            :action="uploadApi"
+            :headers="uploadHeaders"
+            :multiple="1 == 1"
+            name="photo"
+            :on-change="handleChange"
+            :on-remove="handleRemove"
+            :on-success="afterUpload"
+            :file-list="fileList"
+            :auto-upload="false"
+            >
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button>
+            </el-upload>
+        </div>
+       </td>
+     </tr>
+     <tr>
        <td class="title">相关链接</td>
        <td colspan="3">
          <el-input :disabled="isDisabled" v-model="linkurl" placeholder="请输入相关链接"></el-input>
@@ -416,7 +439,7 @@
 </template>
 <script>
 import ENV from 'env'
-import { User } from '#/storage'
+import {User, Token} from '#/storage'
 export default {
   components: {
   },
@@ -485,7 +508,11 @@ export default {
       isDisabled: false,
       ideaRadio: '',
       ideas: '',
-      disTabData3: false
+      disTabData3: false,
+      uploadApi: ENV.BokaApi + '/api/upload/singleFile?field=photo',
+      uploadHeaders: {},
+      fileList: [],
+      disUploadBtn: false
     }
   },
   methods: {
@@ -538,6 +565,14 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: id}).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
+        console.log('获取到信息后')
+        console.log(retdata)
+        if (retdata.attachment && retdata.attachment !== '') {
+          let arr = retdata.attachment.split(',')
+          for (let i = 0; i < arr.length; i++) {
+            this.fileList.push({name: arr[i], issuccess: true})
+          }
+        }
         this.title = retdata.title
         this.brand = retdata.brand
         this.videotype = retdata.videotype
@@ -591,62 +626,6 @@ export default {
         }
       })
     },
-    refresh () {
-      this.loginUser = User.get()
-      if (this.loginUser !== '') {
-        this.query = this.$route.query
-        this.pageStart = 0
-        this.disTabData = false
-        this.tableData = []
-        this.pageStart2 = 0
-        this.disTabData2 = false
-        this.tableData2 = []
-        this.disTabData3 = false
-        this.ideas = []
-        this.durationOptions = []
-        this.ratioOptions = []
-        this.videoclassOptions = []
-        this.logo_allOptions = []
-        this.logo_endOptions = []
-        this.videotypeOptions = []
-        this.comefromOptions = []
-        this.pricetypeOptions = []
-        this.title = ''
-        this.brand = ''
-        this.videotype = ''
-        this.product = ''
-        this.target = ''
-        this.videocount = ''
-        this.linkurl = ''
-        this.customerdemand = ''
-        this.customerinfo = ''
-        this.productorientation = ''
-        this.sellerpoint = ''
-        this.keyinfo = ''
-        this.otherdemand = ''
-        this.price = ''
-        this.starttime = ''
-        this.endtime = ''
-        this.duration = ''
-        this.ratio = ''
-        this.videoclass = ''
-        this.logo_all = ''
-        this.logo_end = ''
-        this.customeridea = ''
-        this.comefrom = ''
-        this.pricetype = ''
-        this.price_out = ''
-        this.idea = ''
-        this.ideaRadio = ''
-        this.issubmit = false
-        this.isDisabled = false
-        this.$vux.loading.show()
-        this.getData()
-        if (this.query.id) {
-          this.getInfo(this.query.id)
-        }
-      }
-    },
     onSubmit () {
       let params = {title: this.title,
         starttime: this.starttime,
@@ -658,7 +637,8 @@ export default {
         logo_end: this.logo_end,
         price: this.price,
         videocount: this.videocount,
-        videotype: this.videotype
+        videotype: this.videotype,
+        attachment: []
       }
       if (this.brand !== '') params.brand = this.brand
       if (this.product !== '') params.product = this.product
@@ -672,10 +652,18 @@ export default {
       if (this.otherdemand !== '') params.otherdemand = this.otherdemand
       if (this.customeridea !== '') params.customeridea = this.customeridea
       if (this.query.id) params.id = parseInt(this.query.id)
+      let attachment = []
+      for (let i = 0; i < this.fileList.length; i++) {
+        let cur = this.fileList[i]
+        if (cur.response && cur.response.flag) {
+          attachment.push(cur.name)
+        }
+      }
+      if (attachment.length) params.attachment = attachment.join(',')
       var rule1 = /^(0|[1-9][0-9]*)$/
       if (!this.issubmit) {
         if (this.title === '' || this.starttime === '' || this.endtime === '' || this.duration === '' || this.ratio === '' || this.videoclass === '' ||
-      this.logo_all === '' || this.logo_end === '' || this.videotype === '') {
+            this.logo_all === '' || this.logo_end === '' || this.videotype === '') {
           this.$vux.toast.text('必填项不能为空', 'middle')
         } else if (this.endtime <= this.starttime) {
           this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
@@ -932,6 +920,96 @@ export default {
             }
             this.issubmit = false
           })
+        }
+      }
+    },
+    handleUploadBtn (fileList) {
+      let isDis = false
+      for (let i = 0; i < fileList.length; i++) {
+        let cur = fileList[i]
+        if (!cur.issuccess) {
+          isDis = true
+          break
+        }
+      }
+      this.disUploadBtn = isDis
+    },
+    submitUpload () {
+      this.$refs.upload.submit()
+    },
+    handleRemove (file, fileList) {
+      this.fileList = fileList
+      this.handleUploadBtn(fileList)
+    },
+    handleChange (file, fileList) {
+      this.handleUploadBtn(fileList)
+    },
+    afterUpload (res, file, fileList) {
+      for (let i = 0; i < fileList.length; i++) {
+        let cur = fileList[i]
+        if (cur.response && cur.response.flag) {
+          cur.name = cur.response.data
+          cur.issuccess = true
+        }
+      }
+      this.fileList = fileList
+      this.handleUploadBtn(fileList)
+    },
+    refresh () {
+      this.loginUser = User.get()
+      let token = Token.get()
+      this.uploadHeaders.Authorization = `Bearer ${token.token}`
+      if (this.loginUser !== '') {
+        this.query = this.$route.query
+        this.pageStart = 0
+        this.disTabData = false
+        this.tableData = []
+        this.pageStart2 = 0
+        this.disTabData2 = false
+        this.tableData2 = []
+        this.disTabData3 = false
+        this.ideas = []
+        this.durationOptions = []
+        this.ratioOptions = []
+        this.videoclassOptions = []
+        this.logo_allOptions = []
+        this.logo_endOptions = []
+        this.videotypeOptions = []
+        this.comefromOptions = []
+        this.pricetypeOptions = []
+        this.title = ''
+        this.brand = ''
+        this.videotype = ''
+        this.product = ''
+        this.target = ''
+        this.videocount = ''
+        this.linkurl = ''
+        this.customerdemand = ''
+        this.customerinfo = ''
+        this.productorientation = ''
+        this.sellerpoint = ''
+        this.keyinfo = ''
+        this.otherdemand = ''
+        this.price = ''
+        this.starttime = ''
+        this.endtime = ''
+        this.duration = ''
+        this.ratio = ''
+        this.videoclass = ''
+        this.logo_all = ''
+        this.logo_end = ''
+        this.customeridea = ''
+        this.comefrom = ''
+        this.pricetype = ''
+        this.price_out = ''
+        this.idea = ''
+        this.ideaRadio = ''
+        this.issubmit = false
+        this.isDisabled = false
+        this.$vux.loading.show()
+        this.getData()
+        if (this.query.id) {
+          this.getInfo(this.query.id)
         }
       }
     }

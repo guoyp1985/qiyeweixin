@@ -11,5 +11,6 @@
   "MakeDetails",
   "MyOrder",
   "AddFenJing",
-  "FenJing"
+  "FenJing",
+  "UploadFile"
 ]
