@@ -39,7 +39,7 @@
             </el-table-column>
           </el-table-column>
           <el-table-column
-            :label="title"
+            :label="title+version"
             min-width="100">
             <el-table-column
               prop="seconds"
@@ -114,11 +114,10 @@
           </el-table-column>
             <el-table-column
               label="操作"
-              v-if="query.type"
               min-width="120">
               <template slot-scope="scope">
                 <template v-if="query.type"><el-button size="mini" @click="addFenJing(scope.row)">修改</el-button></template>
-                <!-- <template v-if="!query.type"><el-button size="mini" @click="handleExamine(scope.row.id)">审批</el-button></template> -->
+                <template v-if="!query.type"><el-button size="mini" @click="handleExamine(scope.row.id)">审批</el-button></template>
               </template>
             </el-table-column>
         </el-table>
@@ -127,10 +126,14 @@
              v-if="query.type"
              type="primary"
              @click="addFenJing">新增分镜脚本</el-button>
-             <el-button
-               v-if="!query.type"
-               type="primary"
-               @click="handleExamine">审批</el-button>
+           <el-button
+             v-if="!query.type"
+             type="primary"
+             @click="submitExamine">提交审批</el-button>
+           <el-button
+             v-if="!query.type"
+             type="primary"
+             @click="backModify">返回修改</el-button>
          </div>
       </template>
       <div class="bg-white mt20" v-if="isAddFenJing">
@@ -184,12 +187,6 @@
     <div class="auto-modal flex_center" style="position:fixed;" v-if="showExamine">
       <div class="modal-inner">
         <div class="modal-content padding20">
-            <div class="modal-header mb20">
-              <el-radio-group v-model="radio" @change="changeExamine">
-                <el-radio :label= "1">审批通过</el-radio>
-                <el-radio :label= "2">审批不通过</el-radio>
-              </el-radio-group>
-            </div>
             <div class="modal-body mb20">
               <div class="from-item-textarea">
                 <el-input type="textarea" v-model="reason" :placeholder="showReason" size="50"></el-input>
@@ -222,7 +219,7 @@ export default {
       reason: '',
       examineIndex: '',
       showExamine: false,
-      showReason: '请输入审批通过原因',
+      showReason: '请输入审批意见',
       title: '',
       demandno: '',
       ratioOptions: '',
@@ -239,7 +236,9 @@ export default {
       postproduction: '',
       memo: '',
       addText: '立即提交',
-      isAddFenJing: false
+      isAddFenJing: false,
+      version: 0,
+      fenjingId: 0
     }
   },
   methods: {
@@ -257,6 +256,7 @@ export default {
         this.postproduction = row.postproduction
         this.memo = row.memo
         this.addText = '修改'
+        this.fenjingId = row.id
       } else {
         this.daynight = ''
         this.scene = ''
@@ -269,6 +269,7 @@ export default {
         this.postproduction = ''
         this.memo = ''
         this.addText = '立即提交'
+        this.fenjingId = 0
       }
     },
     getData1 () {
@@ -299,7 +300,8 @@ export default {
           this.$vux.loading.hide()
           const data = res.data
           const retdata = data.data ? data.data : data
-          this.tableData = this.tableData.concat(retdata)
+          this.tableData = retdata
+          this.version = data.version
           this.disTabData = true
         }
       })
@@ -318,8 +320,7 @@ export default {
         this.memo === '') {
           this.$vux.toast.text('必填项不能为空', 'middle')
         } else {
-          this.issubmit = true
-          this.$http.post(`${ENV.BokaApi}/api/demands/addStoryBoard`, {
+          let params = {
             demandid: parseInt(this.query.id),
             daynight: this.daynight,
             scene: this.scene,
@@ -330,9 +331,12 @@ export default {
             actorsline: this.actorsline,
             costumes: this.costumes,
             postproduction: this.postproduction,
-            memo: this.memo,
-            id: this.query.fenjingId
-          }).then(res => {
+            memo: this.memo
+          }
+          if (this.fenjingId !== 0) params.id = this.fenjingId
+          console.log(params);
+          this.issubmit = true
+          this.$http.post(`${ENV.BokaApi}/api/demands/addStoryBoard`, params).then(res => {
             let data = res.data
             this.$vux.toast.text(data.error, 'middle')
             this.getData()
@@ -346,35 +350,41 @@ export default {
       this.showExamine = true
       if (id) this.id = id
     },
-    changeExamine () {
-      if (this.radio === 2) {
-        this.showReason = '请输入审批不通过原因'
-      } else {
-        this.showReason = '请输入审批通过原因'
-      }
-      this.reason = ''
-    },
     closeModal () {
       this.showExamine = false
       this.reason = ''
-      this.radio = 1
-      this.showReason = '请输入审批通过原因'
     },
     submitModal () {
-      if (this.radio === 2 && this.reason === '') {
-        this.$vux.toast.text('请填写审批不通过原因', 'middle')
+      if (this.reason === '') {
+        this.$vux.toast.text('请填写审批意见', 'middle')
         return false
       }
-      let params = {id: this.id, agree: this.radio}
-      if (this.reason) params.reason = this.reason
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/censor`, params).then(res => {
+      this.$http.post(`${ENV.BokaApi}/api/demands/checkStoryBoard`, {id: this.id, checkresult: this.reason}).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
           this.closeModal()
-          this.getInfo(this.query.id)
-          this.$router.push({path: '/makeList', query: {status: 5}})
+          this.getData()
+        }
+      })
+    },
+    submitExamine () {
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {demandid: this.query.id, version: this.version}).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+        }
+      })
+    },
+    backModify () {
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/reworkStoryBoard`, {demandid: this.query.id, version: this.version}).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          this.getData()
         }
       })
     },
