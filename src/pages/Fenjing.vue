@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="bg-page font14 fenjing-list-page">
     <div class="vux-tab-wrap">分镜脚本</div>
-    <div class="s-container scroll-container" style="top:44px;">
+    <div class="s-container scroll-container  mb20" style="top:44px;">
       <template v-if="disTabData">
         <el-table
           :data="tableData"
@@ -114,26 +114,30 @@
           </el-table-column>
             <el-table-column
               label="操作"
+              v-if="(query.type && canedit === 1) || !query.type"
               min-width="120">
               <template slot-scope="scope">
-                <template v-if="query.type"><el-button size="mini" @click="addFenJing(scope.row)">修改</el-button></template>
+                <template  v-if="query.type && canedit === 1"><el-button size="mini" @click="addFenJing(scope.row)">修改</el-button></template>
                 <template v-if="!query.type"><el-button size="mini" @click="handleExamine(scope.row.id)">审批</el-button></template>
               </template>
             </el-table-column>
         </el-table>
-         <div class="align_center mt20">
+        <div class="align_center mt20" v-if="query.type && canedit === 1">
+          <el-button
+            type="primary"
+            @click="addFenJing">新增分镜脚本</el-button>
+          <el-button
+            type="primary"
+            @click="submitExamine">提交审批</el-button>
+        </div>
+         <div class="align_center mt20" v-if="!query.type && cancheck === 1">
            <el-button
-             v-if="query.type"
-             type="primary"
-             @click="addFenJing">新增分镜脚本</el-button>
-           <el-button
-             v-if="!query.type"
-             type="primary"
-             @click="submitExamine">提交审批</el-button>
-           <el-button
-             v-if="!query.type"
+             v-if="!query.type && cancheck === 1"
              type="primary"
              @click="backModify">返回修改</el-button>
+           <el-button
+             type="primary"
+             @click="agreeStoryBoard">审核通过</el-button>
          </div>
       </template>
       <div class="bg-white mt20" v-if="isAddFenJing">
@@ -238,7 +242,9 @@ export default {
       addText: '立即提交',
       isAddFenJing: false,
       version: 0,
-      fenjingId: 0
+      fenjingId: 0,
+      canedit: 0,
+      cancheck: 0
     }
   },
   methods: {
@@ -302,7 +308,19 @@ export default {
           const retdata = data.data ? data.data : data
           this.tableData = retdata
           this.version = data.version
+          this.canedit = data.canedit
+          this.cancheck = data.cancheck
           this.disTabData = true
+        }
+      })
+    },
+    agreeStoryBoard () {
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.version}).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          this.$router.push({path: '/makeList', query: {status: 5}})
         }
       })
     },
@@ -375,6 +393,7 @@ export default {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
+          this.getData()
         }
       })
     },
