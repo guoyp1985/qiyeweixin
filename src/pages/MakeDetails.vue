@@ -133,7 +133,12 @@
      <tr>
        <td class="title">上传附件</td>
        <td colspan="3" class="align_left">
-         <div class="align_left padding10" style="display:inline-block;">
+         <div v-if="query.type || viewData.status !== 0" class="file-list">
+           <div class="file-item" v-for="(item,index) in fileList" :key="index" :item="item">
+             <a type="primary" :href="item.url" style="color: #409EFF;" target="_blank">{{item.name}}</a>
+            </div>
+         </div>
+         <div v-else class="align_left padding10" style="display:inline-block;">
             <el-upload
             class="upload-demo"
             ref="upload"
@@ -512,7 +517,8 @@ export default {
       uploadApi: ENV.BokaApi + '/api/upload/singleFile?field=photo',
       uploadHeaders: {},
       fileList: [],
-      disUploadBtn: false
+      disUploadBtn: false,
+      viewData: {}
     }
   },
   methods: {
@@ -565,12 +571,13 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: id}).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
+        this.viewData = retdata
         console.log('获取到信息后')
         console.log(retdata)
         if (retdata.attachment && retdata.attachment !== '') {
           let arr = retdata.attachment.split(',')
           for (let i = 0; i < arr.length; i++) {
-            this.fileList.push({name: arr[i], issuccess: true})
+            this.fileList.push({name: arr[i], issuccess: true, url: arr[i]})
           }
         }
         this.title = retdata.title
@@ -621,7 +628,7 @@ export default {
           this.getData3()
         }
         if (this.query.type || retdata.status !== 0) {
-          console.log(retdata.status);
+          console.log(retdata.status)
           this.isDisabled = true
         }
       })
@@ -950,6 +957,7 @@ export default {
         if (cur.response && cur.response.flag) {
           cur.name = cur.response.data
           cur.issuccess = true
+          cur.url = cur.response.data
         }
       }
       this.fileList = fileList
@@ -1075,5 +1083,9 @@ export default {
     height: 100%;
     border: none !important;
   }
+}
+.file-list{
+  padding:10px;text-align:left;
+  .file-item{display:block;}
 }
 </style>
