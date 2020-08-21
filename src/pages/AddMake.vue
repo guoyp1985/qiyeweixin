@@ -206,7 +206,7 @@
 </template>
 <script>
 import ENV from 'env'
-import { User } from '#/storage'
+import {User, Token} from '#/storage'
 export default {
   components: {
   },
@@ -290,6 +290,7 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
+      let token = Token.get()
       this.uploadHeaders.Authorization = `Bearer ${token.token}`
       if (this.loginUser) {
         this.durationOptions = []
@@ -400,7 +401,7 @@ export default {
       }
       this.fileList = fileList
       this.handleUploadBtn(fileList)
-    },
+    }
   },
   activated () {
     this.refresh()
