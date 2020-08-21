@@ -133,7 +133,7 @@
      <tr>
        <td class="title">上传附件</td>
        <td colspan="3" class="align_left">
-         <div v-if="query.type || viewData.status !== 0" class="file-list">
+         <div v-if="isDisabled" class="file-list">
            <div class="file-item" v-for="(item,index) in fileList" :key="index" :item="item">
              <a type="primary" :href="item.url" style="color: #409EFF;" target="_blank">{{item.name}}</a>
             </div>
@@ -574,12 +574,6 @@ export default {
         this.viewData = retdata
         console.log('获取到信息后')
         console.log(retdata)
-        if (retdata.attachment && retdata.attachment !== '') {
-          let arr = retdata.attachment.split(',')
-          for (let i = 0; i < arr.length; i++) {
-            this.fileList.push({name: arr[i], issuccess: true, url: arr[i]})
-          }
-        }
         this.title = retdata.title
         this.brand = retdata.brand
         this.videotype = retdata.videotype
@@ -630,6 +624,12 @@ export default {
         if (this.query.type || retdata.status !== 0) {
           console.log(retdata.status)
           this.isDisabled = true
+        }
+        if (retdata.attachment && retdata.attachment !== '') {
+          let arr = retdata.attachment.split(',')
+          for (let i = 0; i < arr.length; i++) {
+            this.fileList.push({name: arr[i], issuccess: true, url: arr[i]})
+          }
         }
       })
     },
@@ -985,6 +985,7 @@ export default {
         this.videotypeOptions = []
         this.comefromOptions = []
         this.pricetypeOptions = []
+        this.fileList = []
         this.title = ''
         this.brand = ''
         this.videotype = ''
