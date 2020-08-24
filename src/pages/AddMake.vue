@@ -206,7 +206,7 @@
 </template>
 <script>
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import {User, Token} from '#/storage'
 export default {
   components: {
   },
@@ -401,7 +401,7 @@ export default {
       }
       this.fileList = fileList
       this.handleUploadBtn(fileList)
-    },
+    }
   },
   activated () {
     this.refresh()
