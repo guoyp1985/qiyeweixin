@@ -4,7 +4,7 @@
     <div class="s-container scroll-container mb20" style="top:44px;">
       <template v-if="disTabData">
         <div class="videobox">
-          <div class='demo'v-for="item in playerOptions"  :key="item">
+          <div class='demo'v-for="(item,index) in playerOptions"  :key="index">
            <video-player class="video-player vjs-custom-skin"
             ref="videoPlayer"
             :playsinline="true"
@@ -148,6 +148,11 @@
              type="primary"
              @click="agreeStoryBoard">审核通过</el-button>
          </div>
+         <div class="align_center mt20" v-if="!query.type && status === 5">
+           <el-button
+             type="primary"
+             @click="agreeRushVideo">审核通过</el-button>
+         </div>
       </template>
       <div class="bg-white mt20" v-if="isAddFenJing">
         <div class="from bg-white from-list">
@@ -254,7 +259,9 @@ export default {
       fenjingId: 0,
       canedit: 0,
       cancheck: 0,
-      playerOptions: []
+      playerOptions: [],
+      status: 0,
+      videoid: 0
     }
   },
   methods: {
@@ -307,32 +314,33 @@ export default {
         this.title = retdata.title
         this.demandno = retdata.demandno
         this.ratio = retdata.ratio
+        this.status = retdata.status
+        this.videoid = retdata.videoid
         if (retdata.video && retdata.video !== '') {
           let arr = retdata.video.split(',')
           for (let i = 0; i < arr.length; i++) {
             let arrs = {
-              playbackRates: [1.0, 2.0, 3.0], //播放速度
-              autoplay: false, //如果true,浏览器准备好时开始回放。
-              muted: false, // 默认情况下将会消除任何音频。
-              loop: false, // 导致视频一结束就重新开始。
-              preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-              language: "zh-CN",
-              aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-              fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+              playbackRates: [1.0, 2.0, 3.0],
+              autoplay: false,
+              muted: false,
+              loop: false,
+              preload: 'auto',
+              language: 'zh-CN',
+              aspectRatio: '16:9',
+              fluid: true,
               sources: [
                 {
-                  type: "video/mp4",
-                  type: "video/ogg",
-                  src: arr[i]//url地址
+                  type: 'video/mp4',
+                  src: arr[i]
                 }
               ],
-              poster: "", //封面地址
-              notSupportedMessage: "此视频暂无法播放，请稍后再试", //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+              poster: '',
+              notSupportedMessage: '此视频暂无法播放，请稍后再试',
               controlBar: {
                 timeDivider: true,
                 durationDisplay: true,
                 remainingTimeDisplay: false,
-                fullscreenToggle: true //全屏按钮
+                fullscreenToggle: true
               }
             };
             this.playerOptions.push(arrs);
@@ -358,6 +366,16 @@ export default {
     agreeStoryBoard () {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.version}).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          this.$router.push({path: '/makeList', query: {status: 5}})
+        }
+      })
+    },
+    agreeRushVideo () {
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/agreeRushVideo`, {demandid: this.query.id, videoid: this.videoid}).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
@@ -418,8 +436,13 @@ export default {
         this.$vux.toast.text('请填写审批意见', 'middle')
         return false
       }
+      let params = {id: this.id, checkresult: this.reason}
+      if (this.status === 5) {
+        params.type = 'rushvideo'
+        params.videoid = this.videoid
+      }
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/checkStoryBoard`, {id: this.id, checkresult: this.reason}).then(res => {
+      this.$http.post(`${ENV.BokaApi}/api/demands/checkStoryBoard`, params).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
@@ -535,7 +558,8 @@ export default {
     }
   }
   .videobox{
-    // width: 50%;
+    width: 50%;
+    margin: auto;
   }
 }
 </style>

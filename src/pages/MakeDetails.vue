@@ -430,6 +430,120 @@
         </div>
      </template>
    </div>
+   <div class="scroll-container mb20">
+     <template v-if="disTabData4">
+       <el-table
+         :data="tableData4"
+         stripe
+         style="width: 100%"
+         :header-cell-style="{'text-align':'center'}"
+         :cell-style="{'text-align':'center'}">
+         <el-table-column
+           label="《制作需求单》附件："
+           min-width="100">
+           <el-table-column
+             prop="id"
+             label="镜号"
+             min-width="100">
+           </el-table-column>
+           <el-table-column
+             prop="daynight"
+             label="日外/夜内"
+             min-width="100">
+           </el-table-column>
+           <el-table-column
+             prop="scene"
+             label="场景"
+             min-width="100">
+           </el-table-column>
+           <el-table-column
+             prop="photography"
+             label="拍摄手法"
+             min-width="100">
+           </el-table-column>
+           <el-table-column
+             prop="fieldofview"
+             label="景别"
+             min-width="100">
+           </el-table-column>
+         </el-table-column>
+         <el-table-column
+           :label="title"
+           min-width="100">
+           <el-table-column
+             prop="seconds"
+             label="时长"
+             min-width="100">
+           </el-table-column>
+           <el-table-column
+             prop="pictures"
+             label="画面描述"
+             min-width="200">
+             <template slot-scope="scope">
+               <div v-if="!scope.row.pictures || scope.row.pictures == ''">无</div>
+               <div class="align_left pre-wrap" v-else>{{scope.row.pictures}}</div>
+             </template>
+           </el-table-column>
+         </el-table-column>
+         <el-table-column
+           label="分镜脚本"
+           min-width="100">
+           <el-table-column
+             label="台词/解说词"
+             min-width="200">
+             <template slot-scope="scope">
+               <div v-if="!scope.row.actorsline || scope.row.actorsline == ''">无</div>
+               <div class="align_left pre-wrap" v-else>{{scope.row.actorsline}}</div>
+             </template>
+           </el-table-column>
+         </el-table-column>
+         <el-table-column
+           :label="ratios[ratio]"
+           min-width="100">
+           <el-table-column
+             label="服装道具"
+             min-width="120">
+               <template slot-scope="scope">
+                 <template v-if="!scope.row.costumes || scope.row.costumes == ''">无</template>
+                 <template v-else>{{scope.row.costumes}}</template>
+               </template>
+           </el-table-column>
+           <el-table-column
+             label="后期制作"
+             min-width="120">
+               <template slot-scope="scope">
+                 <template v-if="!scope.row.postproduction || scope.row.postproduction == ''">无</template>
+                 <template v-else>{{scope.row.postproduction}}</template>
+               </template>
+           </el-table-column>
+         </el-table-column>
+         <el-table-column
+           label="项目编号"
+           min-width="100">
+           <el-table-column
+             label="备注"
+             min-width="120">
+               <template slot-scope="scope">
+                 <template v-if="!scope.row.memo || scope.row.memo == ''">无</template>
+                 <template v-else>{{scope.row.memo}}</template>
+               </template>
+           </el-table-column>
+         </el-table-column>
+         <el-table-column
+           :label="demandno"
+           min-width="100">
+           <el-table-column
+             label="审核意见"
+             min-width="200">
+               <template slot-scope="scope">
+                 <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
+                 <template v-else>{{scope.row.checkresult}}</template>
+               </template>
+           </el-table-column>
+         </el-table-column>
+       </el-table>
+     </template>
+   </div>
    <div class="auto-modal flex_center" style="position:fixed;" v-if="showExamine">
      <div class="modal-inner">
        <div class="modal-content padding20">
@@ -565,7 +679,10 @@ export default {
       fileList: [],
       disUploadBtn: false,
       samplePiece: [],
-      memo: ''
+      memo: '',
+      disTabData4: false,
+      tableData4: [],
+      ratios: ''
     }
   },
   methods: {
@@ -616,6 +733,7 @@ export default {
             let item = {value: i, label: retdata.pricetype[i]}
             this.pricetypeOptions.push(item)
           }
+          this.ratios = retdata.ratio
         }
       })
     },
@@ -687,6 +805,9 @@ export default {
           for (let i = 0; i < arr.length; i++) {
             this.samplePiece.push({name: arr[i], issuccess: true, url: arr[i]})
           }
+        }
+        if (retdata.status === 5 && this.query.type) {
+          this.getData4()
         }
       })
     },
@@ -898,6 +1019,19 @@ export default {
           this.uids = data.uids
           this.tableData2 = this.tableData2.concat(retdata)
           this.disTabData2 = true
+        }
+      })
+    },
+    getData4 () {
+      let params = {pagestart: this.pageStart2, limit: this.limit, demandid: parseInt(this.query.id)}
+      this.$http.post(`${ENV.BokaApi}/api/demands/rushVideoCheckList`, params).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          this.tableData4 = this.tableData4.concat(retdata)
+          this.disTabData4 = true
         }
       })
     },

@@ -14,6 +14,9 @@ import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import VideoPlayer from 'vue-video-player'
+import 'vue-video-player/src/custom-theme.css'
+import 'video.js/dist/video-js.css'
 
 Vue.use(ElementUI)
 
@@ -26,14 +29,9 @@ Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
 Vue.use(AlertPlugin)
 Vue.use(ConfirmPlugin)
+Vue.use(VideoPlayer)
 console.log(Vue.wechat)
 require('es6-promise').polyfill()
-
-import VideoPlayer from 'vue-video-player'
-import 'vue-video-player/src/custom-theme.css'
-import 'video.js/dist/video-js.css'
-
-Vue.use(VideoPlayer)
 
 console.log('env.debugmode', ENV.DebugMode)
 if (ENV.DebugMode) {
