@@ -156,11 +156,7 @@ export default {
     },
     handleEdit (row) {
       let id = row.id
-      if (this.clickStatus === 4) {
-        this.$router.push({path: '/fenJing', query: {id: id}})
-      } else {
-        this.$router.push({path: '/makeDetails', query: {id: id}})
-      }
+      this.$router.push({path: '/makeDetails', query: {id: id}})
     },
     refresh () {
       this.loginUser = User.get()

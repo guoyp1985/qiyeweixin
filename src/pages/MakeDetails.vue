@@ -13,13 +13,13 @@
      <tr>
        <td class="title">项目名称<span>*</span></td>
        <td colspan="3">
-         <el-input :disabled="isDisabled" v-model="title" placeholder="请输入项目名称"></el-input>
+         <el-input v-if="(title&&title!='')||!isDisabled" :disabled="isDisabled" v-model="title" placeholder="请输入项目名称"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">品牌名称</td>
        <td>
-         <el-input :disabled="isDisabled" v-model="brand" placeholder="请输入品牌名称"></el-input>
+         <el-input v-if="(brand&&brand!='')||!isDisabled" :disabled="isDisabled" v-model="brand" placeholder="请输入品牌名称"></el-input>
        </td>
        <td class="title">视频类型<span>*</span></td>
        <td>
@@ -36,11 +36,11 @@
      <tr>
        <td class="title">产品名称</td>
        <td>
-         <el-input :disabled="isDisabled" v-model="product" placeholder="请输入产品名称"></el-input>
+         <el-input v-if="(product&&product!='')||!isDisabled" :disabled="isDisabled" v-model="product" placeholder="请输入产品名称"></el-input>
        </td>
        <td class="title">效果目标</td>
        <td>
-         <el-input :disabled="isDisabled" v-model="target" placeholder="请输入效果目标"></el-input>
+         <el-input v-if="!isDisabled||(target&&target!='')" :disabled="isDisabled" v-model="target" placeholder="请输入效果目标"></el-input>
        </td>
      </tr>
      <tr>
@@ -70,7 +70,7 @@
      <tr>
        <td class="title">视频数量</td>
        <td>
-         <el-input :disabled="isDisabled" v-model="videocount" placeholder="请输入视频数量"></el-input>
+         <el-input v-if="(videocount&&videocount!='')||!isDisabled" :disabled="isDisabled" v-model="videocount" placeholder="请输入视频数量"></el-input>
        </td>
        <td class="title">视频分类<span>*</span></td>
        <td>
@@ -161,52 +161,52 @@
      <tr>
        <td class="title">相关链接</td>
        <td colspan="3">
-         <el-input :disabled="isDisabled" v-model="linkurl" placeholder="请输入相关链接"></el-input>
+         <el-input v-if="(linkurl&&linkurl!='')||!isDisabled" :disabled="isDisabled" v-model="linkurl" placeholder="请输入相关链接"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户投诉</td>
        <td colspan="3">
-         <el-input :disabled="isDisabled" v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input v-if="(customerdemand&&customerdemand!='')||!isDisabled" :disabled="isDisabled" v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户信息</td>
        <td colspan="3">
-         <el-input :disabled="isDisabled" v-model="customerinfo" placeholder="请输入客户信息"></el-input>
+         <el-input v-if="(customerinfo&&customerinfo!='')||!isDisabled" :disabled="isDisabled" v-model="customerinfo" placeholder="请输入客户信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">产品定位</td>
-       <td colspan="3"><el-input :disabled="isDisabled" v-model="productorientation" placeholder="请输入产品定位"></el-input>
+       <td colspan="3"><el-input v-if="(productorientation&&productorientation!='')||!isDisabled" :disabled="isDisabled" v-model="productorientation" placeholder="请输入产品定位"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">产品买点<span class="font12 color-gray5">（核心买点需标注）</span></td>
        <td colspan="3">
-         <el-input :disabled="isDisabled" type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input>
+         <el-input v-if="(sellerpoint&&sellerpoint!='')||!isDisabled" :disabled="isDisabled" type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">视频内必须展示的关键信息</td>
        <td colspan="3">
-         <el-input :disabled="isDisabled" type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input>
+         <el-input v-if="(keyinfo&&keyinfo!='')||!isDisabled" :disabled="isDisabled" type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">创意思路</td>
        <td colspan="3">
-         <el-input :disabled="isDisabled" type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
+         <el-input v-if="(customeridea&&customeridea!='')||!isDisabled" :disabled="isDisabled" type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">特殊备注</td>
        <td :colspan="query.type ? 3 : ''">
-         <el-input :disabled="isDisabled" v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
+         <el-input v-if="(otherdemand&&otherdemand!='')||!isDisabled" :disabled="isDisabled" v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
        </td>
        <td v-if="!query.type">制作价格</td>
        <td v-if="!query.type">
-         <el-input :disabled="isDisabled" v-model="price" placeholder="请输入制作价格"></el-input>
+         <el-input v-if="(price&&price!='')||!isDisabled" :disabled="isDisabled" v-model="price" placeholder="请输入制作价格"></el-input>
        </td>
      </tr>
      <tr v-if="status === 1">
@@ -243,13 +243,47 @@
          <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input>
        </td>
      </tr>
-     <tr v-if="query.type || status === 4">
+     <tr v-if="query.type || status >= 4">
        <td class="title">创意梗概</td>
        <td colspan="3">
-         <el-input type="textarea" v-model="idea" placeholder="请输入创意梗概"></el-input>
+         <el-input :disabled="status >= 4" type="textarea" v-model="idea" placeholder="请输入创意梗概"></el-input>
        </td>
      </tr>
-     <tr v-if="query.type || status === 1 || status === 0">
+     <tr v-if="status === 5&&query.type">
+       <td class="title">上传样片</td>
+       <td colspan="3" class="align_left">
+         <div v-if="!query.type" class="file-list">
+           <div class="file-item" v-for="(item,index) in samplePiece" :key="index" :item="item">
+             <a type="primary" :href="item.url" style="color: #409EFF;" target="_blank">{{item.name}}</a>
+            </div>
+         </div>
+         <div v-else class="align_left padding10" style="display:inline-block;">
+            <el-upload
+            class="upload-demo"
+            ref="upload"
+            :action="uploadApi"
+            :headers="uploadHeaders"
+            :multiple="1 == 1"
+            name="photo"
+            :on-change="handleChange1"
+            :on-remove="handleRemove1"
+            :on-success="afterUpload1"
+            :file-list="samplePiece"
+            :auto-upload="false"
+            >
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button>
+            </el-upload>
+        </div>
+       </td>
+     </tr>
+     <tr v-if="status === 5&&query.type">
+       <td class="title">样片备注</td>
+       <td colspan="3">
+         <el-input v-model="memo" placeholder="请输入样片备注"></el-input>
+       </td>
+     </tr>
+     <tr v-if="query.type || (status !== 2 && status !== 3)">
        <td class="padding10" colspan="4">
          <el-button
            v-if="canedit === 1"
@@ -263,14 +297,26 @@
            v-if="status === 1"
            type="primary"
            @click="onInvite">分发</el-button>
-           <el-button
-             v-if="query.type === 'new' && status === 2"
-             type="primary"
-             @click="onInvite3(0)">确认订单</el-button>
-           <el-button
-             v-if="query.type === 'ongoing' && status === 3"
-             type="primary"
-             @click="onInvite3(1)">修改创意梗概</el-button>
+         <el-button
+           v-if="query.type === 'new' && status === 2"
+           type="primary"
+           @click="onInvite3(0)">确认订单</el-button>
+         <el-button
+           v-if="query.type === 'ongoing' && status === 3"
+           type="primary"
+           @click="onInvite3(1)">修改创意梗概</el-button>
+         <el-button
+           v-if="status === 4"
+           type="primary"
+           @click="toFenjing()">分镜脚本</el-button>
+         <el-button
+           v-if="query.type === 'ongoing' && status === 5"
+           type="primary"
+           @click="uploadSamplePiece()">上传样片</el-button>
+         <el-button
+           v-if="!query.type && status === 5"
+           type="primary"
+           @click="toFenjing()">样片</el-button>
      </td>
      </tr>
    </table>
@@ -324,7 +370,7 @@
      </template>
    </div>
    <div class="scroll-container">
-     <template v-if="disTabData3 && (status === 3 || query.type === 'ongoing')">
+     <template v-if="disTabData3 && status === 3">
        <el-table
          :data="ideas"
          stripe
@@ -518,12 +564,18 @@ export default {
       uploadHeaders: {},
       fileList: [],
       disUploadBtn: false,
-      viewData: {}
+      samplePiece: [],
+      memo: ''
     }
   },
   methods: {
     toLink (link) {
       this.$router.push({path: link})
+    },
+    toFenjing () {
+      let params = {id: parseInt(this.query.id)}
+      if (this.query.type) params.type = this.query.type
+      this.$router.push({path: '/fenJing', query: params})
     },
     getData () {
       this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {
@@ -571,7 +623,6 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: id}).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
-        this.viewData = retdata
         console.log('获取到信息后')
         console.log(retdata)
         this.title = retdata.title
@@ -629,6 +680,12 @@ export default {
           let arr = retdata.attachment.split(',')
           for (let i = 0; i < arr.length; i++) {
             this.fileList.push({name: arr[i], issuccess: true, url: arr[i]})
+          }
+        }
+        if (retdata.video && retdata.video !== '') {
+          let arr = retdata.video.split(',')
+          for (let i = 0; i < arr.length; i++) {
+            this.samplePiece.push({name: arr[i], issuccess: true, url: arr[i]})
           }
         }
       })
@@ -963,6 +1020,49 @@ export default {
       this.fileList = fileList
       this.handleUploadBtn(fileList)
     },
+    handleRemove1 (file, fileList) {
+      this.fileList = fileList
+      this.handleUploadBtn(fileList)
+    },
+    handleChange1 (file, fileList) {
+      this.handleUploadBtn(fileList)
+    },
+    afterUpload1 (res, file, fileList) {
+      for (let i = 0; i < fileList.length; i++) {
+        let cur = fileList[i]
+        if (cur.response && cur.response.flag) {
+          cur.name = cur.response.data
+          cur.issuccess = true
+          cur.url = cur.response.data
+        }
+      }
+      this.samplePiece = fileList
+      this.handleUploadBtn(fileList)
+    },
+    uploadSamplePiece () {
+      if (!this.issubmit) {
+        let params = {demandid: parseInt(this.query.id)}
+        if (!this.samplePiece.length) {
+          this.$vux.toast.text('请选择上传样片', 'middle')
+          return false
+        }
+        let attachment = []
+        for (let i = 0; i < this.samplePiece.length; i++) {
+          let cur = this.samplePiece[i]
+          if (cur.response && cur.response.flag) {
+            attachment.push(cur.name)
+          }
+        }
+        if (attachment.length) params.video = attachment.join(',')
+        if (this.memo !== '') params.memo = this.memo
+        this.issubmit = true
+        this.$http.post(`${ENV.BokaApi}/api/demands/addRushVideo`, params).then(res => {
+          let data = res.data
+          this.$vux.toast.text(data.error, 'middle')
+          this.issubmit = false
+        })
+      }
+    },
     refresh () {
       this.loginUser = User.get()
       let token = Token.get()
@@ -986,6 +1086,7 @@ export default {
         this.comefromOptions = []
         this.pricetypeOptions = []
         this.fileList = []
+        this.samplePiece = []
         this.title = ''
         this.brand = ''
         this.videotype = ''
@@ -1041,6 +1142,7 @@ export default {
     .title{
       width: 10%;
       min-width: 80px;
+      padding: 9px;
       span{
         color: red;
       }
