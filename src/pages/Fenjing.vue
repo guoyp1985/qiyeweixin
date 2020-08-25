@@ -1,8 +1,17 @@
 <template lang="html">
   <div class="bg-page font14 fenjing-list-page">
     <div class="vux-tab-wrap">分镜脚本</div>
-    <div class="s-container scroll-container  mb20" style="top:44px;">
+    <div class="s-container scroll-container mb20" style="top:44px;">
       <template v-if="disTabData">
+        <div class="videobox">
+          <div class='demo'v-for="(item,index) in playerOptions"  :key="index">
+           <video-player class="video-player vjs-custom-skin"
+            ref="videoPlayer"
+            :playsinline="true"
+            :options="item">
+           </video-player>
+          </div>
+        </div>
         <el-table
           :data="tableData"
           stripe
@@ -139,6 +148,11 @@
              type="primary"
              @click="agreeStoryBoard">审核通过</el-button>
          </div>
+         <div class="align_center mt20" v-if="!query.type && status === 5">
+           <el-button
+             type="primary"
+             @click="agreeRushVideo">审核通过</el-button>
+         </div>
       </template>
       <div class="bg-white mt20" v-if="isAddFenJing">
         <div class="from bg-white from-list">
@@ -244,7 +258,10 @@ export default {
       version: 0,
       fenjingId: 0,
       canedit: 0,
-      cancheck: 0
+      cancheck: 0,
+      playerOptions: [],
+      status: 0,
+      videoid: 0
     }
   },
   methods: {
@@ -297,6 +314,38 @@ export default {
         this.title = retdata.title
         this.demandno = retdata.demandno
         this.ratio = retdata.ratio
+        this.status = retdata.status
+        this.videoid = retdata.videoid
+        if (retdata.video && retdata.video !== '') {
+          let arr = retdata.video.split(',')
+          for (let i = 0; i < arr.length; i++) {
+            let arrs = {
+              playbackRates: [1.0, 2.0, 3.0],
+              autoplay: false,
+              muted: false,
+              loop: false,
+              preload: 'auto',
+              language: 'zh-CN',
+              aspectRatio: '16:9',
+              fluid: true,
+              sources: [
+                {
+                  type: 'video/mp4',
+                  src: arr[i]
+                }
+              ],
+              poster: '',
+              notSupportedMessage: '此视频暂无法播放，请稍后再试',
+              controlBar: {
+                timeDivider: true,
+                durationDisplay: true,
+                remainingTimeDisplay: false,
+                fullscreenToggle: true
+              }
+            };
+            this.playerOptions.push(arrs);
+          }
+        }
       })
     },
     getData () {
@@ -317,6 +366,16 @@ export default {
     agreeStoryBoard () {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.version}).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          this.$router.push({path: '/makeList', query: {status: 5}})
+        }
+      })
+    },
+    agreeRushVideo () {
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/agreeRushVideo`, {demandid: this.query.id, videoid: this.videoid}).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
@@ -377,8 +436,13 @@ export default {
         this.$vux.toast.text('请填写审批意见', 'middle')
         return false
       }
+      let params = {id: this.id, checkresult: this.reason}
+      if (this.status === 5) {
+        params.type = 'rushvideo'
+        params.videoid = this.videoid
+      }
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/checkStoryBoard`, {id: this.id, checkresult: this.reason}).then(res => {
+      this.$http.post(`${ENV.BokaApi}/api/demands/checkStoryBoard`, params).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
@@ -492,6 +556,10 @@ export default {
         }
       }
     }
+  }
+  .videobox{
+    width: 50%;
+    margin: auto;
   }
 }
 </style>
