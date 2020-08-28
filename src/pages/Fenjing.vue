@@ -3,6 +3,9 @@
     <div class="vux-tab-wrap">分镜脚本</div>
     <div class="s-container scroll-container mb20" style="top:44px;">
       <template v-if="disTabData">
+        <div class="file-item" v-for="(item,index) in fileList" :key="index" :item="item">
+          <a type="primary" :href="item.url" style="color: #409EFF;" target="_blank">{{item.name}}</a>
+         </div>
         <div class="videobox">
           <div class='demo'v-for="(item,index) in playerOptions"  :key="index">
            <video-player class="video-player vjs-custom-skin"
@@ -148,7 +151,7 @@
              type="primary"
              @click="agreeStoryBoard">审核通过</el-button>
          </div>
-         <div class="align_center mt20" v-if="!query.type && status === 5">
+         <div class="align_center mt20" v-if="!query.type && (status === 5 || status === 6)">
            <el-button
              type="primary"
              @click="agreeRushVideo">审核通过</el-button>
@@ -261,7 +264,8 @@ export default {
       cancheck: 0,
       playerOptions: [],
       status: 0,
-      videoid: 0
+      videoid: 0,
+      fileList:[]
     }
   },
   methods: {
@@ -346,6 +350,11 @@ export default {
             this.playerOptions.push(arrs);
           }
         }
+        if(retdata.status === 4) {
+          this.getData()
+        } else{
+          this.getData4()
+        }
       })
     },
     getData () {
@@ -359,6 +368,19 @@ export default {
           this.version = data.version
           this.canedit = data.canedit
           this.cancheck = data.cancheck
+          this.disTabData = true
+        }
+      })
+    },
+    getData4 () {
+      let params = {demandid: parseInt(this.query.id)}
+      this.$http.post(`${ENV.BokaApi}/api/demands/rushVideoCheckList`, params).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          this.tableData = retdata
           this.disTabData = true
         }
       })
@@ -437,7 +459,7 @@ export default {
         return false
       }
       let params = {id: this.id, checkresult: this.reason}
-      if (this.status === 5) {
+      if (this.status === 5 || this.status === 6) {
         params.type = 'rushvideo'
         params.videoid = this.videoid
       }
@@ -447,7 +469,11 @@ export default {
         if (data.flag) {
           this.$vux.loading.hide()
           this.closeModal()
-          this.getData()
+          if(this.status === 4) {
+            this.getData()
+          } else{
+            this.getData4()
+          }
         }
       })
     },
@@ -476,10 +502,11 @@ export default {
       if (this.loginUser) {
         this.query = this.$route.query
         this.tableData = []
+        this.fileList = []
+        this.playerOptions = []
         this.isAddFenJing = false
         this.issubmit = false
         this.$vux.loading.show()
-        this.getData()
         this.getData1()
         this.getInfo(parseInt(this.query.id))
       }

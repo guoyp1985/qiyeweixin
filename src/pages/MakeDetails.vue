@@ -250,14 +250,33 @@
        </td>
      </tr>
      <tr v-if="status === 5&&query.type">
-       <td class="title">上传样片</td>
+       <td class="title">上传演员身份证及肖像权协议扫描件<span>（只能上传图片）</span></td>
        <td colspan="3" class="align_left">
-         <div v-if="!query.type" class="file-list">
-           <div class="file-item" v-for="(item,index) in samplePiece" :key="index" :item="item">
-             <a type="primary" :href="item.url" style="color: #409EFF;" target="_blank">{{item.name}}</a>
-            </div>
-         </div>
-         <div v-else class="align_left padding10" style="display:inline-block;">
+         <div class="align_left padding10" style="display:inline-block;">
+            <el-upload
+            class="upload-demo"
+            ref="upload"
+            :action="uploadApi"
+            :headers="uploadHeaders"
+            :multiple="1 == 1"
+            name="photo"
+            :on-change="handleChange1"
+            :on-remove="handleRemove1"
+            :on-success="afterUpload1"
+            :file-list="photos"
+            :auto-upload="false"
+            accept=".jpg,.jpeg,.png,.JPG,.JPEG"
+            >
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button>
+            </el-upload>
+        </div>
+       </td>
+     </tr>
+     <tr v-if="(status === 5 || status === 6)&&query.type">
+       <td class="title">{{status === 5 ? '上传样片' : '上传成片'}}<span>（只能上传一项）</span></td>
+       <td colspan="3" class="align_left">
+         <div class="align_left padding10" style="display:inline-block;">
             <el-upload
             class="upload-demo"
             ref="upload"
@@ -270,6 +289,7 @@
             :on-success="afterUpload1"
             :file-list="samplePiece"
             :auto-upload="false"
+            :limit="1"
             >
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
               <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button>
@@ -277,10 +297,10 @@
         </div>
        </td>
      </tr>
-     <tr v-if="status === 5&&query.type">
-       <td class="title">样片备注</td>
+     <tr v-if="(status === 5 || status === 6)&&query.type">
+       <td class="title">{{status === 5 ? '样片备注' : '成片备注'}}</td>
        <td colspan="3">
-         <el-input v-model="memo" placeholder="请输入样片备注"></el-input>
+         <el-input v-model="memo" placeholder="请输入备注"></el-input>
        </td>
      </tr>
      <tr v-if="query.type || (status !== 2 && status !== 3)">
@@ -314,9 +334,13 @@
            type="primary"
            @click="uploadSamplePiece()">上传样片</el-button>
          <el-button
-           v-if="!query.type && status === 5"
+           v-if="query.type === 'ongoing' && status === 6"
            type="primary"
-           @click="toFenjing()">样片</el-button>
+           @click="uploadFinalVideo()">上传成片</el-button>
+         <el-button
+           v-if="!query.type && (status === 5 || status === 6)"
+           type="primary"
+           @click="toFenjing()">{{status === 5 ? '审核样片' : '审核成片'}}</el-button>
      </td>
      </tr>
    </table>
@@ -682,7 +706,8 @@ export default {
       memo: '',
       disTabData4: false,
       tableData4: [],
-      ratios: ''
+      ratios: '',
+      photos: ''
     }
   },
   methods: {
@@ -806,7 +831,7 @@ export default {
             this.samplePiece.push({name: arr[i], issuccess: true, url: arr[i]})
           }
         }
-        if (retdata.status === 5 && this.query.type) {
+        if ((retdata.status === 5 || retdata.status === 6) && this.query.type) {
           this.getData4()
         }
       })
@@ -1023,14 +1048,14 @@ export default {
       })
     },
     getData4 () {
-      let params = {pagestart: this.pageStart2, limit: this.limit, demandid: parseInt(this.query.id)}
+      let params = {demandid: parseInt(this.query.id)}
       this.$http.post(`${ENV.BokaApi}/api/demands/rushVideoCheckList`, params).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
           const data = res.data
           const retdata = data.data ? data.data : data
-          this.tableData4 = this.tableData4.concat(retdata)
+          this.tableData4 = retdata
           this.disTabData4 = true
         }
       })
@@ -1176,8 +1201,44 @@ export default {
     uploadSamplePiece () {
       if (!this.issubmit) {
         let params = {demandid: parseInt(this.query.id)}
+        if (!this.photos.length) {
+          this.$vux.toast.text('请选择上传演员身份证及肖像权协议扫描件', 'middle')
+          return false
+        }
         if (!this.samplePiece.length) {
           this.$vux.toast.text('请选择上传样片', 'middle')
+          return false
+        }
+        let attachmentPhotos = []
+        for (let i = 0; i < this.photos.length; i++) {
+          let cur = this.photos[i]
+          if (cur.response && cur.response.flag) {
+            photos.push(cur.name)
+          }
+        }
+        if (attachmentPhotos.length) params.photos = attachmentPhotos.join(',')
+        let attachment = []
+        for (let i = 0; i < this.samplePiece.length; i++) {
+          let cur = this.samplePiece[i]
+          if (cur.response && cur.response.flag) {
+            attachment.push(cur.name)
+          }
+        }
+        if (attachment.length) params.video = attachment.join(',')
+        if (this.memo !== '') params.memo = this.memo
+        this.issubmit = true
+        this.$http.post(`${ENV.BokaApi}/api/demands/addRushVideo`, params).then(res => {
+          let data = res.data
+          this.$vux.toast.text(data.error, 'middle')
+          this.issubmit = false
+        })
+      }
+    },
+    uploadFinalVideo () {
+      if (!this.issubmit) {
+        let params = {demandid: parseInt(this.query.id)}
+        if (!this.samplePiece.length) {
+          this.$vux.toast.text('请选择上传成片', 'middle')
           return false
         }
         let attachment = []
@@ -1190,7 +1251,7 @@ export default {
         if (attachment.length) params.video = attachment.join(',')
         if (this.memo !== '') params.memo = this.memo
         this.issubmit = true
-        this.$http.post(`${ENV.BokaApi}/api/demands/addRushVideo`, params).then(res => {
+        this.$http.post(`${ENV.BokaApi}/api/demands/addFinalVideo`, params).then(res => {
           let data = res.data
           this.$vux.toast.text(data.error, 'middle')
           this.issubmit = false
@@ -1250,6 +1311,8 @@ export default {
         this.ideaRadio = ''
         this.issubmit = false
         this.isDisabled = false
+        this.tableData4 = []
+        this.disTabData4 = false
         this.$vux.loading.show()
         this.getData()
         if (this.query.id) {
