@@ -14,7 +14,7 @@
           <div class="flex_cell">服务</div>
         </div>
         <div class="listicon list">
-          <template v-if="groupid == 1 || groupid == 4">
+          <template v-if="isManger || isSale">
             <div class="item" @click="toLink('/userList')">
               <div class="item-inner">
                 <div class="w_100">
@@ -40,7 +40,7 @@
               </div>
             </div>
           </template>
-          <template v-if="groupid == 2 || groupid == 3">
+          <template v-if="isCustomer || isSupplier">
             <div class="item" @click="toLink('/makeList')">
               <div class="item-inner">
                 <div class="w_100">
@@ -89,7 +89,10 @@ export default {
     return {
       userInfo: {},
       query: {},
-      groupid: 0
+      isManger: false, // 1:管理员
+      isSale: false, // 4:业务员
+      isCustomer: false, // 2:客户
+      isSupplier: false // 3:供应商
     }
   },
   methods: {
@@ -108,14 +111,19 @@ export default {
     },
     refresh () {
       this.userInfo = User.get()
-      this.groupid = this.userInfo.usergroup[0]
-      // let usergroup = this.userInfo.usergroup
-      // for (let i = 0; i < usergroup.length; i ++) {
-      //   if (usergroup[i] === 1) this.groupid1 = true
-      //   if (usergroup[i] === 2) this.groupid2 = true
-      //   if (usergroup[i] === 3) this.groupid3 = true
-      //   if (usergroup[i] === 4) this.groupid4 = true
-      // }
+      // 1、管理员 2、客户 3、供应商 4、业务员
+      for (let i = 0; i < this.userInfo.usergoup; i++) {
+        let gid = this.userInfo.usergoup[i]
+        if (gid === 1) {
+          this.isManger = true
+        } else if (gid === 2) {
+          this.isCustomer = true
+        } else if (gid === 3) {
+          this.isSupplier = true
+        } else if (gid === 4) {
+          this.isSale = true
+        }
+      }
     }
   },
   activated () {
