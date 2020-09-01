@@ -265,7 +265,7 @@ export default {
       playerOptions: [],
       status: 0,
       videoid: 0,
-      fileList:[]
+      fileList: []
     }
   },
   methods: {
@@ -350,9 +350,9 @@ export default {
             this.playerOptions.push(arrs);
           }
         }
-        if(retdata.status === 4) {
+        if (retdata.status === 4) {
           this.getData()
-        } else{
+        } else {
           this.getData4()
         }
       })
@@ -469,9 +469,9 @@ export default {
         if (data.flag) {
           this.$vux.loading.hide()
           this.closeModal()
-          if(this.status === 4) {
+          if (this.status === 4) {
             this.getData()
-          } else{
+          } else {
             this.getData4()
           }
         }

@@ -1213,7 +1213,7 @@ export default {
         for (let i = 0; i < this.photos.length; i++) {
           let cur = this.photos[i]
           if (cur.response && cur.response.flag) {
-            photos.push(cur.name)
+            attachmentPhotos.push(cur.name)
           }
         }
         if (attachmentPhotos.length) params.photos = attachmentPhotos.join(',')
