@@ -7,6 +7,7 @@
   "UserList",
   "AddUser",
   "MakeList",
+  "MakeUserList",
   "AddMake",
   "MakeDetails",
   "MyOrder",

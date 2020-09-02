@@ -1,14 +1,6 @@
 <template>
   <div class="bg-page font14 user-list-page">
-    <tab class="b-tab" v-model="selectedIndex">
-      <tab-item :selected="selectedIndex == 0" @on-item-click="clickTab(0,0)">新订单</tab-item>
-      <tab-item :selected="selectedIndex == 1" @on-item-click="clickTab(1,1)">待分发</tab-item>
-      <tab-item :selected="selectedIndex == 2" @on-item-click="clickTab(2,2)">创意期</tab-item>
-      <tab-item :selected="selectedIndex == 3" @on-item-click="clickTab(3,4)">分镜脚本期</tab-item>
-      <tab-item :selected="selectedIndex == 4" @on-item-click="clickTab(4,5)">样片期</tab-item>
-      <tab-item :selected="selectedIndex == 5" @on-item-click="clickTab(5,6)">成片期</tab-item>
-    </tab>
-    <div class="s-container scroll-container makeList-page" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
+    <div class="s-container scroll-container makeList-page" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <el-row class="padding10">
         <el-col :span="18">
           <el-input placeholder="请输入项目名称搜索" v-model="keyword" @keyup.enter.native="kwChange">
@@ -60,13 +52,11 @@
                 <template v-else>{{scope.row.otherdemand}}</template>
               </template>
             </el-table-column>
-            <!-- 客户列表不要tab, 状态加到列表页后
             <el-table-column
-              prop="price"
+              prop="status"
               label="项目状态"
               min-width="120">
             </el-table-column>
-          -->
         </el-table>
       </template>
     </div>

@@ -31,7 +31,15 @@
                 </div>
               </div>
             </div>
-            <div class="item" @click="toLink('/makeList')">
+            <div class="item" @click="toLink('/makeList')" v-if="isManger">
+              <div class="item-inner">
+                <div class="w_100">
+                  <div class="radius bg-orange"><span class="al al-fuwu"></span></div>
+                  <div class="align_center">制作需求单</div>
+                </div>
+              </div>
+            </div>
+            <div class="item" @click="toLink('/makeUserList')" v-if="isCustomer">
               <div class="item-inner">
                 <div class="w_100">
                   <div class="radius bg-orange"><span class="al al-fuwu"></span></div>
@@ -40,24 +48,22 @@
               </div>
             </div>
           </template>
-          <template v-if="isCustomer || isSupplier">
-            <div class="item" @click="toLink('/makeList')">
-              <div class="item-inner">
-                <div class="w_100">
-                  <div class="radius bg-blue"><span class="al al-fuwu font18" style="font-weight:bold;"></span></div>
-                  <div class="align_center">我的需求</div>
-                </div>
+          <div class="item" @click="toLink('/makeList')" v-if="isCustomer || isSupplier">
+            <div class="item-inner">
+              <div class="w_100">
+                <div class="radius bg-blue"><span class="al al-fuwu font18" style="font-weight:bold;"></span></div>
+                <div class="align_center">我的需求</div>
               </div>
             </div>
-            <div class="item" @click="toLink('/myOrder')">
-              <div class="item-inner">
-                <div class="w_100">
-                  <div class="radius bg-theme"><span class="al al-order"></span></div>
-                  <div class="align_center">我的订单</div>
-                </div>
+          </div>
+          <div class="item" @click="toLink('/myOrder')" v-if="isSupplier">
+            <div class="item-inner">
+              <div class="w_100">
+                <div class="radius bg-theme"><span class="al al-order"></span></div>
+                <div class="align_center">我的订单</div>
               </div>
             </div>
-          </template>
+          </div>
           <div class="item" @click="toBind">
               <div class="item-inner">
                 <div class="w_100">
@@ -111,9 +117,11 @@ export default {
     },
     refresh () {
       this.userInfo = User.get()
+      console.log(this.userInfo)
       // 1、管理员 2、客户 3、供应商 4、业务员
-      for (let i = 0; i < this.userInfo.usergoup; i++) {
-        let gid = this.userInfo.usergoup[i]
+      console.log(this.userInfo.usergroup)
+      for (let i = 0; i < this.userInfo.usergroup.length; i++) {
+        let gid = this.userInfo.usergroup[i]
         if (gid === 1) {
           this.isManger = true
         } else if (gid === 2) {
