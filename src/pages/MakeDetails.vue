@@ -1,28 +1,37 @@
 <template>
-  <div class="bg-page font14 user-list-page">
+  <div class="bg-white font14 make-detail-page">
    <table class="add-make-list bg-white">
      <tr>
        <th colspan="4" class="align_center font20 padding15">制作需求单</th>
      </tr>
      <tr v-if="query.id">
        <td class="title">项目编号</td>
-       <td colspan="3">
-         <el-input readonly v-model="demandno"></el-input>
-       </td>
+       <td colspan="3">{{viewData.demandno}}</td>
      </tr>
      <tr>
        <td class="title">项目名称<span>*</span></td>
        <td colspan="3">
-         <el-input v-if="(title&&title!='')||!isDisabled" :disabled="isDisabled" v-model="title" placeholder="请输入项目名称"></el-input>
+         <el-input v-if="allowEdit" v-model="viewData.title" placeholder="请输入项目名称"></el-input>
+         <template v-else>{{viewData.title}}</template>
        </td>
      </tr>
      <tr>
        <td class="title">品牌名称</td>
        <td>
-         <el-input v-if="(brand&&brand!='')||!isDisabled" :disabled="isDisabled" v-model="brand" placeholder="请输入品牌名称"></el-input>
+         <el-input v-if="allowEdit" v-model="viewData.brand" placeholder="请输入品牌名称"></el-input>
+         <template v-else>{{viewData.brand}}</template>
        </td>
        <td class="title">视频类型<span>*</span></td>
        <td>
+         <!-- <el-select v-if="allowEdit" v-model="videotype" placeholder="请选择视频类型">
+           <el-option
+              v-for="item in videotypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+           </el-option>
+          </el-select>
+         <template v-else>{{viewData.videotype}}</template> -->
          <el-select :disabled="isDisabled" v-model="videotype" placeholder="请选择视频类型">
            <el-option
               v-for="item in videotypeOptions"
@@ -36,16 +45,27 @@
      <tr>
        <td class="title">产品名称</td>
        <td>
-         <el-input v-if="(product&&product!='')||!isDisabled" :disabled="isDisabled" v-model="product" placeholder="请输入产品名称"></el-input>
+         <el-input v-if="allowEdit" v-model="viewData.product" placeholder="请输入产品名称"></el-input>
+         <template v-else>{{viewData.product}}</template>
        </td>
        <td class="title">效果目标</td>
        <td>
-         <el-input v-if="!isDisabled||(target&&target!='')" :disabled="isDisabled" v-model="target" placeholder="请输入效果目标"></el-input>
+         <el-input v-if="allowEdit" v-model="viewData.target" placeholder="请输入效果目标"></el-input>
+         <template v-else>{{viewData.target}}</template>
        </td>
      </tr>
      <tr>
        <td class="title">视频时长<span>*</span></td>
        <td>
+         <!-- <el-select v-if="allowEdit" v-model="viewData.duration" placeholder="请选择视频时长">
+           <el-option
+              v-for="item in durationOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+           </el-option>
+         </el-select>
+         <template v-else>{{viewData.duration}}</template> -->
          <el-select :disabled="isDisabled" v-model="duration" placeholder="请选择视频时长">
            <el-option
               v-for="item in durationOptions"
@@ -53,10 +73,19 @@
               :label="item.label"
               :value="item.value">
            </el-option>
-          </el-select>
+         </el-select>
         </td>
         <td class="title">视频比例<span>*</span></td>
         <td>
+          <!-- <el-select v-if="allowEdit" v-model="viewData.ratio" placeholder="请选择视频比例">
+            <el-option
+              v-for="item in ratioOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <template v-else>{{viewData.ratio}}</template> -->
           <el-select :disabled="isDisabled" v-model="ratio" placeholder="请选择视频比例">
             <el-option
               v-for="item in ratioOptions"
@@ -70,10 +99,20 @@
      <tr>
        <td class="title">视频数量</td>
        <td>
-         <el-input v-if="(videocount&&videocount!='')||!isDisabled" :disabled="isDisabled" v-model="videocount" placeholder="请输入视频数量"></el-input>
+         <el-input v-if="allowEdit" v-model="viewData.videocount" placeholder="请输入视频数量"></el-input>
+         <template v-else>{{viewData.videocount}}</template>
        </td>
        <td class="title">视频分类<span>*</span></td>
        <td>
+         <!-- <el-select v-if="allowEdit" v-model="viewData.videoclass" placeholder="请选择视频分类">
+           <el-option
+              v-for="item in videoclassOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+           </el-option>
+         </el-select>
+         <template v-else>{{viewData.videoclass}}</template> -->
          <el-select :disabled="isDisabled" v-model="videoclass" placeholder="请选择视频分类">
             <el-option
               v-for="item in videoclassOptions"
@@ -87,6 +126,14 @@
      <tr>
        <td class="title">立项日期<span>*</span></td>
        <td>
+         <!-- <el-date-picker
+            v-if="allowEdit"
+            v-model="viewData.starttime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="选择立项日期">
+          </el-date-picker>
+         <template v-else>{{viewData.starttime}}</template> -->
          <el-date-picker
             :disabled="isDisabled"
             v-model="starttime"
@@ -97,6 +144,14 @@
         </td>
         <td class="title">交付日期<span>*</span></td>
         <td>
+          <!-- <el-date-picker
+             v-if="allowEdit"
+             v-model="viewData.endtime"
+             type="date"
+             value-format="yyyy-MM-dd"
+             placeholder="选择交付日期">
+           </el-date-picker>
+          <template v-else>{{viewData.endtime}}</template> -->
           <el-date-picker
             :disabled="isDisabled"
             v-model="endtime"
@@ -109,6 +164,15 @@
     <tr>
       <td class="title">全片LOGO<span>*</span></td>
       <td>
+        <!-- <el-select v-if="allowEdit" v-model="viewData.logo_all" placeholder="请选择全片LOGO">
+          <el-option
+            v-for="item in logo_allOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <template v-else>{{viewData.logo_all}}</template> -->
         <el-select :disabled="isDisabled" v-model="logo_all" placeholder="请选择全片LOGO">
           <el-option
             v-for="item in logo_allOptions"
@@ -120,6 +184,15 @@
       </td>
       <td class="title">片尾LOGO<span>*</span></td>
       <td>
+        <!-- <el-select v-if="allowEdit" v-model="viewData.logo_end" placeholder="请选择片尾LOGO">
+          <el-option
+            v-for="item in logo_endOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <template v-else>{{viewData.logo_end}}</template> -->
         <el-select :disabled="isDisabled" v-model="logo_end" placeholder="请选择片尾LOGO">
           <el-option
             v-for="item in logo_endOptions"
@@ -133,12 +206,7 @@
      <tr>
        <td class="title">上传附件</td>
        <td colspan="3" class="align_left">
-         <div v-if="isDisabled" class="file-list">
-           <div class="file-item" v-for="(item,index) in fileList" :key="index" :item="item">
-             <a type="primary" :href="item.url" style="color: #409EFF;" target="_blank">{{item.name}}</a>
-            </div>
-         </div>
-         <div v-else class="align_left padding10" style="display:inline-block;">
+         <div v-if="allowEdit" class="align_left padding10" style="display:inline-block;">
             <el-upload
             class="upload-demo"
             ref="upload"
@@ -156,62 +224,86 @@
               <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button>
             </el-upload>
         </div>
+        <div v-else class="file-list">
+          <div class="file-item" v-for="(item,index) in fileList" :key="index" :item="item">
+            <a type="primary" :href="item.url" style="color: #409EFF;" target="_blank">{{item.name}}</a>
+           </div>
+        </div>
        </td>
      </tr>
      <tr>
        <td class="title">相关链接</td>
        <td colspan="3">
-         <el-input v-if="(linkurl&&linkurl!='')||!isDisabled" :disabled="isDisabled" v-model="linkurl" placeholder="请输入相关链接"></el-input>
+         <el-input v-if="allowEdit" v-model="viewData.linkurl" placeholder="请输入相关链接"></el-input>
+         <template v-else>{{viewData.linkurl}}</template>
        </td>
      </tr>
      <tr>
        <td class="title">客户投诉</td>
        <td colspan="3">
-         <el-input v-if="(customerdemand&&customerdemand!='')||!isDisabled" :disabled="isDisabled" v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input v-if="allowEdit" v-model="viewData.customerdemand" placeholder="请输入投诉内容"></el-input>
+         <template v-else>{{viewData.customerdemand}}</template>
        </td>
      </tr>
      <tr>
        <td class="title">客户信息</td>
        <td colspan="3">
-         <el-input v-if="(customerinfo&&customerinfo!='')||!isDisabled" :disabled="isDisabled" v-model="customerinfo" placeholder="请输入客户信息"></el-input>
+         <el-input v-if="allowEdit" v-model="viewData.customerinfo" placeholder="请输入客户信息"></el-input>
+         <template v-else>{{viewData.customerinfo}}</template>
        </td>
      </tr>
      <tr>
        <td class="title">产品定位</td>
-       <td colspan="3"><el-input v-if="(productorientation&&productorientation!='')||!isDisabled" :disabled="isDisabled" v-model="productorientation" placeholder="请输入产品定位"></el-input>
+       <td colspan="3">
+         <el-input v-if="allowEdit" v-model="viewData.productorientation" placeholder="请输入产品定位"></el-input>
+         <template v-else>{{viewData.productorientation}}</template>
        </td>
      </tr>
      <tr>
        <td class="title">产品买点<span class="font12 color-gray5">（核心买点需标注）</span></td>
        <td colspan="3">
-         <el-input v-if="(sellerpoint&&sellerpoint!='')||!isDisabled" :disabled="isDisabled" type="textarea" v-model="sellerpoint" placeholder="请输入产品买点"></el-input>
+         <el-input v-if="allowEdit" type="textarea" v-model="viewData.sellerpoint" placeholder="请输入产品买点"></el-input>
+         <template v-else>{{viewData.sellerpoint}}</template>
        </td>
      </tr>
      <tr>
        <td class="title">视频内必须展示的关键信息</td>
        <td colspan="3">
-         <el-input v-if="(keyinfo&&keyinfo!='')||!isDisabled" :disabled="isDisabled" type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input>
+         <el-input v-if="allowEdit" type="textarea" v-model="viewData.keyinfo" placeholder="请输入关键信息"></el-input>
+         <template v-else>{{viewData.keyinfo}}</template>
        </td>
      </tr>
      <tr>
        <td class="title">创意思路</td>
        <td colspan="3">
-         <el-input v-if="(customeridea&&customeridea!='')||!isDisabled" :disabled="isDisabled" type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
+         <el-input v-if="allowEdit" type="textarea" v-model="viewData.customeridea" placeholder="请输入创意思路"></el-input>
+         <template v-else>{{viewData.customeridea}}</template>
        </td>
      </tr>
      <tr>
        <td class="title">特殊备注</td>
        <td :colspan="query.type ? 3 : ''">
-         <el-input v-if="(otherdemand&&otherdemand!='')||!isDisabled" :disabled="isDisabled" v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
+         <el-input v-if="allowEdit" v-model="viewData.otherdemand" placeholder="请输入特殊备注"></el-input>
+         <template v-else>{{viewData.otherdemand}}</template>
        </td>
        <td v-if="!query.type">制作价格</td>
        <td v-if="!query.type">
-         <el-input v-if="(price&&price!='')||!isDisabled" :disabled="isDisabled" v-model="price" placeholder="请输入制作价格"></el-input>
+         <el-input v-if="allowEdit" v-model="viewData.price" placeholder="请输入制作价格"></el-input>
+         <template v-else>{{viewData.price}}</template>
        </td>
      </tr>
      <tr v-if="status === 1">
        <td class="title">项目来源<span>*</span></td>
        <td>
+         <!-- <el-select v-if="allowEdit" v-model="viewData.comefrom" placeholder="请选择项目来源">
+           <el-option
+              v-for="item in comefromOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+           </el-option>
+          </el-select>
+         <template v-else>{{viewData.comefrom}}</template> -->
          <el-select v-model="comefrom" placeholder="请选择项目来源">
            <el-option
               v-for="item in comefromOptions"
@@ -223,6 +315,15 @@
         </td>
         <td class="title">视频价格<span>*</span></td>
         <td>
+          <!-- <el-select v-if="allowEdit" v-model="viewData.pricetype" placeholder="请选择视频价格">
+            <el-option
+              v-for="item in pricetypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <template v-else>{{viewData.pricetype}}</template> -->
           <el-select v-model="pricetype" placeholder="请选择视频价格">
             <el-option
               v-for="item in pricetypeOptions"
@@ -233,10 +334,11 @@
           </el-select>
         </td>
      </tr>
-     <tr v-if="isDisabled">
+     <tr v-if="!allowEdit">
        <td class="title">拍摄价格<span>*</span></td>
        <td :colspan="status !== 0 && status !== 1 ? 3 : ''">
-         <el-input :disabled="status !== 1" v-model="price_out" placeholder="请输入拍摄价格"></el-input>
+         <el-input v-if="status == 1" v-model="viewData.price_out" placeholder="请输入拍摄价格"></el-input>
+         <template v-else>{{viewData.price_out}}</template>
        </td>
        <td v-if="status === 1" class="title">分发用户<span>*</span></td>
        <td v-if="status === 1" @click="chooseUser">
@@ -246,10 +348,11 @@
      <tr v-if="query.type || status >= 4">
        <td class="title">创意梗概</td>
        <td colspan="3">
-         <el-input :disabled="status >= 4" type="textarea" v-model="idea" placeholder="请输入创意梗概"></el-input>
+         <el-input v-if="query.type" type="textarea" v-model="viewData.idea" placeholder="请输入创意梗概"></el-input>
+         <template v-else>{{viewData.idea}}</template>
        </td>
      </tr>
-     <tr v-if="status === 5&&query.type">
+     <tr v-if="status === 5 && query.type">
        <td class="title">上传演员身份证及肖像权协议扫描件<span>（只能上传图片）</span></td>
        <td colspan="3" class="align_left">
          <div class="align_left padding10" style="display:inline-block;">
@@ -707,7 +810,9 @@ export default {
       disTabData4: false,
       tableData4: [],
       ratios: '',
-      photos: ''
+      photos: '',
+      viewData: {},
+      allowEdit: true
     }
   },
   methods: {
@@ -766,8 +871,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: id}).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
-        console.log('获取到信息后')
-        console.log(retdata)
+        this.viewData = retdata
         this.title = retdata.title
         this.brand = retdata.brand
         this.videotype = retdata.videotype
@@ -818,6 +922,7 @@ export default {
         if (this.query.type || retdata.status !== 0) {
           console.log(retdata.status)
           this.isDisabled = true
+          this.allowEdit = false
         }
         if (retdata.attachment && retdata.attachment !== '') {
           let arr = retdata.attachment.split(',')
@@ -1313,6 +1418,7 @@ export default {
         this.isDisabled = false
         this.tableData4 = []
         this.disTabData4 = false
+        this.allowEdit = true
         this.$vux.loading.show()
         this.getData()
         if (this.query.id) {
@@ -1328,7 +1434,8 @@ export default {
 </script>
 
 <style lang="less">
-.user-list-page{
+.make-detail-page{
+  padding:10px;box-sizing: border-box;
   .add-make-list{
     width: 99.9%;
     text-align: center;

@@ -53,7 +53,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="status"
+              prop="statusdesc"
               label="项目状态"
               min-width="120">
             </el-table-column>
@@ -111,7 +111,7 @@ export default {
       this.getData()
     },
     getData () {
-      let params = {pagestart: this.pageStart, limit: this.limit, status: this.clickStatus}
+      let params = {pagestart: this.pageStart, limit: this.limit}
       if (this.keyword && this.keyword !== '') {
         params.keyword = this.keyword
       }
@@ -165,13 +165,6 @@ export default {
         this.selectedIndex = 0
         this.clickStatus = 0
         this.tableData = []
-        if (this.query.status) {
-          this.selectedIndex = parseInt(this.query.status)
-          if (parseInt(this.query.status) > 3) {
-            this.selectedIndex = parseInt(this.query.status) - 1
-          }
-          this.clickStatus = parseInt(this.query.status)
-        }
         this.$vux.loading.show()
         this.getData()
       }
