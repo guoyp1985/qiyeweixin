@@ -332,10 +332,10 @@
          <el-input v-model="memo" placeholder="请输入备注"></el-input>
        </td>
      </tr>
-     <tr v-if="query.type || (viewData.status !== 2 && viewData.status !== 3) || viewData.status < 100">
+     <tr v-if="query.type || (viewData.status !== 2 && viewData.status !== 3) || (viewData.status < 100 && isManger)">
        <td class="padding10" colspan="4">
          <el-button
-            v-if="viewData.status < 100"
+            v-if="viewData.status < 100 && isManger"
            type="primary"
            @click="toSale">分配业务员</el-button>
          <el-button
@@ -744,7 +744,11 @@ export default {
       photos: '',
       viewData: {},
       allowEdit: true,
-      fieldsData: {}
+      fieldsData: {},
+      isManger: false, // 1:管理员
+      isSale: false, // 4:业务员
+      isCustomer: false, // 2:客户
+      isSupplier: false // 3:供应商
     }
   },
   methods: {
@@ -1320,6 +1324,19 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
+      // 1、管理员 2、客户 3、供应商 4、业务员
+      for (let i = 0; i < this.loginUser.usergroup.length; i++) {
+        let gid = this.loginUser.usergroup[i]
+        if (gid === 1) {
+          this.isManger = true
+        } else if (gid === 2) {
+          this.isCustomer = true
+        } else if (gid === 3) {
+          this.isSupplier = true
+        } else if (gid === 4) {
+          this.isSale = true
+        }
+      }
       let token = Token.get()
       this.uploadHeaders.Authorization = `Bearer ${token.token}`
       if (this.loginUser !== '') {
