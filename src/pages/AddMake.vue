@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-page font14 user-list-page">
+  <div class="bg-white font14 add-make-page">
    <table class="add-make-list bg-white">
      <tr>
        <th colspan="4" class="align_center font20 padding15">制作需求单</th>
@@ -122,6 +122,24 @@
         </el-select>
       </td>
      </tr>
+     <tr v-if="isManger">
+       <td class="title">选择客户</td>
+       <td colspan="3" class="align_left">
+         <div class="padding10">
+           <div v-if="selectedCustomer" @click="clickCustomer">{{selectedCustomer.linkman}}</div>
+           <el-button v-else type="primary" size="small" @click="clickCustomer">选择客户</el-button>
+         </div>
+       </td>
+     </tr>
+     <tr v-if="isManger && !isSale">
+       <td class="title">选择业务员</td>
+       <td colspan="3" class="align_left">
+         <div class="padding10">
+           <div v-if="selectedSale" @click="clickSale">{{selectedSale.linkman}}</div>
+           <el-button v-else type="primary" size="small" @click="clickSale">选择业务员</el-button>
+         </div>
+       </td>
+     </tr>
      <tr>
        <td class="title">上传附件</td>
        <td colspan="3" class="align_left">
@@ -202,6 +220,34 @@
        </td>
      </tr>
    </table>
+   <el-dialog class="addmake-dialog" title="选择客户" :visible.sync="showCustomerDialog">
+     <template v-if="disCustomerList">
+      <template v-if="customerData.length">
+        <el-radio-group v-model="selectedCustomerUid" size="small">
+          <el-radio v-for="(item,index) in customerData" :key="item.uid" :label="item.uid">{{item.linkman}}</el-radio>
+        </el-radio-group>
+      </template>
+      <div v-else>暂无客户</div>
+    </template>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="showCustomerDialog = false">取 消</el-button>
+      <el-button type="primary" @click="submitCustomer">确 定</el-button>
+    </span>
+   </el-dialog>
+   <el-dialog class="addmake-dialog" title="选择业务员" :visible.sync="showSaleDialog">
+     <template v-if="disSaleList">
+      <template v-if="saleData.length">
+        <el-radio-group v-model="selectedSaleUid" size="small">
+          <el-radio v-for="(item,index) in saleData" :key="item.uid" :label="item.uid">{{item.linkman}}</el-radio>
+        </el-radio-group>
+      </template>
+      <div v-else>暂无业务员</div>
+    </template>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="showSaleDialog = false">取 消</el-button>
+      <el-button type="primary" @click="submitSale">确 定</el-button>
+    </span>
+   </el-dialog>
   </div>
 </template>
 <script>
@@ -247,10 +293,81 @@ export default {
       uploadHeaders: {},
       fileList: [],
       disUploadBtn: false,
-      viewData: {}
+      viewData: {},
+      isManger: false, // 1:管理员
+      isSale: false, // 4:业务员
+      isCustomer: false, // 2:客户
+      isSupplier: false, // 3:供应商
+      showCustomerDialog: false,
+      showSaleDialog: false,
+      customerData: [],
+      saleData: [],
+      disCustomerList: false,
+      disSaleList: false,
+      limit: 20,
+      customerPageStart: 0,
+      salePageStart: 0,
+      selectedCustomerUid: 0,
+      selectedSaleUid: 0,
+      selectedCustomer: null,
+      selectedSale: null,
+      customerObject: {},
+      saleObject: {}
     }
   },
   methods: {
+    clickCustomer () {
+      this.showCustomerDialog = true
+      if (!this.customerData.length) {
+        this.$http.post(`${ENV.BokaApi}/api/user/getList`, {
+          groupid: 2, pageStart: this.customerPageStart, limit: this.limit
+        }).then(res => {
+          const data = res.data
+          if (data.flag) {
+            const retdata = data.data
+            for (let i = 0; i < retdata.length; i++) {
+              this.customerObject[retdata[i].uid] = retdata[i]
+            }
+            this.customerData = this.customerData.concat(retdata)
+            this.disCustomerList = true
+          }
+        })
+      }
+    },
+    clickSale () {
+      this.showSaleDialog = true
+      if (!this.saleData.length) {
+        this.$http.post(`${ENV.BokaApi}/api/user/getList`, {
+          groupid: 4, pageStart: this.salePageStart, limit: this.limit
+        }).then(res => {
+          const data = res.data
+          if (data.flag) {
+            const retdata = data.data
+            for (let i = 0; i < retdata.length; i++) {
+              this.saleObject[retdata[i].uid] = retdata[i]
+            }
+            this.saleData = this.customerData.concat(retdata)
+            this.disSaleList = true
+          }
+        })
+      }
+    },
+    submitCustomer () {
+      if (!this.selectedCustomerUid || this.selectedCustomerUid === '') {
+        this.$vux.toast.text('请选择客户', 'middle')
+        return false
+      }
+      this.selectedCustomer = this.customerObject[this.selectedCustomerUid]
+      this.showCustomerDialog = false
+    },
+    submitSale () {
+      if (!this.selectedSaleUid || this.selectedSaleUid === '') {
+        this.$vux.toast.text('请选择业务员', 'middle')
+        return false
+      }
+      this.selectedSale = this.saleObject[this.selectedSaleUid]
+      this.showSaleDialog = false
+    },
     toLink (link) {
       this.$router.push({path: link})
     },
@@ -293,6 +410,19 @@ export default {
       let token = Token.get()
       this.uploadHeaders.Authorization = `Bearer ${token.token}`
       if (this.loginUser) {
+        // 1、管理员 2、客户 3、供应商 4、业务员
+        for (let i = 0; i < this.loginUser.usergroup.length; i++) {
+          let gid = this.loginUser.usergroup[i]
+          if (gid === 1) {
+            this.isManger = true
+          } else if (gid === 2) {
+            this.isCustomer = true
+          } else if (gid === 3) {
+            this.isSupplier = true
+          } else if (gid === 4) {
+            this.isSale = true
+          }
+        }
         this.durationOptions = []
         this.ratioOptions = []
         this.videoclassOptions = []
@@ -410,7 +540,8 @@ export default {
 </script>
 
 <style lang="less">
-.user-list-page{
+.add-make-page{
+  padding:10px;box-sizing: border-box;
   .add-make-list{
     width: 99.9%;
     text-align: center;
@@ -436,5 +567,11 @@ export default {
       min-width: 200px;
     }
   }
+}
+.addmake-dialog{
+  .el-dialog__body{padding:10px;}
+  .el-radio-group{display:block;}
+  .el-radio{display:block;margin-right:0;margin-left:0 !important;padding:5px 0;}
+  .el-radio-group .el-radio:not(:last-child){margin-bottom:5px;}
 }
 </style>

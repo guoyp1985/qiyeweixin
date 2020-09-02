@@ -80,23 +80,12 @@ export default {
       pageStart: 0,
       disTabData: false,
       keyword: '',
-      selectedIndex: 0,
       clickStatus: 0
     }
   },
   methods: {
     toLink (link) {
       this.$router.push({path: link})
-    },
-    clickTab (index, status) {
-      this.keyword = ''
-      this.selectedIndex = index
-      this.clickStatus = status
-      this.pagestart = 0
-      this.disTabData = false
-      this.tableData = []
-      this.$vux.loading.show()
-      this.getData()
     },
     kwChange () {
       if (event.keyCode === 13) {
@@ -162,7 +151,6 @@ export default {
         this.query = this.$route.query
         this.pageStart = 0
         this.disTabData = false
-        this.selectedIndex = 0
         this.clickStatus = 0
         this.tableData = []
         this.$vux.loading.show()

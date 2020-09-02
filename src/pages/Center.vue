@@ -119,7 +119,6 @@ export default {
       this.userInfo = User.get()
       console.log(this.userInfo)
       // 1、管理员 2、客户 3、供应商 4、业务员
-      console.log(this.userInfo.usergroup)
       for (let i = 0; i < this.userInfo.usergroup.length; i++) {
         let gid = this.userInfo.usergroup[i]
         if (gid === 1) {

@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white font14 make-detail-page">
-   <table class="add-make-list bg-white">
+   <table class="add-make-list bg-white" v-if="!query.id || viewData.id">
      <tr>
        <th colspan="4" class="align_center font20 padding15">制作需求单</th>
      </tr>
@@ -9,7 +9,7 @@
        <td colspan="3">{{viewData.demandno}}</td>
      </tr>
      <tr>
-       <td class="title">项目名称<span>*</span></td>
+       <td class="title">项目名称<span v-if="allowEdit">*</span></td>
        <td colspan="3">
          <el-input v-if="allowEdit" v-model="viewData.title" placeholder="请输入项目名称"></el-input>
          <template v-else>{{viewData.title}}</template>
@@ -21,9 +21,9 @@
          <el-input v-if="allowEdit" v-model="viewData.brand" placeholder="请输入品牌名称"></el-input>
          <template v-else>{{viewData.brand}}</template>
        </td>
-       <td class="title">视频类型<span>*</span></td>
+       <td class="title">视频类型<span v-if="allowEdit">*</span></td>
        <td>
-         <!-- <el-select v-if="allowEdit" v-model="videotype" placeholder="请选择视频类型">
+         <el-select v-if="allowEdit" v-model="videotype" placeholder="请选择视频类型">
            <el-option
               v-for="item in videotypeOptions"
               :key="item.value"
@@ -31,15 +31,7 @@
               :value="item.value">
            </el-option>
           </el-select>
-         <template v-else>{{viewData.videotype}}</template> -->
-         <el-select :disabled="isDisabled" v-model="videotype" placeholder="请选择视频类型">
-           <el-option
-              v-for="item in videotypeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-           </el-option>
-          </el-select>
+         <template v-else>{{fieldsData.videotype[viewData.videotype]}}</template>
        </td>
      </tr>
      <tr>
@@ -55,9 +47,9 @@
        </td>
      </tr>
      <tr>
-       <td class="title">视频时长<span>*</span></td>
+       <td class="title">视频时长<span v-if="allowEdit">*</span></td>
        <td>
-         <!-- <el-select v-if="allowEdit" v-model="viewData.duration" placeholder="请选择视频时长">
+         <el-select v-if="allowEdit" v-model="viewData.duration" placeholder="请选择视频时长">
            <el-option
               v-for="item in durationOptions"
               :key="item.value"
@@ -65,19 +57,11 @@
               :value="item.value">
            </el-option>
          </el-select>
-         <template v-else>{{viewData.duration}}</template> -->
-         <el-select :disabled="isDisabled" v-model="duration" placeholder="请选择视频时长">
-           <el-option
-              v-for="item in durationOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-           </el-option>
-         </el-select>
+         <template v-else>{{fieldsData.duration[viewData.duration]}}</template>
         </td>
-        <td class="title">视频比例<span>*</span></td>
+        <td class="title">视频比例<span v-if="allowEdit">*</span></td>
         <td>
-          <!-- <el-select v-if="allowEdit" v-model="viewData.ratio" placeholder="请选择视频比例">
+          <el-select v-if="allowEdit" v-model="viewData.ratio" placeholder="请选择视频比例">
             <el-option
               v-for="item in ratioOptions"
               :key="item.value"
@@ -85,15 +69,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <template v-else>{{viewData.ratio}}</template> -->
-          <el-select :disabled="isDisabled" v-model="ratio" placeholder="请选择视频比例">
-            <el-option
-              v-for="item in ratioOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+          <template v-else>{{fieldsData.ratio[viewData.ratio]}}</template>
         </td>
      </tr>
      <tr>
@@ -102,9 +78,9 @@
          <el-input v-if="allowEdit" v-model="viewData.videocount" placeholder="请输入视频数量"></el-input>
          <template v-else>{{viewData.videocount}}</template>
        </td>
-       <td class="title">视频分类<span>*</span></td>
+       <td class="title">视频分类<span v-if="allowEdit">*</span></td>
        <td>
-         <!-- <el-select v-if="allowEdit" v-model="viewData.videoclass" placeholder="请选择视频分类">
+         <el-select v-if="allowEdit" v-model="viewData.videoclass" placeholder="请选择视频分类">
            <el-option
               v-for="item in videoclassOptions"
               :key="item.value"
@@ -112,59 +88,37 @@
               :value="item.value">
            </el-option>
          </el-select>
-         <template v-else>{{viewData.videoclass}}</template> -->
-         <el-select :disabled="isDisabled" v-model="videoclass" placeholder="请选择视频分类">
-            <el-option
-              v-for="item in videoclassOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+         <template v-else>{{fieldsData.videoclass[viewData.videoclass]}}</template>
         </td>
       </tr>
      <tr>
-       <td class="title">立项日期<span>*</span></td>
+       <td class="title">立项日期<span v-if="allowEdit">*</span></td>
        <td>
-         <!-- <el-date-picker
-            v-if="allowEdit"
-            v-model="viewData.starttime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择立项日期">
-          </el-date-picker>
-         <template v-else>{{viewData.starttime}}</template> -->
          <el-date-picker
-            :disabled="isDisabled"
-            v-model="starttime"
+            v-if="allowEdit"
+            v-model="viewData.v_starttime"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="选择立项日期">
           </el-date-picker>
+         <template v-else>{{viewData.starttime_str}}</template>
         </td>
-        <td class="title">交付日期<span>*</span></td>
+        <td class="title">交付日期<span v-if="allowEdit">*</span></td>
         <td>
-          <!-- <el-date-picker
+          <el-date-picker
              v-if="allowEdit"
-             v-model="viewData.endtime"
+             v-model="viewData.v_endtime"
              type="date"
              value-format="yyyy-MM-dd"
              placeholder="选择交付日期">
            </el-date-picker>
-          <template v-else>{{viewData.endtime}}</template> -->
-          <el-date-picker
-            :disabled="isDisabled"
-            v-model="endtime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择交付日期">
-          </el-date-picker>
+          <template v-else>{{viewData.endtime_str}}</template>
         </td>
       </tr>
     <tr>
-      <td class="title">全片LOGO<span>*</span></td>
+      <td class="title">全片LOGO<span v-if="allowEdit">*</span></td>
       <td>
-        <!-- <el-select v-if="allowEdit" v-model="viewData.logo_all" placeholder="请选择全片LOGO">
+        <el-select v-if="allowEdit" v-model="viewData.logo_all" placeholder="请选择全片LOGO">
           <el-option
             v-for="item in logo_allOptions"
             :key="item.value"
@@ -172,19 +126,11 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <template v-else>{{viewData.logo_all}}</template> -->
-        <el-select :disabled="isDisabled" v-model="logo_all" placeholder="请选择全片LOGO">
-          <el-option
-            v-for="item in logo_allOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+        <template v-else>{{fieldsData.logo_all[viewData.logo_all]}}</template>
       </td>
-      <td class="title">片尾LOGO<span>*</span></td>
+      <td class="title">片尾LOGO<span v-if="allowEdit">*</span></td>
       <td>
-        <!-- <el-select v-if="allowEdit" v-model="viewData.logo_end" placeholder="请选择片尾LOGO">
+        <el-select v-if="allowEdit" v-model="viewData.logo_end" placeholder="请选择片尾LOGO">
           <el-option
             v-for="item in logo_endOptions"
             :key="item.value"
@@ -192,15 +138,7 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <template v-else>{{viewData.logo_end}}</template> -->
-        <el-select :disabled="isDisabled" v-model="logo_end" placeholder="请选择片尾LOGO">
-          <el-option
-            v-for="item in logo_endOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+        <template v-else>{{fieldsData.logo_end[viewData.logo_end]}}</template>
       </td>
      </tr>
      <tr>
@@ -293,9 +231,9 @@
        </td>
      </tr>
      <tr v-if="status === 1">
-       <td class="title">项目来源<span>*</span></td>
+       <td class="title">项目来源<span v-if="allowEdit">*</span></td>
        <td>
-         <!-- <el-select v-if="allowEdit" v-model="viewData.comefrom" placeholder="请选择项目来源">
+         <el-select v-if="allowEdit" v-model="viewData.comefrom" placeholder="请选择项目来源">
            <el-option
               v-for="item in comefromOptions"
               :key="item.value"
@@ -303,19 +241,11 @@
               :value="item.value">
            </el-option>
           </el-select>
-         <template v-else>{{viewData.comefrom}}</template> -->
-         <el-select v-model="comefrom" placeholder="请选择项目来源">
-           <el-option
-              v-for="item in comefromOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-           </el-option>
-          </el-select>
+          <template v-else>{{fieldsData.comefrom[viewData.comefrom]}}</template>
         </td>
-        <td class="title">视频价格<span>*</span></td>
+        <td class="title">视频价格<span v-if="allowEdit">*</span></td>
         <td>
-          <!-- <el-select v-if="allowEdit" v-model="viewData.pricetype" placeholder="请选择视频价格">
+          <el-select v-if="allowEdit" v-model="viewData.pricetype" placeholder="请选择视频价格">
             <el-option
               v-for="item in pricetypeOptions"
               :key="item.value"
@@ -323,26 +253,22 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <template v-else>{{viewData.pricetype}}</template> -->
-          <el-select v-model="pricetype" placeholder="请选择视频价格">
-            <el-option
-              v-for="item in pricetypeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+          <template v-else>{{fieldsData.pricetype[viewData.pricetype]}}</template>
         </td>
      </tr>
      <tr v-if="!allowEdit">
-       <td class="title">拍摄价格<span>*</span></td>
+       <td class="title">拍摄价格<span v-if="allowEdit">*</span></td>
        <td :colspan="status !== 0 && status !== 1 ? 3 : ''">
          <el-input v-if="status == 1" v-model="viewData.price_out" placeholder="请输入拍摄价格"></el-input>
          <template v-else>{{viewData.price_out}}</template>
        </td>
-       <td v-if="status === 1" class="title">分发用户<span>*</span></td>
-       <td v-if="status === 1" @click="chooseUser">
-         <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input>
+       <td v-if="status === 1" class="title">分发用户<span v-if="allowEdit">*</span></td>
+       <td v-if="status === 1">
+         <!-- <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input> -->
+         <div class="padding10">
+           <div v-if="users" @click="chooseUser">{{users}}</div>
+           <el-button v-else type="primary" size="small" @click="chooseUser">选择分发用户</el-button>
+         </div>
        </td>
      </tr>
      <tr v-if="query.type || status >= 4">
@@ -731,6 +657,7 @@
 </template>
 <script>
 import ENV from 'env'
+import Time from '#/time'
 import {User, Token} from '#/storage'
 export default {
   components: {
@@ -812,7 +739,8 @@ export default {
       ratios: '',
       photos: '',
       viewData: {},
-      allowEdit: true
+      allowEdit: true,
+      fieldsData: {}
     }
   },
   methods: {
@@ -831,6 +759,7 @@ export default {
           this.$vux.loading.hide()
           const data = res.data
           const retdata = data.data ? data.data : data
+          this.fieldsData = retdata
           for (let i in retdata.duration) {
             let item = {value: parseInt(i), label: retdata.duration[i]}
             this.durationOptions.push(item)
@@ -868,10 +797,24 @@ export default {
       })
     },
     getInfo (id) {
-      this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: id}).then(res => {
+      // [0=>'新发布','1'=>'需求已确认','2'=>'需求已分发','3'=>'确认供应商','4'=>'创意已确认',5=>'分镜脚本已确认','6'=>'样片已确认'];
+      // 新发布的可以编辑，其它状态都不可以编辑
+      this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: this.query.id}).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
         this.viewData = retdata
+        if (this.viewData.starttime) {
+          this.viewData.starttime_str = new Time(this.viewData.starttime * 1000).dateFormat('yyyy-MM-dd')
+        } else {
+          this.viewData.starttime_str = ''
+        }
+        if (this.viewData.endtime) {
+          this.viewData.endtime_str = new Time(this.viewData.endtime * 1000).dateFormat('yyyy-MM-dd')
+        } else {
+          this.viewData.endtime_str = ''
+        }
+        this.viewData.v_starttime = new Date(retdata.starttime * 1000)
+        this.viewData.v_endtime = new Date(retdata.endtime * 1000)
         this.title = retdata.title
         this.brand = retdata.brand
         this.videotype = retdata.videotype
@@ -942,30 +885,32 @@ export default {
       })
     },
     onSubmit () {
-      let params = {title: this.title,
-        starttime: this.starttime,
-        endtime: this.endtime,
-        duration: this.duration,
-        ratio: this.ratio,
-        videoclass: this.videoclass,
-        logo_all: this.logo_all,
-        logo_end: this.logo_end,
-        price: this.price,
-        videocount: this.videocount,
-        videotype: this.videotype,
-        attachment: []
+      if (this.issubmit) return false
+      let params = {
+        title: this.viewData.title,
+        starttime: this.viewData.v_starttime,
+        endtime: this.viewData.v_endtime,
+        duration: this.viewData.duration,
+        ratio: this.viewData.ratio,
+        videoclass: this.viewData.videoclass,
+        logo_all: this.viewData.logo_all,
+        logo_end: this.viewData.logo_end,
+        price: this.viewData.price,
+        videocount: this.viewData.videocount,
+        videotype: this.viewData.videotype,
+        attachment: ''
       }
-      if (this.brand !== '') params.brand = this.brand
-      if (this.product !== '') params.product = this.product
-      if (this.target !== '') params.target = this.target
-      if (this.linkurl !== '') params.linkurl = this.linkurl
-      if (this.customerdemand !== '') params.customerdemand = this.customerdemand
-      if (this.customerinfo !== '') params.customerinfo = this.customerinfo
-      if (this.productorientation !== '') params.productorientation = this.productorientation
-      if (this.sellerpoint !== '') params.sellerpoint = this.sellerpoint
-      if (this.keyinfo !== '') params.keyinfo = this.keyinfo
-      if (this.otherdemand !== '') params.otherdemand = this.otherdemand
-      if (this.customeridea !== '') params.customeridea = this.customeridea
+      if (this.viewData.brand !== '') params.brand = this.viewData.brand
+      if (this.viewData.product !== '') params.product = this.viewData.product
+      if (this.viewData.target !== '') params.target = this.viewData.target
+      if (this.viewData.linkurl !== '') params.linkurl = this.viewData.linkurl
+      if (this.viewData.customerdemand !== '') params.customerdemand = this.viewData.customerdemand
+      if (this.viewData.customerinfo !== '') params.customerinfo = this.viewData.customerinfo
+      if (this.viewData.productorientation !== '') params.productorientation = this.viewData.productorientation
+      if (this.viewData.sellerpoint !== '') params.sellerpoint = this.viewData.sellerpoint
+      if (this.viewData.keyinfo !== '') params.keyinfo = this.viewData.keyinfo
+      if (this.viewData.otherdemand !== '') params.otherdemand = this.viewData.otherdemand
+      if (this.viewData.customeridea !== '') params.customeridea = this.viewData.customeridea
       if (this.query.id) params.id = parseInt(this.query.id)
       let attachment = []
       for (let i = 0; i < this.fileList.length; i++) {
@@ -976,26 +921,30 @@ export default {
       }
       if (attachment.length) params.attachment = attachment.join(',')
       var rule1 = /^(0|[1-9][0-9]*)$/
-      if (!this.issubmit) {
-        if (this.title === '' || this.starttime === '' || this.endtime === '' || this.duration === '' || this.ratio === '' || this.videoclass === '' ||
-            this.logo_all === '' || this.logo_end === '' || this.videotype === '') {
-          this.$vux.toast.text('必填项不能为空', 'middle')
-        } else if (this.endtime <= this.starttime) {
-          this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
-        } else if (this.price !== '' && (isNaN(this.price) || parseFloat(this.price) < 0 || parseFloat(this.price).length > 7)) {
-          this.$vux.toast.text('请输入正确的制作价格', 'middle')
-        } else if (this.videocount !== '' && (isNaN(this.videocount) || parseFloat(this.videocount) < 0 || !rule1.test(this.videocount))) {
-          this.$vux.toast.text('请输入正确的视频数量', 'middle')
-        } else {
-          this.issubmit = true
-          this.$http.post(`${ENV.BokaApi}/api/demands/add`, params).then(res => {
-            let data = res.data
-            this.$vux.toast.text(data.error, 'middle')
-            this.$router.push({path: '/makeList'})
-            this.issubmit = false
-          })
-        }
+      if (this.viewData.title === '' || this.viewData.v_starttime === '' || this.viewData.v_endtime === '' || this.viewData.duration === '' || this.viewData.ratio === '' || this.viewData.videoclass === '' ||
+          this.viewData.logo_all === '' || this.viewData.logo_end === '' || this.viewData.videotype === '') {
+        this.$vux.toast.text('必填项不能为空', 'middle')
+        return false
       }
+      if (this.viewData.v_endtime <= this.viewData.v_starttime) {
+        this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
+        return false
+      }
+      if (this.viewData.price !== '' && (isNaN(this.viewData.price) || parseFloat(this.viewData.price) < 0 || parseFloat(this.viewData.price).length > 7)) {
+        this.$vux.toast.text('请输入正确的制作价格', 'middle')
+        return false
+      }
+      if (this.viewData.videocount !== '' && (isNaN(this.viewData.videocount) || parseFloat(this.viewData.videocount) < 0 || !rule1.test(this.viewData.videocount))) {
+        this.$vux.toast.text('请输入正确的视频数量', 'middle')
+        return false
+      }
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/add`, params).then(res => {
+        let data = res.data
+        this.$vux.toast.text(data.error, 'middle')
+        this.$router.push({path: '/makeList'})
+        this.issubmit = false
+      })
     },
     handleExamine (id) {
       this.showExamine = true
