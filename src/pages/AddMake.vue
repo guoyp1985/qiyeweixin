@@ -470,9 +470,11 @@ export default {
       if (this.keyinfo !== '') params.keyinfo = this.keyinfo
       if (this.otherdemand !== '') params.otherdemand = this.otherdemand
       if (this.customeridea !== '') params.customeridea = this.customeridea
-      if (!this.selectedCustomerUid) {
-        this.$vux.toast.text('请选择客户', 'middle')
-        return false
+      if (this.isManger || this.isSale) {
+        if (!this.selectedCustomerUid) {
+          this.$vux.toast.text('请选择客户', 'middle')
+          return false
+        }
       }
       let attachment = []
       for (let i = 0; i < this.fileList.length; i++) {
@@ -504,7 +506,11 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/add`, params).then(res => {
         let data = res.data
         this.$vux.toast.text(data.error, 'middle')
-        this.$router.push({path: '/makeList'})
+        if (this.isCustomer) {
+          this.$router.push({path: '/makeUserList'})
+        } else {
+          this.$router.push({path: '/makeList'})
+        }
         this.issubmit = false
       })
     },

@@ -37,7 +37,7 @@
             <el-table-column
               prop="datetime"
               label="项目起止时间"
-              min-width="120">
+              min-width="140">
             </el-table-column>
             <el-table-column
               prop="price"
