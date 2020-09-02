@@ -457,6 +457,7 @@ export default {
       }
     },
     onSubmit () {
+      if (this.issubmit) return false
       let params = {title: this.title, starttime: this.starttime, endtime: this.endtime, duration: this.duration, ratio: this.ratio, videoclass: this.videoclass, logo_all: this.logo_all, logo_end: this.logo_end, price: this.price, videocount: this.videocount, videotype: this.videotype}
       if (this.brand !== '') params.brand = this.brand
       if (this.product !== '') params.product = this.product
@@ -469,6 +470,10 @@ export default {
       if (this.keyinfo !== '') params.keyinfo = this.keyinfo
       if (this.otherdemand !== '') params.otherdemand = this.otherdemand
       if (this.customeridea !== '') params.customeridea = this.customeridea
+      if (!this.selectedCustomerUid) {
+        this.$vux.toast.text('请选择客户', 'middle')
+        return false
+      }
       let attachment = []
       for (let i = 0; i < this.fileList.length; i++) {
         let cur = this.fileList[i]
@@ -478,26 +483,30 @@ export default {
       }
       if (attachment.length) params.attachment = attachment.join(',')
       var rule1 = /^(0+)|[^\d]+/g
-      if (!this.issubmit) {
-        if (this.title === '' || this.starttime === '' || this.endtime === '' || this.duration === '' || this.ratio === '' || this.videoclass === '' ||
-      this.logo_all === '' || this.logo_end === '' || this.videotype === '') {
-          this.$vux.toast.text('必填项不能为空', 'middle')
-        } else if (this.endtime <= this.starttime) {
-          this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
-        } else if (this.price !== '' && (isNaN(this.price) || parseFloat(this.price) < 0 || parseFloat(this.price).length > 7)) {
-          this.$vux.toast.text('请输入正确的制作价格', 'middle')
-        } else if (this.videocount !== '' && (isNaN(this.videocount) || parseInt(this.videocount) < 0 || rule1.test(this.videocount))) {
-          this.$vux.toast.text('请输入正确的视频数量', 'middle')
-        } else {
-          this.issubmit = true
-          this.$http.post(`${ENV.BokaApi}/api/demands/add`, params).then(res => {
-            let data = res.data
-            this.$vux.toast.text(data.error, 'middle')
-            this.$router.push({path: '/makeList'})
-            this.issubmit = false
-          })
-        }
+      if (this.title === '' || this.starttime === '' || this.endtime === '' || this.duration === '' || this.ratio === '' || this.videoclass === '' ||
+    this.logo_all === '' || this.logo_end === '' || this.videotype === '') {
+        this.$vux.toast.text('必填项不能为空', 'middle')
+        return false
       }
+      if (this.endtime <= this.starttime) {
+        this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
+        return false
+      }
+      if (this.price !== '' && (isNaN(this.price) || parseFloat(this.price) < 0 || parseFloat(this.price).length > 7)) {
+        this.$vux.toast.text('请输入正确的制作价格', 'middle')
+        return false
+      }
+      if (this.videocount !== '' && (isNaN(this.videocount) || parseInt(this.videocount) < 0 || rule1.test(this.videocount))) {
+        this.$vux.toast.text('请输入正确的视频数量', 'middle')
+        return false
+      }
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/add`, params).then(res => {
+        let data = res.data
+        this.$vux.toast.text(data.error, 'middle')
+        this.$router.push({path: '/makeList'})
+        this.issubmit = false
+      })
     },
     handleUploadBtn (fileList) {
       let isDis = false

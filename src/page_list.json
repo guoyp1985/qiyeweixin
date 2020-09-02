@@ -1,16 +1,18 @@
 [
+  "AddFenJing",
+  "AddMake",
+  "AddUser",
+  "AssignSale",
   "Center",
   "CluesList",
+  "FenJing",
   "GetClues",
   "Login",
-  "Statement",
-  "UserList",
-  "AddUser",
+  "MakeDetails",
   "MakeList",
   "MakeUserList",
-  "AddMake",
-  "MakeDetails",
   "MyOrder",
-  "AddFenJing",
-  "FenJing"
+  "Redirect",
+  "Statement",
+  "UserList"
 ]

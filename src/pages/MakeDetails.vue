@@ -332,8 +332,12 @@
          <el-input v-model="memo" placeholder="请输入备注"></el-input>
        </td>
      </tr>
-     <tr v-if="query.type || (status !== 2 && status !== 3)">
+     <tr v-if="query.type || (viewData.status !== 2 && viewData.status !== 3) || viewData.status < 100">
        <td class="padding10" colspan="4">
+         <el-button
+            v-if="viewData.status < 100"
+           type="primary"
+           @click="toSale">分配业务员</el-button>
          <el-button
            v-if="canedit === 1"
            type="primary"
@@ -744,6 +748,9 @@ export default {
     }
   },
   methods: {
+    toSale () {
+      this.$router.push({path: '/assignSale', query: {id: this.query.id}})
+    },
     toLink (link) {
       this.$router.push({path: link})
     },
@@ -815,7 +822,6 @@ export default {
         }
         this.viewData.v_starttime = new Date(retdata.starttime * 1000)
         this.viewData.v_endtime = new Date(retdata.endtime * 1000)
-        this.title = retdata.title
         this.brand = retdata.brand
         this.videotype = retdata.videotype
         this.product = retdata.product
@@ -1336,8 +1342,6 @@ export default {
         this.pricetypeOptions = []
         this.fileList = []
         this.samplePiece = []
-        this.title = ''
-        this.brand = ''
         this.videotype = ''
         this.product = ''
         this.target = ''
