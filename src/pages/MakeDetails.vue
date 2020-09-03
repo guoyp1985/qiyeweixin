@@ -789,7 +789,7 @@ export default {
       if (this.viewData.status === 4) {
         this.controlBtn.push({id: 5, title: '分镜脚本', type: 'info'})
       }
-      if (this.viewData.status == 2 && this.isSupplier) {
+      if (this.viewData.status === 2 && this.isSupplier) {
         this.controlBtn.push({id: 6, title: '提交创意', type: 'danger'})
       }
       if (this.query.type) {
