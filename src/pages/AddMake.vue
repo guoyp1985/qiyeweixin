@@ -170,7 +170,7 @@
        </td>
      </tr>
      <tr>
-       <td class="title">客户投诉</td>
+       <td class="title">客户诉求</td>
        <td colspan="3">
          <el-input v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
        </td>
