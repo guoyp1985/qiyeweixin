@@ -235,7 +235,7 @@
        </td>
      </tr>
      <template v-if="!isCustomer">
-       <tr v-if="status === 1">
+       <!-- <tr v-if="status === 1">
          <td class="title">项目来源<span v-if="allowEdit">*</span></td>
          <td>
            <el-select v-if="allowEdit" v-model="viewData.comefrom" placeholder="请选择项目来源">
@@ -260,8 +260,17 @@
             </el-select>
             <template v-else>{{fieldsData.pricetype[viewData.pricetype]}}</template>
           </td>
+       </tr> -->
+       <tr v-if="!allowEdit && viewData.status == 1">
+         <td class="title">分发用户</td>
+         <td colspan="3">
+           <div class="padding10 align_left">
+             <div v-if="users" @click="chooseUser">{{users}}</div>
+             <el-button v-else type="primary" size="small" @click="chooseUser">选择分发用户</el-button>
+           </div>
+         </td>
        </tr>
-       <tr v-if="!allowEdit">
+       <!-- <tr v-if="!allowEdit">
          <td class="title">拍摄价格<span v-if="allowEdit">*</span></td>
          <td :colspan="status !== 0 && status !== 1 ? 3 : ''">
            <el-input v-if="status == 1" v-model="viewData.price_out" placeholder="请输入拍摄价格"></el-input>
@@ -269,13 +278,12 @@
          </td>
          <td v-if="viewData.status === 1" class="title">分发用户<span v-if="allowEdit">*</span></td>
          <td v-if="viewData.status === 1">
-           <!-- <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input> -->
            <div class="padding10">
              <div v-if="users" @click="chooseUser">{{users}}</div>
              <el-button v-else type="primary" size="small" @click="chooseUser">选择分发用户</el-button>
            </div>
          </td>
-       </tr>
+       </tr> -->
      </template>
      <tr v-if="query.type || status >= 4">
        <td class="title">创意梗概</td>
@@ -341,49 +349,7 @@
      <tr v-if="controlBtn.length">
        <td class="padding10" colspan="4">
          <el-button v-for="(item,index) in controlBtn" :key="index" :type="item.type" @click="buttonEvent(item.id)">{{item.title}}</el-button>
-         <!--
-         <el-button
-            v-if="viewData.status < 100 && isManger"
-            type="warning"
-           @click="toSale">分配业务员</el-button>
-         <el-button
-           v-if="canedit === 1"
-           type="primary"
-           @click="onSubmit">修改</el-button>
-         <el-button
-           v-if="cancensor === 1"
-           type="danger"
-           @click="handleExamine(parseInt(query.id))">需求确认</el-button>
-         <el-button
-           v-if="status === 1 && !isCustomer"
-           type="primary"
-           @click="onInvite">分发</el-button>
-         <el-button
-           v-if="query.type === 'new' && status === 2"
-           type="primary"
-           @click="onInvite3(0)">确认订单</el-button>
-         <el-button
-           v-if="query.type === 'ongoing' && status === 3"
-           type="primary"
-           @click="onInvite3(1)">修改创意梗概</el-button>
-         <el-button
-           v-if="status === 4"
-           type="primary"
-           @click="toFenjing()">分镜脚本</el-button>
-         <el-button
-           v-if="query.type === 'ongoing' && status === 5"
-           type="primary"
-           @click="uploadSamplePiece()">上传样片</el-button>
-         <el-button
-           v-if="query.type === 'ongoing' && status === 6"
-           type="primary"
-           @click="uploadFinalVideo()">上传成片</el-button>
-         <el-button
-           v-if="!query.type && (status === 5 || status === 6)"
-           type="primary"
-           @click="toFenjing()">{{status === 5 ? '审核样片' : '审核成片'}}</el-button>
-         -->
-     </td>
+       </td>
      </tr>
    </table>
    <div class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
@@ -637,12 +603,38 @@
          <div class="modal-content padding20">
              <div class="modal-header mb20 align_center">选择用户</div>
              <div class="modal-body mb20">
-               <div class="mb20">
+               <div class="flex_left">
+                 <div class="pr10">项目来源</div>
+                 <el-select class="flex_cell" v-model="viewData.comefrom" placeholder="请选择项目来源">
+                   <el-option
+                      v-for="item in comefromOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                   </el-option>
+                  </el-select>
+               </div>
+               <div class="flex_left mt10">
+                 <div class="pr10">视频价格</div>
+                 <el-select v-model="viewData.pricetype" placeholder="请选择视频价格">
+                   <el-option
+                     v-for="item in pricetypeOptions"
+                     :key="item.value"
+                     :label="item.label"
+                     :value="item.value">
+                   </el-option>
+                 </el-select>
+               </div>
+               <div class="flex_left mt10">
+                 <div class="pr10">拍摄价格</div>
+                 <el-input class="flex_cell" v-model="viewData.price_out" placeholder="请输入拍摄价格"></el-input>
+               </div>
+               <div class="mt10">
                  <el-input placeholder="请输入用户名称搜索" v-model="keyword" @keyup.enter.native="kwChange">
                    <el-button slot="append" icon="el-icon-search" @click="searchEvent"></el-button>
                  </el-input>
                </div>
-               <div class="users-box scroll-container" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
+               <el-card class="box-card users-box scroll-container mt10" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
                  <template v-if="disTabData">
                    <div v-if="!tableData.length" class="rw-item flex_center">暂无数据</div>
                    <el-checkbox-group v-else v-model="checkList">
@@ -654,7 +646,20 @@
                    </el-checkbox-group>
                  </template>
                  <div class="load-end-area loading" v-if="isLoading"></div>
-               </div>
+               </el-card>
+               <!-- <div class="users-box scroll-container" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
+                 <template v-if="disTabData">
+                   <div v-if="!tableData.length" class="rw-item flex_center">暂无数据</div>
+                   <el-checkbox-group v-else v-model="checkList">
+                     <div v-for="(item,index) in tableData" :key="index">
+                       <div class="rw-item flex_left">
+                         <el-checkbox :disabled="item.checked" :label="item.uid">{{item.linkman}}</el-checkbox>
+                       </div>
+                     </div>
+                   </el-checkbox-group>
+                 </template>
+                 <div class="load-end-area loading" v-if="isLoading"></div>
+               </div> -->
              </div>
              <div class="modal-footer flex_right">
                <el-button @click="closeUserModal">取消</el-button>
@@ -824,7 +829,7 @@ export default {
       if (this.cancensor) {
         this.controlBtn.push({id: 3, title: '需求确认', type: 'danger'})
       }
-      if (this.viewData.status === 1 && !this.isCustomer) {
+      if (this.viewData.status === 1 && (this.isManger || this.isSale)) {
         this.controlBtn.push({id: 4, title: '分发', type: 'primary'})
       }
       if (this.viewData.status === 4) {
@@ -908,6 +913,11 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: this.query.id}).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
+        if (retdata.canedit) {
+          this.allowEdit = true
+        } else {
+          this.allowEdit = false
+        }
         this.viewData = retdata
         if (this.viewData.starttime) {
           this.viewData.starttime_str = new Time(this.viewData.starttime * 1000).dateFormat('yyyy-MM-dd')
@@ -982,9 +992,6 @@ export default {
           }
         }
         if (this.query.type) {
-          if (retdata.status !== 0) {
-            this.allowEdit = false
-          }
           if (retdata.status === 5 || retdata.status === 6) {
             this.getData4()
           }
