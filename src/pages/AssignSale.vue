@@ -24,8 +24,8 @@
               <el-button style="float: right; padding: 3px 0" type="text" @click="saveEvent">保存</el-button>
             </div>
             <el-checkbox-group v-model="salearr">
-              <el-checkbox v-for="(item,index) in listData1" :label="item.uid">{{item.linkman}}</el-checkbox>
-              <el-checkbox v-for="(item,index) in listData2" :label="item.uid">{{item.linkman}}</el-checkbox>
+              <el-checkbox v-for="(item,index) in listData1" :key="index" :label="item.uid">{{item.linkman}}</el-checkbox>
+              <el-checkbox v-for="(item,index) in listData2" :key="index" :label="item.uid">{{item.linkman}}</el-checkbox>
             </el-checkbox-group>
           </el-card>
         </template>
