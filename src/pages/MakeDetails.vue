@@ -1090,7 +1090,7 @@ export default {
           this.$vux.toast.text('请补全信息', 'middle')
           return false
         }
-        if ((isNaN(params.price_out) || parseFloat(params.price_out) < 0 || parseFloat(params.price_out).length > 7)) {
+        if ((isNaN(params.price_out) || parseFloat(params.price_out) <= 0 || parseFloat(params.price_out).length > 7)) {
           this.$vux.toast.text('请输入正确的拍摄价格', 'middle')
           return false
         }
