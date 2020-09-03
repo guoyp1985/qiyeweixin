@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-page font14 user-list-page">
+  <div class="bg-page font14 clues-list-page">
     <div class="vux-tab-wrap">线索列表</div>
     <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <template v-if="disTabData">
@@ -64,7 +64,11 @@ export default {
       tableData: [],
       limit: 20,
       pageStart: 0,
-      disTabData: false
+      disTabData: false,
+      isManger: false, // 1:管理员
+      isSale: false, // 4:业务员
+      isCustomer: false, // 2:客户
+      isSupplier: false // 3:供应商
     }
   },
   methods: {
@@ -105,6 +109,7 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
+      this.$util.setUserRole(this)
       if (this.loginUser) {
         this.pageStart = 0
         this.disTabData = false
@@ -121,7 +126,7 @@ export default {
 </script>
 
 <style lang="less">
-.user-list-page{
+.clues-list-page{
   .vux-tab-wrap{
     position: fixed;
     top: 0;

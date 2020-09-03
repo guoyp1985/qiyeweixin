@@ -8,7 +8,7 @@ zh-CN:
   tUserList: 用户列表
   tCluesList: 线索管理
   Service: 服务
-  tAdduser: 新增用户
+  tAddUser: 新增用户
   tMakeList: 制作需求单
   tMakeUserList: 制作需求单
   tAddMake: 新增制作需求
@@ -16,4 +16,5 @@ zh-CN:
   tMyOrder: 我的订单
   tAddFenJing: 新增分镜脚本
   tFenJing: 分镜脚本
+  tFenjing: 分镜脚本
   tAssignSale: 分配业务员

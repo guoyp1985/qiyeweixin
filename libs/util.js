@@ -765,6 +765,7 @@ Util.install = function (Vue, options) {
       }
     },
     setUserRole: (curpage) => {
+      if (!curpage.loginUser) return false
       curpage.isManger = false
       curpage.isCustomer = false
       curpage.isSupplier = false

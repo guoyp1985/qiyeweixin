@@ -1,37 +1,38 @@
 <template>
-    <div class="bg-white">
-      <div class="from bg-white">
-        <div class="from-items">
-          <div class="item-title">姓名<span>*</span></div>
-          <div class="item-cell"><input v-model="linkman" placeholder="请输入姓名" /></div>
-        </div>
-        <div class="from-items">
-          <div class="item-title">手机号<span>*</span></div>
-          <div class="item-cell">
-            <input v-model="telephone" placeholder="请输入手机号"/>
-          </div>
-        </div>
-        <div class="from-items">
-          <div class="item-title">身份<span>*</span></div>
-          <div class="item-cell">
-            <el-select v-model="groupid" placeholder="请选择身份">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </div>
+  <div class="bg-white">
+    <div class="from bg-white">
+      <div class="from-items">
+        <div class="item-title">姓名<span>*</span></div>
+        <div class="item-cell"><input v-model="linkman" placeholder="请输入姓名" /></div>
+      </div>
+      <div class="from-items">
+        <div class="item-title">手机号<span>*</span></div>
+        <div class="item-cell">
+          <input v-model="telephone" placeholder="请输入手机号"/>
         </div>
       </div>
-      <div class="submit-bottom  bg-white">
-        <div class="btn submit-btn mb10" @click="submitEvent">立即提交</div>
+      <div class="from-items">
+        <div class="item-title">身份<span>*</span></div>
+        <div class="item-cell">
+          <el-select v-model="groupid" placeholder="请选择身份">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
       </div>
     </div>
+    <div class="submit-bottom  bg-white">
+      <div class="btn submit-btn mb10" @click="submitEvent">立即提交</div>
+    </div>
+  </div>
 </template>
 <script>
 import ENV from 'env'
+import {User} from '#/storage'
 export default {
   components: {
   },
@@ -53,7 +54,12 @@ export default {
       }, {
         value: 4,
         label: '业务员'
-      }]
+      }],
+      loginUser: {},
+      isManger: false, // 1:管理员
+      isSale: false, // 4:业务员
+      isCustomer: false, // 2:客户
+      isSupplier: false // 3:供应商
     }
   },
   methods: {
@@ -84,6 +90,8 @@ export default {
   },
   activated () {
     this.issubmit = false
+    this.loginUser = User.get()
+    this.$util.setUserRole(this)
   }
 }
 </script>

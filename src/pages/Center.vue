@@ -3,9 +3,9 @@
     <div class="toparea">
       <div class="box-area">
         <div class="avatar">
-          <img :src="userInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+          <img :src="loginUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
-        <div class="txt">{{userInfo.linkman}}</div>
+        <div class="txt">{{loginUser.linkman}}</div>
       </div>
     </div>
     <div class="app-box-area part">
@@ -93,7 +93,7 @@ export default {
   },
   data () {
     return {
-      userInfo: {},
+      loginUser: {},
       query: {},
       isManger: false, // 1:管理员
       isSale: false, // 4:业务员
@@ -116,7 +116,7 @@ export default {
       this.$router.push({path: link})
     },
     refresh () {
-      this.userInfo = User.get()
+      this.loginUser = User.get()
       this.$util.setUserRole(this)
     }
   },

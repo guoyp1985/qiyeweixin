@@ -405,57 +405,6 @@ export default {
         }
       })
     },
-    refresh () {
-      this.loginUser = User.get()
-      let token = Token.get()
-      this.uploadHeaders.Authorization = `Bearer ${token.token}`
-      if (this.loginUser) {
-        // 1、管理员 2、客户 3、供应商 4、业务员
-        for (let i = 0; i < this.loginUser.usergroup.length; i++) {
-          let gid = this.loginUser.usergroup[i]
-          if (gid === 1) {
-            this.isManger = true
-          } else if (gid === 2) {
-            this.isCustomer = true
-          } else if (gid === 3) {
-            this.isSupplier = true
-          } else if (gid === 4) {
-            this.isSale = true
-          }
-        }
-        this.durationOptions = []
-        this.ratioOptions = []
-        this.videoclassOptions = []
-        this.logo_allOptions = []
-        this.logo_endOptions = []
-        this.videotypeOptions = []
-        this.title = ''
-        this.brand = ''
-        this.videotype = ''
-        this.product = ''
-        this.target = ''
-        this.videocount = ''
-        this.linkurl = ''
-        this.customerdemand = ''
-        this.customerinfo = ''
-        this.productorientation = ''
-        this.sellerpoint = ''
-        this.keyinfo = ''
-        this.otherdemand = ''
-        this.price = ''
-        this.starttime = ''
-        this.endtime = ''
-        this.duration = ''
-        this.ratio = ''
-        this.videoclass = ''
-        this.logo_all = ''
-        this.logo_end = ''
-        this.customeridea = ''
-        this.issubmit = false
-        this.$vux.loading.show()
-        this.getData()
-      }
-    },
     onSubmit () {
       if (this.issubmit) return false
       let params = {title: this.title, starttime: this.starttime, endtime: this.endtime, duration: this.duration, ratio: this.ratio, videoclass: this.videoclass, logo_all: this.logo_all, logo_end: this.logo_end, price: this.price, videocount: this.videocount, videotype: this.videotype}
@@ -546,6 +495,45 @@ export default {
       }
       this.fileList = fileList
       this.handleUploadBtn(fileList)
+    },
+    refresh () {
+      this.loginUser = User.get()
+      this.$util.setUserRole(this)
+      let token = Token.get()
+      this.uploadHeaders.Authorization = `Bearer ${token.token}`
+      if (this.loginUser) {
+        this.durationOptions = []
+        this.ratioOptions = []
+        this.videoclassOptions = []
+        this.logo_allOptions = []
+        this.logo_endOptions = []
+        this.videotypeOptions = []
+        this.title = ''
+        this.brand = ''
+        this.videotype = ''
+        this.product = ''
+        this.target = ''
+        this.videocount = ''
+        this.linkurl = ''
+        this.customerdemand = ''
+        this.customerinfo = ''
+        this.productorientation = ''
+        this.sellerpoint = ''
+        this.keyinfo = ''
+        this.otherdemand = ''
+        this.price = ''
+        this.starttime = ''
+        this.endtime = ''
+        this.duration = ''
+        this.ratio = ''
+        this.videoclass = ''
+        this.logo_all = ''
+        this.logo_end = ''
+        this.customeridea = ''
+        this.issubmit = false
+        this.$vux.loading.show()
+        this.getData()
+      }
     }
   },
   activated () {
