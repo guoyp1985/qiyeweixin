@@ -835,7 +835,7 @@ export default {
           this.toFenjing()
           break
         case 6:
-          // 确认订单 query.type === 'new' && status === 2
+          // 提交创意 status==2 && groupid==3(isSupplier)
           this.onInvite3(0)
           break
         case 7:
