@@ -789,7 +789,7 @@ export default {
       if (this.viewData.status === 4) {
         this.controlBtn.push({id: 5, title: '分镜脚本', type: 'info'})
       }
-      if (this.viewData.status == 2 && isSupplier) {
+      if (this.viewData.status == 2 && this.isSupplier) {
         this.controlBtn.push({id: 6, title: '提交创意', type: 'danger'})
       }
       if (this.query.type) {
@@ -1070,23 +1070,6 @@ export default {
       this.checkList = []
     },
     submitUserModal () {
-      // this.users = ''
-      // for (let i = 0; i < this.tableData.length; i++) {
-      //   for (let u = 0; u < this.checkList.length; u++) {
-      //     if (this.tableData[i].uid === this.checkList[u]) {
-      //       this.users = this.users + this.tableData[i].linkman
-      //     }
-      //   }
-      // }
-      // if (this.checkList.length === this.uids.length) {
-      //   this.$vux.toast.text('请选一个新用户', 'middle')
-      //   return false
-      // }
-      // if (this.checkList.length !== this.uids.length && status === 2) {
-      //   this.onInvite2()
-      // }
-      // this.showChooseUser = false
-
       if (this.issubmit) return false
       let params = {
         uids: this.checkList,
