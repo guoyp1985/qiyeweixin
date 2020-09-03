@@ -349,7 +349,7 @@
          <el-button
            v-if="cancensor === 1"
            type="primary"
-           @click="handleExamine(parseInt(query.id))">审批</el-button>
+           @click="handleExamine(parseInt(query.id))">需求确认</el-button>
          <el-button
            v-if="status === 1"
            type="primary"
@@ -610,13 +610,13 @@
        <div class="modal-content padding20">
            <div class="modal-header mb20">
              <el-radio-group v-model="radio" @change="changeExamine">
-               <el-radio :label= "1">审批通过</el-radio>
-               <el-radio :label= "2">审批不通过</el-radio>
+               <el-radio :label= "1">需求确认</el-radio>
+               <el-radio :label= "2">需求驳回</el-radio>
              </el-radio-group>
            </div>
            <div class="modal-body mb20">
              <div class="from-item-textarea">
-               <el-input type="textarea" v-model="reason" :placeholder="showReason" size="50"></el-input>
+               <el-input type="textarea" v-model="reason" placeholder="请输入原因" size="50"></el-input>
              </div>
            </div>
            <div class="modal-footer flex_right">
@@ -721,7 +721,6 @@ export default {
       disTabData2: false,
       keyword: '',
       showExamine: false,
-      showReason: '请输入审批通过原因',
       radio: 1,
       reason: '',
       examineIndex: '',
@@ -965,22 +964,16 @@ export default {
       if (id) this.id = id
     },
     changeExamine () {
-      if (this.radio === 2) {
-        this.showReason = '请输入审批不通过原因'
-      } else {
-        this.showReason = '请输入审批通过原因'
-      }
       this.reason = ''
     },
     closeModal () {
       this.showExamine = false
       this.reason = ''
       this.radio = 1
-      this.showReason = '请输入审批通过原因'
     },
     submitModal () {
       if (this.radio === 2 && this.reason === '') {
-        this.$vux.toast.text('请填写审批不通过原因', 'middle')
+        this.$vux.toast.text('请填写原因', 'middle')
         return false
       }
       let params = {id: this.id, agree: this.radio}
