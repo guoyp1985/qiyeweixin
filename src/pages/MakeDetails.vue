@@ -219,6 +219,10 @@
        </td>
      </tr>
      <tr>
+       <td class="title">客户资料</td>
+       <td colspan="3">{{viewData.customerdata}}</td>
+     </tr>
+     <tr>
        <td class="title">特殊备注</td>
        <td :colspan="query.type ? 3 : ''">
          <el-input v-if="allowEdit" v-model="viewData.otherdemand" placeholder="请输入特殊备注"></el-input>
