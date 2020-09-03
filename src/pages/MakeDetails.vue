@@ -267,8 +267,8 @@
            <el-input v-if="status == 1" v-model="viewData.price_out" placeholder="请输入拍摄价格"></el-input>
            <template v-else>{{viewData.price_out}}</template>
          </td>
-         <td v-if="status === 1" class="title">分发用户<span v-if="allowEdit">*</span></td>
-         <td v-if="status === 1">
+         <td v-if="viewData.status === 1" class="title">分发用户<span v-if="allowEdit">*</span></td>
+         <td v-if="viewData.status === 1">
            <!-- <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input> -->
            <div class="padding10">
              <div v-if="users" @click="chooseUser">{{users}}</div>
@@ -338,8 +338,10 @@
          <el-input v-model="memo" placeholder="请输入备注"></el-input>
        </td>
      </tr>
-     <tr v-if="query.type || (viewData.status !== 2 && viewData.status !== 3) || (viewData.status < 100 && isManger)">
+     <tr v-if="controlBtn.length">
        <td class="padding10" colspan="4">
+         <el-button v-for="(item,index) in controlBtn" :key="index" :type="item.type" @click="buttonEvent(item.id)">{{item.title}}</el-button>
+         <!--
          <el-button
             v-if="viewData.status < 100 && isManger"
             type="warning"
@@ -353,7 +355,7 @@
            type="danger"
            @click="handleExamine(parseInt(query.id))">需求确认</el-button>
          <el-button
-           v-if="status === 1"
+           v-if="status === 1 && !isCustomer"
            type="primary"
            @click="onInvite">分发</el-button>
          <el-button
@@ -380,6 +382,7 @@
            v-if="!query.type && (status === 5 || status === 6)"
            type="primary"
            @click="toFenjing()">{{status === 5 ? '审核样片' : '审核成片'}}</el-button>
+         -->
      </td>
      </tr>
    </table>
@@ -632,9 +635,7 @@
      <div class="auto-modal flex_center" style="position:fixed;">
        <div class="modal-inner">
          <div class="modal-content padding20">
-             <div class="modal-header mb20 align_center">
-               选择用户
-             </div>
+             <div class="modal-header mb20 align_center">选择用户</div>
              <div class="modal-body mb20">
                <div class="mb20">
                  <el-input placeholder="请输入用户名称搜索" v-model="keyword" @keyup.enter.native="kwChange">
@@ -657,7 +658,7 @@
              </div>
              <div class="modal-footer flex_right">
                <el-button @click="closeUserModal">取消</el-button>
-               <el-button class="" type="primary" @click="submitUserModal">提交</el-button>
+               <el-button class="" type="primary" @click="submitUserModal">分发</el-button>
              </div>
          </div>
        </div>
@@ -733,7 +734,6 @@ export default {
       isLoading: false,
       uids: [],
       id: '',
-      isDisabled: false,
       ideaRadio: '',
       ideas: '',
       disTabData3: false,
@@ -753,7 +753,8 @@ export default {
       isManger: false, // 1:管理员
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
-      isSupplier: false // 3:供应商
+      isSupplier: false, // 3:供应商
+      controlBtn: []
     }
   },
   methods: {
@@ -812,6 +813,95 @@ export default {
         }
       })
     },
+    handleBtn () {
+      this.controlBtn = []
+      if (this.viewData.status < 100 && this.isManger) {
+        this.controlBtn.push({id: 1, title: '分配业务员', type: 'warning'})
+      }
+      if (this.canedit) {
+        this.controlBtn.push({id: 2, title: '修改', type: 'success'})
+      }
+      if (this.cancensor) {
+        this.controlBtn.push({id: 3, title: '需求确认', type: 'danger'})
+      }
+      if (this.viewData.status === 1 && !this.isCustomer) {
+        this.controlBtn.push({id: 4, title: '分发', type: 'primary'})
+      }
+      if (this.viewData.status === 4) {
+        this.controlBtn.push({id: 5, title: '分镜脚本', type: 'info'})
+      }
+      if (this.query.type) {
+        if (this.query.type === 'new') {
+          if (this.viewData.status === 2) {
+            this.controlBtn.push({id: 6, title: '确认订单', type: 'danger'})
+          }
+        } else if (this.query.type === 'ongoing') {
+          if (this.viewData.status === 3) {
+            this.controlBtn.push({id: 7, title: '修改创意梗概', type: 'success'})
+          }
+          if (this.viewData.status === 5) {
+            this.controlBtn.push({id: 8, title: '上传样片', type: 'primary'})
+          }
+          if (this.viewData.status === 6) {
+            this.controlBtn.push({id: 9, title: '上传成片', type: 'primary'})
+          }
+        }
+      } else {
+        if (this.viewData.status === 5) {
+          this.controlBtn.push({id: 10, title: '审核样片', type: 'success'})
+        } else if (this.viewData.status === 6) {
+          this.controlBtn.push({id: 11, title: '审核成片', type: 'success'})
+        }
+      }
+    },
+    buttonEvent (id) {
+      switch (id) {
+        case 1:
+          // 分配业务员 viewData.status < 100 && isManger
+          this.toSale()
+          break
+        case 2:
+          // 修改 canedit === 1
+          this.onSubmit()
+          break
+        case 3:
+          // 需求确认 cancensor === 1
+          this.handleExamine(parseInt(this.query.id))
+          break
+        case 4:
+          // 分发 status === 1 && !isCustomer
+          this.onInvite()
+          break
+        case 5:
+          // 分镜脚本 status === 4
+          this.toFenjing()
+          break
+        case 6:
+          // 确认订单 query.type === 'new' && status === 2
+          this.onInvite3(0)
+          break
+        case 7:
+          // 修改创意梗概 query.type === 'ongoing' && status === 3
+          this.onInvite3(1)
+          break
+        case 8:
+          // 上传样片 query.type === 'ongoing' && status === 5
+          this.uploadSamplePiece()
+          break
+        case 9:
+          // 上传成片 query.type === 'ongoing' && status === 6
+          this.uploadFinalVideo()
+          break
+        case 10:
+          // 审核样片 !query.type && status === 5
+          this.toFenjing()
+          break
+        case 11:
+          // 审核成片 !query.type && status === 6
+          this.toFenjing()
+          break
+      }
+    },
     getInfo (id) {
       // [0=>'新发布','1'=>'需求已确认','2'=>'需求已分发','3'=>'确认供应商','4'=>'创意已确认',5=>'分镜脚本已确认','6'=>'样片已确认'];
       // 新发布的可以编辑，其它状态都不可以编辑
@@ -831,6 +921,8 @@ export default {
         }
         this.viewData.v_starttime = new Date(retdata.starttime * 1000)
         this.viewData.v_endtime = new Date(retdata.endtime * 1000)
+        this.handleBtn()
+
         this.brand = retdata.brand
         this.videotype = retdata.videotype
         this.product = retdata.product
@@ -877,11 +969,6 @@ export default {
         if (retdata.status === 2 && !this.query.type) {
           this.getData3()
         }
-        if (this.query.type || retdata.status !== 0) {
-          console.log(retdata.status)
-          this.isDisabled = true
-          this.allowEdit = false
-        }
         if (retdata.attachment && retdata.attachment !== '') {
           let arr = retdata.attachment.split(',')
           for (let i = 0; i < arr.length; i++) {
@@ -894,8 +981,13 @@ export default {
             this.samplePiece.push({name: arr[i], issuccess: true, url: arr[i]})
           }
         }
-        if ((retdata.status === 5 || retdata.status === 6) && this.query.type) {
-          this.getData4()
+        if (this.query.type) {
+          if (retdata.status !== 0) {
+            this.allowEdit = false
+          }
+          if (retdata.status === 5 || retdata.status === 6) {
+            this.getData4()
+          }
         }
       })
     },
@@ -1120,6 +1212,7 @@ export default {
       })
     },
     onInvite () {
+      if (this.issubmit) return false
       let params = {
         comefrom: this.comefrom,
         pricetype: this.pricetype,
@@ -1127,21 +1220,21 @@ export default {
         uids: this.checkList,
         id: parseInt(this.query.id)
       }
-      if (!this.issubmit) {
-        if (this.pricetype === '' || this.comefrom === '' || this.users === '' || this.price_out === '') {
-          this.$vux.toast.text('必填项不能为空', 'middle')
-        } else if (this.price_out !== '' && (isNaN(this.price_out) || parseFloat(this.price_out) < 0 || parseFloat(this.price_out).length > 7)) {
-          this.$vux.toast.text('请输入正确的拍摄价格', 'middle')
-        } else {
-          this.issubmit = true
-          this.$http.post(`${ENV.BokaApi}/api/demands/invite`, params).then(res => {
-            let data = res.data
-            this.$vux.toast.text(data.error, 'middle')
-            this.$router.push({path: '/makeList', query: {status: 2}})
-            this.issubmit = false
-          })
-        }
+      if (this.pricetype === '' || this.comefrom === '' || this.users === '' || this.price_out === '') {
+        this.$vux.toast.text('必填项不能为空', 'middle')
+        return false
       }
+      if (this.price_out !== '' && (isNaN(this.price_out) || parseFloat(this.price_out) < 0 || parseFloat(this.price_out).length > 7)) {
+        this.$vux.toast.text('请输入正确的拍摄价格', 'middle')
+        return false
+      }
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/invite`, params).then(res => {
+        let data = res.data
+        this.$vux.toast.text(data.error, 'middle')
+        this.$router.push({path: '/makeList', query: {status: 2}})
+        this.issubmit = false
+      })
     },
     onInvite2 () {
       let params = {
@@ -1380,7 +1473,6 @@ export default {
         this.idea = ''
         this.ideaRadio = ''
         this.issubmit = false
-        this.isDisabled = false
         this.tableData4 = []
         this.disTabData4 = false
         this.allowEdit = true
