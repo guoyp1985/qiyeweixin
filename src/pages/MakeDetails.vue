@@ -327,7 +327,7 @@
            </el-table-column>
            <el-table-column
              prop="linkman"
-             label="姓名"
+             label="供应商"
              min-width="100">
            </el-table-column>
            <el-table-column
@@ -717,7 +717,8 @@ export default {
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
       isSupplier: false, // 3:供应商
-      controlBtn: []
+      controlBtn: [],
+      inviteObject: {}
     }
   },
   methods: {
@@ -1175,6 +1176,9 @@ export default {
           this.$vux.loading.hide()
           const data = res.data
           const retdata = data.data ? data.data : data
+          for (let i = 0; i < retdata.length; i++) {
+            this.inviteObject[retdata[i].uid] = retdata[i]
+          }
           this.checkList = data.uids
           this.uids = data.uids
           this.tableData2 = this.tableData2.concat(retdata)
@@ -1260,15 +1264,19 @@ export default {
       this.ideaRadio = val.uid
     },
     onSubmit2 () {
-      console.log(this.ideaRadio);
+      if (this.issubmit) return false
       let params = {
         suid: this.ideaRadio,
         id: parseInt(this.query.id)
       }
-      if (!this.issubmit) {
-        if (this.ideaRadio === '') {
-          this.$vux.toast.text('请选择一条创意梗概', 'middle')
-        } else {
+      if (this.ideaRadio === '') {
+        this.$vux.toast.text('请选择一条创意梗概', 'middle')
+        return false
+      }
+      let selectedInvite = this.inviteObject[this.ideaRadio]
+      this.$vux.confirm.show({
+        content: `您确定选择${selectedInvite.linkman}为该订单的供应商吗？`,
+        onConfirm: () => {
           this.issubmit = true
           this.$http.post(`${ENV.BokaApi}/api/demands/selectIdea`, params).then(res => {
             let data = res.data
@@ -1279,7 +1287,7 @@ export default {
             this.issubmit = false
           })
         }
-      }
+      })
     },
     handleUploadBtn (fileList) {
       let isDis = false
