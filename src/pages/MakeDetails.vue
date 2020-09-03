@@ -198,9 +198,9 @@
        </td>
      </tr>
      <tr>
-       <td class="title">产品买点<span class="font12 color-gray5">（核心买点需标注）</span></td>
+       <td class="title">产品卖点<span class="font12 color-gray5">（核心卖点需标注）</span></td>
        <td colspan="3">
-         <el-input v-if="allowEdit" type="textarea" v-model="viewData.sellerpoint" placeholder="请输入产品买点"></el-input>
+         <el-input v-if="allowEdit" type="textarea" v-model="viewData.sellerpoint" placeholder="请输入产品卖点"></el-input>
          <template v-else>{{viewData.sellerpoint}}</template>
        </td>
      </tr>
