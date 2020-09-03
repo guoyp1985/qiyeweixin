@@ -52,6 +52,7 @@
 <script>
 import {XAddress, PopupPicker, CheckIcon, ChinaAddressV4Data, Value2nameFilter as value2name} from 'vux'
 import ENV from 'env'
+import {User} from '#/storage'
 export default {
   components: {
     XAddress,
@@ -60,6 +61,7 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
       linkman: '',
       telephone: '',
       linkman1: '',
@@ -77,7 +79,11 @@ export default {
       }, {
         value: 2,
         label: '我是视频制作团队，求合作'
-      }]
+      }],
+      isManger: false, // 1:管理员
+      isSale: false, // 4:业务员
+      isCustomer: false, // 2:客户
+      isSupplier: false // 3:供应商
     }
   },
   methods: {
@@ -138,6 +144,8 @@ export default {
   },
   activated () {
     this.issubmit = false
+    this.loginUser = User.get()
+    this.$util.setUserRole(this)
   }
 }
 </script>

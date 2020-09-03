@@ -91,7 +91,11 @@ export default {
       disTabData: false,
       keyword: '',
       selectedIndex: 0,
-      clickStatus: 0
+      clickStatus: 0,
+      isManger: false, // 1:管理员
+      isSale: false, // 4:业务员
+      isCustomer: false, // 2:客户
+      isSupplier: false // 3:供应商
     }
   },
   methods: {
@@ -168,6 +172,7 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
+      this.$util.setUserRole(this)
       if (this.loginUser) {
         this.query = this.$route.query
         this.pageStart = 0
