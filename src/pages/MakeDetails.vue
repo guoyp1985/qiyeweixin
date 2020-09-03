@@ -218,7 +218,7 @@
          <template v-else>{{viewData.customeridea}}</template>
        </td>
      </tr>
-     <tr>
+     <tr v-if="isManger || isSale">
        <td class="title">客户资料</td>
        <td colspan="3">{{viewData.customerdata}}</td>
      </tr>
