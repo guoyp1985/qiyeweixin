@@ -234,47 +234,49 @@
          <template v-else>{{viewData.price}}</template>
        </td>
      </tr>
-     <tr v-if="status === 1">
-       <td class="title">项目来源<span v-if="allowEdit">*</span></td>
-       <td>
-         <el-select v-if="allowEdit" v-model="viewData.comefrom" placeholder="请选择项目来源">
-           <el-option
-              v-for="item in comefromOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-           </el-option>
-          </el-select>
-          <template v-else>{{fieldsData.comefrom[viewData.comefrom]}}</template>
-        </td>
-        <td class="title">视频价格<span v-if="allowEdit">*</span></td>
-        <td>
-          <el-select v-if="allowEdit" v-model="viewData.pricetype" placeholder="请选择视频价格">
-            <el-option
-              v-for="item in pricetypeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-          <template v-else>{{fieldsData.pricetype[viewData.pricetype]}}</template>
-        </td>
-     </tr>
-     <tr v-if="!allowEdit">
-       <td class="title">拍摄价格<span v-if="allowEdit">*</span></td>
-       <td :colspan="status !== 0 && status !== 1 ? 3 : ''">
-         <el-input v-if="status == 1" v-model="viewData.price_out" placeholder="请输入拍摄价格"></el-input>
-         <template v-else>{{viewData.price_out}}</template>
-       </td>
-       <td v-if="status === 1" class="title">分发用户<span v-if="allowEdit">*</span></td>
-       <td v-if="status === 1">
-         <!-- <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input> -->
-         <div class="padding10">
-           <div v-if="users" @click="chooseUser">{{users}}</div>
-           <el-button v-else type="primary" size="small" @click="chooseUser">选择分发用户</el-button>
-         </div>
-       </td>
-     </tr>
+     <template v-if="!isCustomer">
+       <tr v-if="status === 1">
+         <td class="title">项目来源<span v-if="allowEdit">*</span></td>
+         <td>
+           <el-select v-if="allowEdit" v-model="viewData.comefrom" placeholder="请选择项目来源">
+             <el-option
+                v-for="item in comefromOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+             </el-option>
+            </el-select>
+            <template v-else>{{fieldsData.comefrom[viewData.comefrom]}}</template>
+          </td>
+          <td class="title">视频价格<span v-if="allowEdit">*</span></td>
+          <td>
+            <el-select v-if="allowEdit" v-model="viewData.pricetype" placeholder="请选择视频价格">
+              <el-option
+                v-for="item in pricetypeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <template v-else>{{fieldsData.pricetype[viewData.pricetype]}}</template>
+          </td>
+       </tr>
+       <tr v-if="!allowEdit">
+         <td class="title">拍摄价格<span v-if="allowEdit">*</span></td>
+         <td :colspan="status !== 0 && status !== 1 ? 3 : ''">
+           <el-input v-if="status == 1" v-model="viewData.price_out" placeholder="请输入拍摄价格"></el-input>
+           <template v-else>{{viewData.price_out}}</template>
+         </td>
+         <td v-if="status === 1" class="title">分发用户<span v-if="allowEdit">*</span></td>
+         <td v-if="status === 1">
+           <!-- <el-input readonly v-model="users" placeholder="请输入选择分发用户"></el-input> -->
+           <div class="padding10">
+             <div v-if="users" @click="chooseUser">{{users}}</div>
+             <el-button v-else type="primary" size="small" @click="chooseUser">选择分发用户</el-button>
+           </div>
+         </td>
+       </tr>
+     </template>
      <tr v-if="query.type || status >= 4">
        <td class="title">创意梗概</td>
        <td colspan="3">
