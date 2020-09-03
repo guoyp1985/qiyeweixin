@@ -763,6 +763,33 @@ Util.install = function (Vue, options) {
       } else {
         Vue.wechat.miniProgram.navigateTo({url: `${minibackurl}`})
       }
+    },
+    setUserRole: (curpage) => {
+      curpage.isManger = false
+      curpage.isCustomer = false
+      curpage.isSupplier = false
+      curpage.isSale = false
+      // 1、管理员 2、客户 3、供应商 4、业务员
+      for (let i = 0; i < curpage.loginUser.usergroup.length; i++) {
+        let gid = curpage.loginUser.usergroup[i]
+        if (gid === 1) {
+          curpage.isManger = true
+        } else if (gid === 2) {
+          curpage.isCustomer = true
+        } else if (gid === 3) {
+          curpage.isSupplier = true
+        } else if (gid === 4) {
+          curpage.isSale = true
+        }
+      }
+    },
+    transSelectOption: (data) => {
+      let arr = []
+      for (let key in data) {
+        let item = {value: key, label: data[key]}
+        arr.push(item)
+      }
+      return arr
     }
   }
 }

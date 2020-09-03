@@ -117,24 +117,7 @@ export default {
     },
     refresh () {
       this.userInfo = User.get()
-      console.log(this.userInfo)
-      this.isManger = false
-      this.isCustomer = false
-      this.isSupplier = false
-      this.isSale = false
-      // 1、管理员 2、客户 3、供应商 4、业务员
-      for (let i = 0; i < this.userInfo.usergroup.length; i++) {
-        let gid = this.userInfo.usergroup[i]
-        if (gid === 1) {
-          this.isManger = true
-        } else if (gid === 2) {
-          this.isCustomer = true
-        } else if (gid === 3) {
-          this.isSupplier = true
-        } else if (gid === 4) {
-          this.isSale = true
-        }
-      }
+      this.$util.setUserRole(this)
     }
   },
   activated () {

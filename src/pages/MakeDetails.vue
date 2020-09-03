@@ -23,7 +23,7 @@
        </td>
        <td class="title">视频类型<span v-if="allowEdit">*</span></td>
        <td>
-         <el-select v-if="allowEdit" v-model="videotype" placeholder="请选择视频类型">
+         <el-select v-if="allowEdit" v-model="viewData.videotype" placeholder="请选择视频类型">
            <el-option
               v-for="item in videotypeOptions"
               :key="item.value"
@@ -248,7 +248,7 @@
        <td class="title">创意梗概</td>
        <td colspan="3">{{viewData.confirmedidea}}</td>
      </tr>
-     <tr v-if="status === 5 && query.type">
+     <tr v-if="viewData.status === 5 && query.type">
        <td class="title">上传演员身份证及肖像权协议扫描件<span>（只能上传图片）</span></td>
        <td colspan="3" class="align_left">
          <div class="align_left padding10" style="display:inline-block;">
@@ -272,8 +272,8 @@
         </div>
        </td>
      </tr>
-     <tr v-if="(status === 5 || status === 6)&&query.type">
-       <td class="title">{{status === 5 ? '上传样片' : '上传成片'}}<span>（只能上传一项）</span></td>
+     <tr v-if="(viewData.status === 5 || viewData.status === 6)&&query.type">
+       <td class="title">{{viewData.status === 5 ? '上传样片' : '上传成片'}}<span>（只能上传一项）</span></td>
        <td colspan="3" class="align_left">
          <div class="align_left padding10" style="display:inline-block;">
             <el-upload
@@ -296,8 +296,8 @@
         </div>
        </td>
      </tr>
-     <tr v-if="(status === 5 || status === 6)&&query.type">
-       <td class="title">{{status === 5 ? '样片备注' : '成片备注'}}</td>
+     <tr v-if="(viewData.status === 5 || viewData.status === 6)&&query.type">
+       <td class="title">{{viewData.status === 5 ? '样片备注' : '成片备注'}}</td>
        <td colspan="3">
          <el-input v-model="memo" placeholder="请输入备注"></el-input>
        </td>
@@ -347,7 +347,7 @@
              </template>
            </el-table-column>
        </el-table>
-        <div class="align_center mt20" v-if="status === 2">
+        <div class="align_center mt20" v-if="viewData.status === 2">
           <el-button
             type="primary"
             @click="onSubmit2">提交选择</el-button>
@@ -357,66 +357,66 @@
         </div>
      </template>
    </div>
-   <div class="scroll-container">
-     <template v-if="disTabData3 && status === 3">
-       <el-table
-         :data="ideas"
-         stripe
-         style="width: 100%"
-         :header-cell-style="{'text-align':'center'}"
-         :cell-style="{'text-align':'center'}">
-           <el-table-column
-             prop="datetime"
-             label="日期"
-             min-width="100">
-           </el-table-column>
-           <el-table-column
-             prop="version"
-             label="版本号"
-             min-width="100">
-           </el-table-column>
-           <el-table-column
-             label="创意梗概"
-             min-width="500">
+   <div class="scroll-container" v-if="viewData.ideas && viewData.ideas.length && viewData.status === 3">
+     <el-table
+       :data="viewData.ideas"
+       stripe
+       style="width: 100%"
+       :header-cell-style="{'text-align':'center'}"
+       :cell-style="{'text-align':'center'}">
+         <el-table-column
+           prop="datetime"
+           label="日期"
+           min-width="100">
+         </el-table-column>
+         <el-table-column
+           prop="version"
+           label="版本号"
+           min-width="100">
+         </el-table-column>
+         <el-table-column
+           label="创意梗概"
+           min-width="500">
+           <template slot-scope="scope">
+             <template v-if="!scope.row.content || scope.row.content == ''">无</template>
+             <template v-else>{{scope.row.content}}</template>
+           </template>
+         </el-table-column>
+         <el-table-column
+           label="审核意见"
+           min-width="120">
              <template slot-scope="scope">
-               <template v-if="!scope.row.content || scope.row.content == ''">无</template>
-               <template v-else>{{scope.row.content}}</template>
+               <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
+               <template v-else>{{scope.row.checkresult}}</template>
              </template>
-           </el-table-column>
-           <el-table-column
-             label="审核意见"
-             min-width="120">
-               <template slot-scope="scope">
-                 <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
-                 <template v-else>{{scope.row.checkresult}}</template>
-               </template>
-           </el-table-column>
-           <el-table-column
-             label="审核状态"
-             min-width="120">
-               <template slot-scope="scope">
-                 <template v-if="!scope.row.modstr || scope.row.modstr == ''">无</template>
-                 <template v-else>{{scope.row.modstr}}</template>
-               </template>
-           </el-table-column>
-           <el-table-column
-             v-if="status === 3"
-             label="操作"
-             min-width="120">
+         </el-table-column>
+         <el-table-column
+           label="审核状态"
+           min-width="120">
              <template slot-scope="scope">
-               <template v-if="scope.row.cancheck === 1"><el-button @click="handleExamine(scope.row.id)">审批</el-button></template>
+               <template v-if="!scope.row.modstr || scope.row.modstr == ''">无</template>
+               <template v-else>{{scope.row.modstr}}</template>
              </template>
-           </el-table-column>
-       </el-table>
-        <div class="align_center mt20" v-if="status === 2">
-          <el-button
-            type="primary"
-            @click="onSubmit2">提交选择</el-button>
-          <el-button
-            type="primary"
-            @click="chooseUser">新增邀请</el-button>
-        </div>
-     </template>
+         </el-table-column>
+         <el-table-column
+           v-if="viewData.status === 3"
+           label="操作"
+           min-width="120">
+           <template slot-scope="scope">
+             <template v-if="scope.row.cancheck === 1">
+               <el-button @click="handleExamine(scope.row.id)">审批</el-button>
+             </template>
+           </template>
+         </el-table-column>
+     </el-table>
+      <div class="align_center mt20" v-if="viewData.status === 2">
+        <el-button
+          type="primary"
+          @click="onSubmit2">提交选择</el-button>
+        <el-button
+          type="primary"
+          @click="chooseUser">新增邀请</el-button>
+      </div>
    </div>
    <div class="scroll-container mb20">
      <template v-if="disTabData4">
@@ -486,7 +486,7 @@
            </el-table-column>
          </el-table-column>
          <el-table-column
-           :label="ratios[ratio]"
+           :label="fieldsData.ratio[viewData.ratio]"
            min-width="100">
            <el-table-column
              label="服装道具"
@@ -640,33 +640,6 @@ export default {
     return {
       loginUser: {},
       query: {},
-      demandno: '',
-      title: '',
-      brand: '',
-      videotype: '',
-      product: '',
-      target: '',
-      videocount: '',
-      linkurl: '',
-      customerdemand: '',
-      customerinfo: '',
-      productorientation: '',
-      sellerpoint: '',
-      keyinfo: '',
-      otherdemand: '',
-      price: '',
-      starttime: '',
-      endtime: '',
-      duration: '',
-      ratio: '',
-      videoclass: '',
-      logo_all: '',
-      logo_end: '',
-      customeridea: '',
-      comefrom: '',
-      pricetype: '',
-      price_out: '',
-      idea: '',
       durationOptions: [],
       ratioOptions: [],
       videoclassOptions: [],
@@ -676,8 +649,6 @@ export default {
       comefromOptions: [],
       pricetypeOptions: [],
       issubmit: false,
-      canedit: 0,
-      cancensor: 0,
       limit: 20,
       tableData: [],
       pageStart: 0,
@@ -692,14 +663,9 @@ export default {
       examineIndex: '',
       showChooseUser: false,
       checkList: [],
-      users: '',
-      status: 0,
       isLoading: false,
-      uids: [],
-      id: '',
+      censorid: 0,
       ideaRadio: '',
-      ideas: '',
-      disTabData3: false,
       uploadApi: ENV.BokaApi + '/api/upload/singleFile?field=photo',
       uploadHeaders: {},
       fileList: [],
@@ -708,7 +674,6 @@ export default {
       memo: '',
       disTabData4: false,
       tableData4: [],
-      ratios: '',
       photos: '',
       viewData: {},
       allowEdit: true,
@@ -741,39 +706,14 @@ export default {
           const data = res.data
           const retdata = data.data ? data.data : data
           this.fieldsData = retdata
-          for (let i in retdata.duration) {
-            let item = {value: parseInt(i), label: retdata.duration[i]}
-            this.durationOptions.push(item)
-          }
-          for (let i in retdata.ratio) {
-            let item = {value: parseInt(i), label: retdata.ratio[i]}
-            this.ratioOptions.push(item)
-          }
-          for (let i in retdata.videoclass) {
-            let item = {value: parseInt(i), label: retdata.videoclass[i]}
-            this.videoclassOptions.push(item)
-          }
-          for (let i in retdata.logo_all) {
-            let item = {value: parseInt(i), label: retdata.logo_all[i]}
-            this.logo_allOptions.push(item)
-          }
-          for (let i in retdata.logo_end) {
-            let item = {value: parseInt(i), label: retdata.logo_end[i]}
-            this.logo_endOptions.push(item)
-          }
-          for (let i in retdata.videotype) {
-            let item = {value: i, label: retdata.videotype[i]}
-            this.videotypeOptions.push(item)
-          }
-          for (let i in retdata.comefrom) {
-            let item = {value: i, label: retdata.comefrom[i]}
-            this.comefromOptions.push(item)
-          }
-          for (let i in retdata.pricetype) {
-            let item = {value: i, label: retdata.pricetype[i]}
-            this.pricetypeOptions.push(item)
-          }
-          this.ratios = retdata.ratio
+          this.durationOptions = this.$util.transSelectOption(retdata.duration)
+          this.ratioOptions = this.$util.transSelectOption(retdata.ratio)
+          this.videoclassOptions = this.$util.transSelectOption(retdata.videoclass)
+          this.logo_allOptions = this.$util.transSelectOption(retdata.logo_all)
+          this.logo_endOptions = this.$util.transSelectOption(retdata.logo_end)
+          this.videotypeOptions = this.$util.transSelectOption(retdata.videotype)
+          this.comefromOptions = this.$util.transSelectOption(retdata.comefrom)
+          this.pricetypeOptions = this.$util.transSelectOption(retdata.pricetype)
         }
       })
     },
@@ -782,10 +722,10 @@ export default {
       if (this.viewData.status < 100 && this.isManger) {
         this.controlBtn.push({id: 1, title: '分配业务员', type: 'warning'})
       }
-      if (this.canedit) {
+      if (this.viewData.canedit) {
         this.controlBtn.push({id: 2, title: '修改', type: 'success'})
       }
-      if (this.cancensor) {
+      if (this.viewData.cancensor) {
         this.controlBtn.push({id: 3, title: '需求确认', type: 'danger'})
       }
       if (this.viewData.status === 1 && (this.isManger || this.isSale)) {
@@ -824,43 +764,43 @@ export default {
           this.toSale()
           break
         case 2:
-          // 修改 canedit === 1
+          // 修改 viewData.canedit === 1
           this.onSubmit()
           break
         case 3:
-          // 需求确认 cancensor === 1
+          // 需求确认 viewData.cancensor === 1
           this.handleExamine(parseInt(this.query.id))
           break
         case 4:
-          // 分发 status === 1 && !isCustomer
+          // 分发 viewData.status === 1 && !isCustomer
           this.chooseUser()
           break
         case 5:
-          // 分镜脚本 status === 4
+          // 分镜脚本 viewData.status === 4
           this.toFenjing()
           break
         case 6:
-          // 提交创意 status==2 && groupid==3(isSupplier)
+          // 提交创意 viewData.status==2 && groupid==3(isSupplier)
           this.onInvite3(0)
           break
         case 7:
-          // 修改创意梗概 query.type === 'ongoing' && status === 3
+          // 修改创意梗概 query.type === 'ongoing' && viewData.status === 3
           this.onInvite3(1)
           break
         case 8:
-          // 上传样片 query.type === 'ongoing' && status === 5
+          // 上传样片 query.type === 'ongoing' && viewData.status === 5
           this.uploadSamplePiece()
           break
         case 9:
-          // 上传成片 query.type === 'ongoing' && status === 6
+          // 上传成片 query.type === 'ongoing' && viewData.status === 6
           this.uploadFinalVideo()
           break
         case 10:
-          // 审核样片 !query.type && status === 5
+          // 审核样片 !query.type && viewData.status === 5
           this.toFenjing()
           break
         case 11:
-          // 审核成片 !query.type && status === 6
+          // 审核成片 !query.type && viewData.status === 6
           this.toFenjing()
           break
       }
@@ -890,50 +830,20 @@ export default {
         this.viewData.v_starttime = new Date(retdata.starttime * 1000)
         this.viewData.v_endtime = new Date(retdata.endtime * 1000)
         this.handleBtn()
-
-        this.brand = retdata.brand
-        this.videotype = retdata.videotype
-        this.product = retdata.product
-        this.target = retdata.target
-        this.videocount = retdata.videocount
-        this.linkurl = retdata.linkurl
-        this.customerdemand = retdata.customerdemand
-        this.customerinfo = retdata.customerinfo
-        this.productorientation = retdata.productorientation
-        this.sellerpoint = retdata.sellerpoint
-        this.keyinfo = retdata.keyinfo
-        this.otherdemand = retdata.otherdemand
-        this.price = retdata.price
-        this.starttime = new Date(retdata.starttime * 1000)
-        this.endtime = new Date(retdata.endtime * 1000)
-        this.duration = retdata.duration
-        this.ratio = retdata.ratio
-        this.videoclass = retdata.videoclass
-        this.logo_all = retdata.logo_all
-        this.logo_end = retdata.logo_end
-        this.customeridea = retdata.customeridea
-        this.demandno = retdata.demandno
-        this.canedit = retdata.canedit
-        this.cancensor = retdata.cancensor
-        this.comefrom = retdata.comefrom
-        this.pricetype = retdata.pricetype
-        this.price_out = retdata.price_out
-        this.status = retdata.status
-        this.ideas = retdata.ideas
         if (retdata.ideas) {
-          for (var i = 0; i < this.ideas.length; i++) {
-            let curd = this.ideas[i]
-            let startdate = new Date(curd.dateline * 1000)
-            let startyear = startdate.getFullYear()
-            let startmonth = startdate.getMonth() + 1
-            let startday = startdate.getDate()
-            curd.datetime = startyear + '/' + startmonth + '/' + startday
+          for (var i = 0; i < retdata.ideas.length; i++) {
+            let curd = retdata.ideas[i]
+            // let startdate = new Date(curd.dateline * 1000)
+            // let startyear = startdate.getFullYear()
+            // let startmonth = startdate.getMonth() + 1
+            // let startday = startdate.getDate()
+            // curd.datetime = startyear + '/' + startmonth + '/' + startday
+            curd.datetime = new Time(this.viewData.endtime * 1000).dateFormat('yyyy-MM-dd')
           }
-          this.disTabData3 = true
         }
-        if (retdata.confirmedidea) {
-          this.idea = retdata.confirmedidea
-        }
+        // if (retdata.confirmedidea) {
+        //   this.idea = retdata.confirmedidea
+        // }
         if (retdata.status === 2 && (this.isManger || this.isSale)) {
           this.getData3()
         }
@@ -1020,7 +930,7 @@ export default {
     },
     handleExamine (id) {
       this.showExamine = true
-      if (id) this.id = id
+      if (id) this.censorid = id
     },
     changeExamine () {
       this.reason = ''
@@ -1035,9 +945,9 @@ export default {
         this.$vux.toast.text('请填写原因', 'middle')
         return false
       }
-      let params = {id: this.id, agree: this.radio}
+      let params = {id: this.censorid, agree: this.radio}
       if (this.reason) params.reason = this.reason
-      if (this.status === 3) {
+      if (this.viewData.status === 3) {
         params.module = 'ideas'
       }
       this.$vux.loading.show()
@@ -1110,7 +1020,6 @@ export default {
         this.issubmit = false
         this.$vux.toast.text(data.error, 'middle')
         if (data.flag) {
-          this.users = unameArr.join(',')
           this.showChooseUser = false
           this.refresh()
         }
@@ -1180,7 +1089,6 @@ export default {
             this.inviteObject[retdata[i].uid] = retdata[i]
           }
           this.checkList = data.uids
-          this.uids = data.uids
           this.tableData2 = this.tableData2.concat(retdata)
           this.disTabData2 = true
         }
@@ -1202,18 +1110,22 @@ export default {
     onInvite () {
       if (this.issubmit) return false
       let params = {
-        comefrom: this.comefrom,
-        pricetype: this.pricetype,
-        price_out: this.price_out,
+        comefrom: this.viewData.comefrom,
+        pricetype: this.viewData.pricetype,
+        price_out: this.viewData.price_out,
         uids: this.checkList,
         id: parseInt(this.query.id)
       }
-      if (this.pricetype === '' || this.comefrom === '' || this.users === '' || this.price_out === '') {
+      if (params.pricetype === '' || params.comefrom === '' || params.price_out === '') {
         this.$vux.toast.text('必填项不能为空', 'middle')
         return false
       }
-      if (this.price_out !== '' && (isNaN(this.price_out) || parseFloat(this.price_out) < 0 || parseFloat(this.price_out).length > 7)) {
+      if (params.price_out !== '' && (isNaN(params.price_out) || parseFloat(params.price_out) < 0 || parseFloat(params.price_out).length > 7)) {
         this.$vux.toast.text('请输入正确的拍摄价格', 'middle')
+        return false
+      }
+      if (!this.checkList.length) {
+        this.$vux.toast.text('请选择用户', 'middle')
         return false
       }
       this.issubmit = true
@@ -1269,7 +1181,7 @@ export default {
         suid: this.ideaRadio,
         id: parseInt(this.query.id)
       }
-      if (this.ideaRadio === '') {
+      if (!this.ideaRadio || this.ideaRadio === '') {
         this.$vux.toast.text('请选择一条创意梗概', 'middle')
         return false
       }
@@ -1281,10 +1193,18 @@ export default {
           this.$http.post(`${ENV.BokaApi}/api/demands/selectIdea`, params).then(res => {
             let data = res.data
             this.$vux.toast.text(data.error, 'middle')
-            if (data.flag === 1) {
-              this.$router.push({path: '/makeList', query: {status: 2}})
-            }
-            this.issubmit = false
+            this.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: this.$util.delay(data.error),
+              onHide: () => {
+                if (data.flag === 1) {
+                  this.$router.push({path: '/makeList', query: {status: 2}})
+                } else {
+                  this.issubmit = false
+                }
+              }
+            })
           })
         }
       })
@@ -1403,30 +1323,17 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
-      // 1、管理员 2、客户 3、供应商 4、业务员
-      for (let i = 0; i < this.loginUser.usergroup.length; i++) {
-        let gid = this.loginUser.usergroup[i]
-        if (gid === 1) {
-          this.isManger = true
-        } else if (gid === 2) {
-          this.isCustomer = true
-        } else if (gid === 3) {
-          this.isSupplier = true
-        } else if (gid === 4) {
-          this.isSale = true
-        }
-      }
+      this.$util.setUserRole(this)
       let token = Token.get()
       this.uploadHeaders.Authorization = `Bearer ${token.token}`
       if (this.loginUser) {
+        this.viewData = {}
         this.pageStart = 0
         this.disTabData = false
         this.tableData = []
         this.pageStart2 = 0
         this.disTabData2 = false
         this.tableData2 = []
-        this.disTabData3 = false
-        this.ideas = []
         this.durationOptions = []
         this.ratioOptions = []
         this.videoclassOptions = []
@@ -1437,30 +1344,6 @@ export default {
         this.pricetypeOptions = []
         this.fileList = []
         this.samplePiece = []
-        this.videotype = ''
-        this.product = ''
-        this.target = ''
-        this.videocount = ''
-        this.linkurl = ''
-        this.customerdemand = ''
-        this.customerinfo = ''
-        this.productorientation = ''
-        this.sellerpoint = ''
-        this.keyinfo = ''
-        this.otherdemand = ''
-        this.price = ''
-        this.starttime = ''
-        this.endtime = ''
-        this.duration = ''
-        this.ratio = ''
-        this.videoclass = ''
-        this.logo_all = ''
-        this.logo_end = ''
-        this.customeridea = ''
-        this.comefrom = ''
-        this.pricetype = ''
-        this.price_out = ''
-        this.idea = ''
         this.ideaRadio = ''
         this.issubmit = false
         this.tableData4 = []
