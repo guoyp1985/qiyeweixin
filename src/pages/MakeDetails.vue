@@ -234,63 +234,15 @@
          <template v-else>{{viewData.price}}</template>
        </td>
      </tr>
-     <template v-if="!isCustomer">
-       <!-- <tr v-if="status === 1">
-         <td class="title">项目来源<span v-if="allowEdit">*</span></td>
-         <td>
-           <el-select v-if="allowEdit" v-model="viewData.comefrom" placeholder="请选择项目来源">
-             <el-option
-                v-for="item in comefromOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-             </el-option>
-            </el-select>
-            <template v-else>{{fieldsData.comefrom[viewData.comefrom]}}</template>
-          </td>
-          <td class="title">视频价格<span v-if="allowEdit">*</span></td>
-          <td>
-            <el-select v-if="allowEdit" v-model="viewData.pricetype" placeholder="请选择视频价格">
-              <el-option
-                v-for="item in pricetypeOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-            <template v-else>{{fieldsData.pricetype[viewData.pricetype]}}</template>
-          </td>
-       </tr> -->
-       <tr v-if="!allowEdit && viewData.status == 1">
-         <td class="title">分发用户</td>
-         <td colspan="3">
-           <div class="padding10 align_left">
-             <div v-if="users" @click="chooseUser">{{users}}</div>
-             <el-button v-else type="primary" size="small" @click="chooseUser">选择分发用户</el-button>
-           </div>
-         </td>
-       </tr>
-       <!-- <tr v-if="!allowEdit">
-         <td class="title">拍摄价格<span v-if="allowEdit">*</span></td>
-         <td :colspan="status !== 0 && status !== 1 ? 3 : ''">
-           <el-input v-if="status == 1" v-model="viewData.price_out" placeholder="请输入拍摄价格"></el-input>
-           <template v-else>{{viewData.price_out}}</template>
-         </td>
-         <td v-if="viewData.status === 1" class="title">分发用户<span v-if="allowEdit">*</span></td>
-         <td v-if="viewData.status === 1">
-           <div class="padding10">
-             <div v-if="users" @click="chooseUser">{{users}}</div>
-             <el-button v-else type="primary" size="small" @click="chooseUser">选择分发用户</el-button>
-           </div>
-         </td>
-       </tr> -->
-     </template>
-     <tr v-if="query.type || status >= 4">
+     <tr v-if="viewData.status == 2 && isSupplier">
        <td class="title">创意梗概</td>
        <td colspan="3">
-         <el-input v-if="query.type" type="textarea" v-model="viewData.idea" placeholder="请输入创意梗概"></el-input>
-         <template v-else>{{viewData.idea}}</template>
+         <el-input type="textarea" v-model="viewData.myidea" placeholder="请输入创意梗概"></el-input>
        </td>
+     </tr>
+     <tr v-if="viewData.status >= 4">
+       <td class="title">创意梗概</td>
+       <td colspan="3">{{viewData.confirmedidea}}</td>
      </tr>
      <tr v-if="status === 5 && query.type">
        <td class="title">上传演员身份证及肖像权协议扫描件<span>（只能上传图片）</span></td>
@@ -352,7 +304,7 @@
        </td>
      </tr>
    </table>
-   <div class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
+   <div v-if="viewData.status == 2 && (isManger || isSale)" class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
      <template v-if="disTabData2">
        <el-table
          :data="tableData2"
@@ -603,33 +555,35 @@
          <div class="modal-content padding20">
              <div class="modal-header mb20 align_center">选择用户</div>
              <div class="modal-body mb20">
-               <div class="flex_left">
-                 <div class="pr10">项目来源</div>
-                 <el-select class="flex_cell" v-model="viewData.comefrom" placeholder="请选择项目来源">
-                   <el-option
-                      v-for="item in comefromOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                   </el-option>
-                  </el-select>
-               </div>
-               <div class="flex_left mt10">
-                 <div class="pr10">视频价格</div>
-                 <el-select v-model="viewData.pricetype" placeholder="请选择视频价格">
-                   <el-option
-                     v-for="item in pricetypeOptions"
-                     :key="item.value"
-                     :label="item.label"
-                     :value="item.value">
-                   </el-option>
-                 </el-select>
-               </div>
-               <div class="flex_left mt10">
-                 <div class="pr10">拍摄价格</div>
-                 <el-input class="flex_cell" v-model="viewData.price_out" placeholder="请输入拍摄价格"></el-input>
-               </div>
-               <div class="mt10">
+               <template v-if="viewData.status == 1 && (isManger || isSale)">
+                 <div class="flex_left">
+                   <div class="pr10">项目来源</div>
+                   <el-select class="flex_cell" v-model="viewData.comefrom" placeholder="请选择项目来源">
+                     <el-option
+                        v-for="item in comefromOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                     </el-option>
+                    </el-select>
+                 </div>
+                 <div class="flex_left mt10">
+                   <div class="pr10">视频价格</div>
+                   <el-select v-model="viewData.pricetype" placeholder="请选择视频价格">
+                     <el-option
+                       v-for="item in pricetypeOptions"
+                       :key="item.value"
+                       :label="item.label"
+                       :value="item.value">
+                     </el-option>
+                   </el-select>
+                 </div>
+                 <div class="flex_left mt10 mb10">
+                   <div class="pr10">拍摄价格</div>
+                   <el-input class="flex_cell" v-model="viewData.price_out" placeholder="请输入拍摄价格"></el-input>
+                 </div>
+               </template>
+               <div>
                  <el-input placeholder="请输入用户名称搜索" v-model="keyword" @keyup.enter.native="kwChange">
                    <el-button slot="append" icon="el-icon-search" @click="searchEvent"></el-button>
                  </el-input>
@@ -835,12 +789,11 @@ export default {
       if (this.viewData.status === 4) {
         this.controlBtn.push({id: 5, title: '分镜脚本', type: 'info'})
       }
+      if (this.viewData.status == 2 && isSupplier) {
+        this.controlBtn.push({id: 6, title: '提交创意', type: 'danger'})
+      }
       if (this.query.type) {
-        if (this.query.type === 'new') {
-          if (this.viewData.status === 2) {
-            this.controlBtn.push({id: 6, title: '确认订单', type: 'danger'})
-          }
-        } else if (this.query.type === 'ongoing') {
+        if (this.query.type === 'ongoing') {
           if (this.viewData.status === 3) {
             this.controlBtn.push({id: 7, title: '修改创意梗概', type: 'success'})
           }
@@ -875,7 +828,7 @@ export default {
           break
         case 4:
           // 分发 status === 1 && !isCustomer
-          this.onInvite()
+          this.chooseUser()
           break
         case 5:
           // 分镜脚本 status === 4
@@ -976,7 +929,7 @@ export default {
         if (retdata.confirmedidea) {
           this.idea = retdata.confirmedidea
         }
-        if (retdata.status === 2 && !this.query.type) {
+        if (retdata.status === 2 && (this.isManger || this.isSale)) {
           this.getData3()
         }
         if (retdata.attachment && retdata.attachment !== '') {
@@ -1117,26 +1070,63 @@ export default {
       this.checkList = []
     },
     submitUserModal () {
+      // this.users = ''
+      // for (let i = 0; i < this.tableData.length; i++) {
+      //   for (let u = 0; u < this.checkList.length; u++) {
+      //     if (this.tableData[i].uid === this.checkList[u]) {
+      //       this.users = this.users + this.tableData[i].linkman
+      //     }
+      //   }
+      // }
+      // if (this.checkList.length === this.uids.length) {
+      //   this.$vux.toast.text('请选一个新用户', 'middle')
+      //   return false
+      // }
+      // if (this.checkList.length !== this.uids.length && status === 2) {
+      //   this.onInvite2()
+      // }
+      // this.showChooseUser = false
+
+      if (this.issubmit) return false
+      let params = {
+        uids: this.checkList,
+        id: parseInt(this.query.id)
+      }
+      if (this.viewData.status === 1 && (this.isManger || this.isSale)) {
+        params = {
+          ...params,
+          comefrom: this.viewData.comefrom,
+          pricetype: this.viewData.pricetype,
+          price_out: this.viewData.price_out
+        }
+        if (params.comefrom === '' || params.pricetype === '' || params.price_out === '') {
+          this.$vux.toast.text('请补全信息', 'middle')
+          return false
+        }
+        if ((isNaN(params.price_out) || parseFloat(params.price_out) < 0 || parseFloat(params.price_out).length > 7)) {
+          this.$vux.toast.text('请输入正确的拍摄价格', 'middle')
+          return false
+        }
+      }
       if (!this.checkList.length) {
         this.$vux.toast.text('请选择一个用户', 'middle')
         return false
       }
-      this.users = ''
-      for (let i = 0; i < this.tableData.length; i++) {
-        for (let u = 0; u < this.checkList.length; u++) {
-          if (this.tableData[i].uid === this.checkList[u]) {
-            this.users = this.users + this.tableData[i].linkman
-          }
+      let unameArr = []
+      for (let i = 0; i < this.checkList.length; i++) {
+        unameArr.push(this.checkList[i].linkman)
+      }
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/invite`, params).then(res => {
+        let data = res.data
+        this.issubmit = false
+        this.$vux.toast.text(data.error, 'middle')
+        if (data.flag) {
+          this.users = unameArr.join(',')
+          this.showChooseUser = false
+          this.refresh()
         }
-      }
-      if (this.checkList.length === this.uids.length) {
-        this.$vux.toast.text('请选一个新用户', 'middle')
-        return false
-      }
-      if (this.checkList.length !== this.uids.length && status === 2) {
-        this.onInvite2()
-      }
-      this.showChooseUser = false
+      })
     },
     handleScroll (refname) {
       const self = this
@@ -1262,23 +1252,22 @@ export default {
       }
     },
     onInvite3 (selectedIndex) {
+      if (this.issubmit) return false
       let params = {
-        idea: this.idea,
+        idea: this.viewData.myidea,
         id: parseInt(this.query.id)
       }
-      if (!this.issubmit) {
-        if (this.idea === '' || !this.idea) {
-          this.$vux.toast.text('请填写创意梗概', 'middle')
-        } else {
-          this.issubmit = true
-          this.$http.post(`${ENV.BokaApi}/api/demands/addIdea`, params).then(res => {
-            let data = res.data
-            this.$vux.toast.text(data.error, 'middle')
-            this.$router.push({path: '/myOrder', query: {type: this.query.type, selectedIndex: selectedIndex}})
-            this.issubmit = false
-          })
-        }
+      if (params.idea === '' || !params.idea) {
+        this.$vux.toast.text('请填写创意梗概', 'middle')
+        return false
       }
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/addIdea`, params).then(res => {
+        let data = res.data
+        this.$vux.toast.text(data.error, 'middle')
+        this.$router.push({path: '/myOrder', query: {type: this.query.type, selectedIndex: selectedIndex}})
+        this.issubmit = false
+      })
     },
     handleCurrentChange (val) {
       this.ideaRadio = val.uid
@@ -1434,8 +1423,7 @@ export default {
       }
       let token = Token.get()
       this.uploadHeaders.Authorization = `Bearer ${token.token}`
-      if (this.loginUser !== '') {
-        this.query = this.$route.query
+      if (this.loginUser) {
         this.pageStart = 0
         this.disTabData = false
         this.tableData = []
@@ -1483,6 +1471,7 @@ export default {
         this.tableData4 = []
         this.disTabData4 = false
         this.allowEdit = true
+        this.showChooseUser = false
         this.$vux.loading.show()
         this.getData()
         if (this.query.id) {
@@ -1492,6 +1481,7 @@ export default {
     }
   },
   activated () {
+    this.query = this.$route.query
     this.refresh()
   }
 }
@@ -1540,6 +1530,7 @@ export default {
 .users-box{
   height: 200px;
   overflow-y: scroll;
+  .el-card__body{padding:10px;box-sizing: border-box;}
 }
 @media (min-width: 768px) {
   .modal-inner{
