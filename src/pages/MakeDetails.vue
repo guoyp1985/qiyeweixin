@@ -340,7 +340,7 @@
        <td class="padding10" colspan="4">
          <el-button
             v-if="viewData.status < 100 && isManger"
-           type="primary"
+            type="warning"
            @click="toSale">分配业务员</el-button>
          <el-button
            v-if="canedit === 1"
@@ -348,7 +348,7 @@
            @click="onSubmit">修改</el-button>
          <el-button
            v-if="cancensor === 1"
-           type="primary"
+           type="danger"
            @click="handleExamine(parseInt(query.id))">需求确认</el-button>
          <el-button
            v-if="status === 1"
@@ -988,11 +988,7 @@ export default {
           this.$vux.loading.hide()
           this.closeModal()
           this.getInfo(this.query.id)
-          if (this.status === 0) {
-            this.$router.push({path: '/makeList', query: {status: 1}})
-          } else {
-            this.$router.push({path: '/makeList', query: {status: 4}})
-          }
+          this.$router.push({path: '/makeList', query: {status: data.status}})
         }
       })
     },
