@@ -211,6 +211,10 @@
          <template v-else>{{viewData.keyinfo}}</template>
        </td>
      </tr>
+     <tr v-if="viewData.status >= 2 && !isCustomer">
+       <td class="title">拍摄价格</td>
+       <td colspan="3">{{viewData.price_out}}</td>
+     </tr>
      <tr>
        <td class="title">创意思路</td>
        <td colspan="3">
