@@ -118,6 +118,10 @@ export default {
     refresh () {
       this.userInfo = User.get()
       console.log(this.userInfo)
+      this.isManger = false
+      this.isCustomer = false
+      this.isSupplier = false
+      this.isSale = false
       // 1、管理员 2、客户 3、供应商 4、业务员
       for (let i = 0; i < this.userInfo.usergroup.length; i++) {
         let gid = this.userInfo.usergroup[i]
