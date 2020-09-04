@@ -148,10 +148,10 @@
           </el-table-column>
             <el-table-column
               label="操作"
-              v-if="(query.type && canedit === 1) || !query.type"
+              v-if="(query.type && storyData.canedit) || !query.type"
               min-width="120">
               <template slot-scope="scope">
-                <template  v-if="query.type && canedit === 1"><el-button size="mini" @click="addFenJing(scope.row)">修改</el-button></template>
+                <el-button v-if="storyData.canedit" size="mini" @click="addFenJing(scope.row)">修改</el-button>
                 <template v-if="!query.type">
                   <el-button v-if="isManger && scope.row.moderate == 40" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
                   <el-button v-else size="mini" @click="handleExamine(scope.row.id)">审批</el-button>
@@ -159,33 +159,9 @@
               </template>
             </el-table-column>
         </el-table>
-        <div class="align_center mt20" v-if="query.type && canedit === 1">
-          <el-button
-            type="primary"
-            @click="addFenJing">新增分镜脚本</el-button>
-          <el-button
-            type="primary"
-            @click="submitExamine">提交审批</el-button>
+        <div class="align_center mt20" v-if="controlBtn.length">
+          <el-button v-for="(item,index) in controlBtn" :key="index" :type="item.type" @click="buttonEvent(item.id)">{{item.title}}</el-button>
         </div>
-         <div class="align_center mt20" v-if="!query.type && cancheck === 1">
-           <el-button
-             v-if="!query.type && cancheck === 1"
-             type="primary"
-             @click="backModify">返回修改</el-button>
-           <el-button
-             type="primary"
-             @click="agreeStoryBoard">审核通过</el-button>
-         </div>
-         <div class="align_center mt20" v-if="!query.type && (status === 5 || status === 6)">
-           <el-button
-             type="primary"
-             @click="agreeRushVideo">审核通过</el-button>
-         </div>
-         <div class="align_center mt20" v-if="storyData.canback">
-           <el-button
-             type="primary"
-             @click="backCensor">撤回审批</el-button>
-         </div>
       </template>
       <div class="bg-white mt20" v-if="isAddFenJing">
         <div class="from bg-white from-list">
@@ -288,10 +264,7 @@ export default {
       memo: '',
       addText: '立即提交',
       isAddFenJing: false,
-      version: 0,
       fenjingId: 0,
-      canedit: 0,
-      cancheck: 0,
       playerOptions: [],
       status: 0,
       videoid: 0,
@@ -302,10 +275,63 @@ export default {
       isSupplier: false, // 3:供应商
       versionData: [],
       curVersion: '',
-      storyData: {}
+      storyData: {},
+      isFirst: true,
+      controlBtn: [],
+      viewData: {}
     }
   },
   methods: {
+    handleBtn () {
+      // 1. canedit=1，行里的修改，下面的新增，提交审核
+      // 2. canback==1，行里没有，下面的撤回审核
+      // 3. cancheck=1，行里的审核，下面的返回修改，审核通过。
+      // 4. canzhuan==1,行里”转交供应商”，下面，返回修改。
+      this.controlBtn = []
+      if (this.storyData.canedit) {
+        this.controlBtn.push({id: 1, title: '新增', type: 'success'})
+        this.controlBtn.push({id: 2, title: '提交审核', type: 'primary'})
+      }
+      if (this.storyData.canback) {
+        this.controlBtn.push({id: 3, title: '撤回审核', type: 'primary'})
+      }
+      if (this.storyData.cancheck || this.storyData.canzhuan) {
+        this.controlBtn.push({id: 4, title: '返回修改', type: 'success'})
+      }
+      if (this.viewData.status === 5 || this.viewData.status === 6) {
+        this.controlBtn.push({id: 5, title: '审核通过', type: 'primary'})
+      } else if (this.storyData.cancheck) {
+        this.controlBtn.push({id: 6, title: '审核通过', type: 'primary'})
+      }
+    },
+    buttonEvent (id) {
+      switch (id) {
+        case 1:
+          // 新增 storyData.canedit
+          this.addFenJing()
+          break
+        case 2:
+          // 提交审核 storyData.canedit
+          this.submitExamine()
+          break
+        case 3:
+          // 撤回审核 storyData.canback
+          this.backCensor()
+          break
+        case 4:
+          // 返回修改 this.storyData.cancheck || this.storyData.canzhuan
+          this.backModify()
+          break
+        case 5:
+          // 审核通过 status === 5 || status === 6
+          this.agreeRushVideo()
+          break
+        case 6:
+          // 审核通过 storyData.cancheck
+          this.agreeStoryBoard()
+          break
+      }
+    },
     versionChange () {
       this.getData()
     },
@@ -370,6 +396,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: id}).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
+        this.viewData = retdata
         this.title = retdata.title
         this.demandno = retdata.demandno
         this.ratio = retdata.ratio
@@ -423,11 +450,15 @@ export default {
           const retdata = data.data ? data.data : data
           this.storyData = data
           this.tableData = retdata
-          this.version = data.version
-          this.canedit = data.canedit
-          this.cancheck = data.cancheck
-          this.disTabData = true
+          if (this.isFirst) {
+            this.isFirst = false
+            if (data.allversions.length) {
+              this.curVersion = data.allversions[0]
+            }
+          }
           this.versionData = this.$util.transSelectOption(data.allversions)
+          this.disTabData = true
+          this.handleBtn()
         }
       })
     },
@@ -447,7 +478,7 @@ export default {
     agreeStoryBoard () {
       this.$confirm('确定要审核通过吗？').then(() => {
         this.$vux.loading.show()
-        this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.version}).then(res => {
+        this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.curVersion}).then(res => {
           const data = res.data
           if (data.flag) {
             this.$vux.loading.hide()
@@ -550,7 +581,7 @@ export default {
     submitExamine () {
       this.$confirm('您是否确认提交审批？提交审批以后将不能再修改。').then(() => {
         this.$vux.loading.show()
-        this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {demandid: this.query.id, version: this.version}).then(res => {
+        this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {demandid: this.query.id, version: this.curVersion}).then(res => {
           const data = res.data
           if (data.flag) {
             this.$vux.loading.hide()
@@ -561,7 +592,7 @@ export default {
     },
     backModify () {
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/reworkStoryBoard`, {demandid: this.query.id, version: this.version}).then(res => {
+      this.$http.post(`${ENV.BokaApi}/api/demands/reworkStoryBoard`, {demandid: this.query.id, version: this.curVersion}).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
