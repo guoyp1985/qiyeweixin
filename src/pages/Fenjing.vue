@@ -442,17 +442,19 @@ export default {
       })
     },
     agreeStoryBoard () {
-      this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.version}).then(res => {
-        const data = res.data
-        if (data.flag) {
-          this.$vux.loading.hide()
-          if (this.isManger || this.isSale) {
-            this.$router.push({path: '/makeList', query: {status: 5}})
-          } else {
-            this.$router.push({path: '/makeUserList', query: {status: 5}})
+      this.$confirm('确定要审核通过吗？').then(() => {
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.version}).then(res => {
+          const data = res.data
+          if (data.flag) {
+            this.$vux.loading.hide()
+            if (this.isManger || this.isSale) {
+              this.$router.push({path: '/makeList', query: {status: 5}})
+            } else {
+              this.$router.push({path: '/makeUserList', query: {status: 5}})
+            }
           }
-        }
+        })
       })
     },
     agreeRushVideo () {
