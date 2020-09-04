@@ -383,7 +383,7 @@
            </template>
          </el-table-column>
          <el-table-column
-          v-if="!isCustomer"
+          v-if="!isCustomer && !isSupplier"
            label="客户意见"
            min-width="120">
            <template slot-scope="scope">
