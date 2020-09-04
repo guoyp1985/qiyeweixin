@@ -64,7 +64,7 @@
             </el-table-column>
           </el-table-column>
           <el-table-column
-            :label="title"
+            :label="viewData.title"
             min-width="100">
             <el-table-column
               prop="seconds"
@@ -94,7 +94,7 @@
             </el-table-column>
           </el-table-column>
           <el-table-column
-            :label="ratioOptions[ratio]"
+            :label="ratioOptions[viewData.ratio]"
             min-width="100">
             <el-table-column
               label="服装道具"
@@ -126,7 +126,7 @@
             </el-table-column>
           </el-table-column>
           <el-table-column
-            :label="demandno"
+            :label="viewData.demandno"
             min-width="100">
             <el-table-column
               v-if="isManger"
@@ -245,10 +245,7 @@ export default {
       examineIndex: '',
       showExamine: false,
       showReason: '请输入审核意见',
-      title: '',
-      demandno: '',
       ratioOptions: '',
-      ratio: '',
       demandid: '',
       daynight: '',
       scene: '',
@@ -265,7 +262,6 @@ export default {
       fenjingId: 0,
       playerOptions: [],
       status: 0,
-      videoid: 0,
       fileList: [],
       isManger: false, // 1:管理员
       isSale: false, // 4:业务员
@@ -385,7 +381,6 @@ export default {
           const data = res.data
           const retdata = data.data ? data.data : data
           this.ratioOptions = retdata.ratio
-          console.log(this.ratioOptions);
         }
       })
     },
@@ -394,11 +389,7 @@ export default {
         const data = res.data
         const retdata = data.data ? data.data : data
         this.viewData = retdata
-        this.title = retdata.title
-        this.demandno = retdata.demandno
-        this.ratio = retdata.ratio
         this.status = retdata.status
-        this.videoid = retdata.videoid
         if (retdata.video && retdata.video !== '') {
           let arr = retdata.video.split(',')
           for (let i = 0; i < arr.length; i++) {
@@ -484,7 +475,7 @@ export default {
     agreeRushVideo () {
       this.$confirm('确定要审核通过吗？').then(() => {
         this.$vux.loading.show()
-        this.$http.post(`${ENV.BokaApi}/api/demands/agreeRushVideo`, {demandid: this.query.id, videoid: this.videoid}).then(res => {
+        this.$http.post(`${ENV.BokaApi}/api/demands/agreeRushVideo`, {demandid: this.query.id, videoid: this.viewData.videoid}).then(res => {
           const data = res.data
           if (data.flag) {
             this.$vux.loading.hide()
@@ -550,7 +541,7 @@ export default {
       let params = {id: this.id, checkresult: this.reason}
       if (this.status === 5 || this.status === 6) {
         params.type = 'rushvideo'
-        params.videoid = this.videoid
+        params.videoid = this.viewData.videoid
       }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/demands/checkStoryBoard`, params).then(res => {
