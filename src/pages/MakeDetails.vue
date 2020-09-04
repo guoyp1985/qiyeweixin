@@ -412,8 +412,8 @@
            min-width="120">
            <template slot-scope="scope">
              <template v-if="scope.row.cancheck === 1">
-               <el-button v-if="scope.row.moderate == 4" @click="handleExamine(scope.row.id, 'trans')">转交供应商</el-button>
-               <el-button @click="handleExamine(scope.row.id, 'censor')">审批</el-button>
+               <el-button v-if="scope.row.moderate == 4" type="primary" @click="handleExamine(scope.row.id, 'trans')">转交供应商</el-button>
+               <el-button v-else type="primary" @click="handleExamine(scope.row.id, 'censor')">审批</el-button>
              </template>
            </template>
          </el-table-column>
@@ -849,11 +849,6 @@ export default {
         if (retdata.ideas) {
           for (var i = 0; i < retdata.ideas.length; i++) {
             let curd = retdata.ideas[i]
-            // let startdate = new Date(curd.dateline * 1000)
-            // let startyear = startdate.getFullYear()
-            // let startmonth = startdate.getMonth() + 1
-            // let startday = startdate.getDate()
-            // curd.datetime = startyear + '/' + startmonth + '/' + startday
             curd.datetime = new Time(this.viewData.endtime * 1000).dateFormat('yyyy-MM-dd')
           }
         }
