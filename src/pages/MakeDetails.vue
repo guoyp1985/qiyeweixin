@@ -238,7 +238,7 @@
          <template v-else>{{viewData.price}}</template>
        </td>
      </tr>
-     <tr v-if="viewData.status == 2 && isSupplier">
+     <tr v-if="(viewData.status == 2 || viewData.status == 3) && isSupplier">
        <td class="title">创意梗概</td>
        <td colspan="3">
          <el-input type="textarea" v-model="viewData.myidea" placeholder="请输入创意梗概"></el-input>
