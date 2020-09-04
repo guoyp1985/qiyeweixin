@@ -589,13 +589,15 @@ export default {
       })
     },
     backModify () {
-      this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/reworkStoryBoard`, {demandid: this.query.id, version: this.curVersion}).then(res => {
-        const data = res.data
-        if (data.flag) {
-          this.$vux.loading.hide()
-          this.getData()
-        }
+      this.$confirm('确定要返回修改吗？').then(() => {
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/demands/reworkStoryBoard`, {demandid: this.query.id, version: this.curVersion}).then(res => {
+          const data = res.data
+          if (data.flag) {
+            this.$vux.loading.hide()
+            this.getData()
+          }
+        })
       })
     },
     refresh () {
