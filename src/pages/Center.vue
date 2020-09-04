@@ -31,15 +31,7 @@
                 </div>
               </div>
             </div>
-            <div class="item" @click="toLink('/makeList')" v-if="isManger">
-              <div class="item-inner">
-                <div class="w_100">
-                  <div class="radius bg-orange"><span class="al al-fuwu"></span></div>
-                  <div class="align_center">制作需求单</div>
-                </div>
-              </div>
-            </div>
-            <div class="item" @click="toLink('/makeUserList')" v-if="isCustomer">
+            <div class="item" @click="toLink('/makeList')">
               <div class="item-inner">
                 <div class="w_100">
                   <div class="radius bg-orange"><span class="al al-fuwu"></span></div>
@@ -48,7 +40,7 @@
               </div>
             </div>
           </template>
-          <div class="item" @click="toLink('/makeList')" v-if="isCustomer || isSupplier">
+          <div class="item" @click="toLink('/makeUserList')" v-if="isCustomer || isSupplier">
             <div class="item-inner">
               <div class="w_100">
                 <div class="radius bg-blue"><span class="al al-fuwu font18" style="font-weight:bold;"></span></div>
@@ -117,7 +109,10 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
+      console.log(this.loginUser)
       this.$util.setUserRole(this)
+      console.log(this.isManger)
+      console.log(this.isCustomer)
     }
   },
   activated () {
