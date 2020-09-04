@@ -151,9 +151,9 @@
               v-if="!storyData.canback"
               min-width="120">
               <template slot-scope="scope">
-                <el-button v-if="storyData.canedit" size="mini" @click="addFenJing(scope.row)">修改</el-button>
-                <el-button v-if="storyData.canzhuan" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
-                <el-button v-if="storyData.cancheck" size="mini" @click="handleExamine(scope.row.id)">审核</el-button>
+                <el-button v-if="storyData.canedit" type="primary" size="mini" @click="addFenJing(scope.row)">修改</el-button>
+                <el-button v-if="storyData.canzhuan" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
+                <el-button v-if="storyData.cancheck" type="primary" size="mini" @click="handleExamine(scope.row.id)">审核</el-button>
               </template>
             </el-table-column>
         </el-table>
