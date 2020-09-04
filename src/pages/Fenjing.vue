@@ -1,8 +1,21 @@
 <template lang="html">
-  <div class="bg-page font14 fenjing-list-page">
+  <div class="bg-white font14 fenjing-list-page">
     <div class="vux-tab-wrap">分镜脚本</div>
     <div class="s-container scroll-container mb20" style="top:44px;">
       <template v-if="disTabData">
+        <div class="flex_left padding10">
+          <div class="pr10">版本号</div>
+          <div class="flex_cell">
+            <el-select v-model="curVersion" placeholder="请选择版本号" @change="versionChange()">
+              <el-option
+                v-for="item in versionData"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+        </div>
         <div class="file-item" v-for="(item,index) in fileList" :key="index" :item="item">
           <a type="primary" :href="item.url" style="color: #409EFF;" target="_blank">{{item.name}}</a>
          </div>
@@ -25,7 +38,7 @@
             label="《制作需求单》附件："
             min-width="100">
             <el-table-column
-              prop="id"
+              type="index"
               label="镜号"
               min-width="100">
             </el-table-column>
@@ -51,7 +64,7 @@
             </el-table-column>
           </el-table-column>
           <el-table-column
-            :label="title"
+            :label="title+version"
             min-width="100">
             <el-table-column
               prop="seconds"
@@ -188,15 +201,15 @@
             <div class="item-cell"><el-input type="textarea" v-model="actorsline" placeholder="请输入台词/解说词"></el-input></div>
           </div>
           <div class="from-item flex_left">
-            <div class="item-title">服装道具<span>*</span></div>
+            <div class="item-title">服装道具</div>
             <div class="item-cell"><el-input v-model="costumes" placeholder="请输入服装道具"></el-input></div>
           </div>
           <div class="from-item flex_left">
-            <div class="item-title">后期制作<span>*</span></div>
+            <div class="item-title">后期制作</div>
             <div class="item-cell"><el-input v-model="postproduction" placeholder="请输入后期制作"></el-input></div>
           </div>
           <div class="from-item flex_left">
-            <div class="item-title">备注<span>*</span></div>
+            <div class="item-title">备注</div>
             <div class="item-cell"><el-input v-model="memo" placeholder="请输入备注"></el-input></div>
           </div>
           <div class="align_center">
@@ -269,10 +282,15 @@ export default {
       isManger: false, // 1:管理员
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
-      isSupplier: false // 3:供应商
+      isSupplier: false, // 3:供应商
+      versionData: [],
+      curVersion: ''
     }
   },
   methods: {
+    versionChange () {
+      this.getData()
+    },
     addFenJing (row) {
       this.isAddFenJing = true
       if (row.daynight) {
@@ -362,7 +380,9 @@ export default {
       })
     },
     getData () {
-      this.$http.post(`${ENV.BokaApi}/api/demands/getStoryBoard`, {demandid: parseInt(this.query.id)}).then(res => {
+      let params = {demandid: parseInt(this.query.id)}
+      if (this.curVersion && this.curVersion !== '') params.version = this.curVersion
+      this.$http.post(`${ENV.BokaApi}/api/demands/getStoryBoard`, params).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
@@ -373,6 +393,7 @@ export default {
           this.canedit = data.canedit
           this.cancheck = data.cancheck
           this.disTabData = true
+          this.versionData = this.$util.transSelectOption(data.allversions)
         }
       })
     },
@@ -418,44 +439,40 @@ export default {
       })
     },
     onSubmit () {
-      if (!this.issubmit) {
-        if (this.daynight === '' ||
-        this.scene === '' ||
-        this.photography === '' ||
-        this.fieldofview === '' ||
-        this.seconds === '' ||
-        this.pictures === '' ||
-        this.actorsline === '' ||
-        this.costumes === '' ||
-        this.postproduction === '' ||
-        this.memo === '') {
-          this.$vux.toast.text('必填项不能为空', 'middle')
-        } else {
-          let params = {
-            demandid: parseInt(this.query.id),
-            daynight: this.daynight,
-            scene: this.scene,
-            photography: this.photography,
-            fieldofview: this.fieldofview,
-            seconds: this.seconds,
-            pictures: this.pictures,
-            actorsline: this.actorsline,
-            costumes: this.costumes,
-            postproduction: this.postproduction,
-            memo: this.memo
-          }
-          if (this.fenjingId !== 0) params.id = this.fenjingId
-          console.log(params);
-          this.issubmit = true
-          this.$http.post(`${ENV.BokaApi}/api/demands/addStoryBoard`, params).then(res => {
-            let data = res.data
-            this.$vux.toast.text(data.error, 'middle')
-            this.getData()
-            this.isAddFenJing = false
-            this.issubmit = false
-          })
-        }
+      if (this.issubmit) return false
+      if (this.daynight === '' ||
+      this.scene === '' ||
+      this.photography === '' ||
+      this.fieldofview === '' ||
+      this.seconds === '' ||
+      this.pictures === '' ||
+      this.actorsline === '') {
+        this.$vux.toast.text('必填项不能为空', 'middle')
+        return false
       }
+      let params = {
+        demandid: parseInt(this.query.id),
+        daynight: this.daynight,
+        scene: this.scene,
+        photography: this.photography,
+        fieldofview: this.fieldofview,
+        seconds: this.seconds,
+        pictures: this.pictures,
+        actorsline: this.actorsline,
+        costumes: this.costumes,
+        postproduction: this.postproduction,
+        memo: this.memo
+      }
+      if (this.fenjingId !== 0) params.id = this.fenjingId
+      console.log(params);
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/addStoryBoard`, params).then(res => {
+        let data = res.data
+        this.$vux.toast.text(data.error, 'middle')
+        this.getData()
+        this.isAddFenJing = false
+        this.issubmit = false
+      })
     },
     handleExamine (id) {
       this.showExamine = true
