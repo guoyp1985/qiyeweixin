@@ -412,6 +412,7 @@
            min-width="120">
            <template slot-scope="scope">
              <template v-if="scope.row.cancheck === 1">
+               <el-button v-if="scope.row.moderate == 4" @click="handleExamine(scope.row.id, 'trans')">转交供应商</el-button>
                <el-button @click="handleExamine(scope.row.id, 'censor')">审批</el-button>
              </template>
            </template>
@@ -543,7 +544,7 @@
    <div class="auto-modal flex_center" style="position:fixed;" v-if="showExamine">
      <div class="modal-inner">
        <div class="modal-content padding20">
-           <div class="modal-header mb20">
+           <div class="modal-header mb20" v-if="modalType != 'trans'">
              <el-radio-group v-model="radio" @change="changeExamine">
                <template v-if="modalType == 'censor'">
                  <el-radio :label= "1">创意通过</el-radio>
@@ -967,7 +968,7 @@ export default {
       }
       let params = {id: this.censorid, agree: this.radio}
       if (this.reason) params.reason = this.reason
-      if (this.modalType === 'censor') {
+      if (this.modalType && this.modalType !== '') {
         params.module = 'ideas'
       }
       this.$vux.loading.show()
