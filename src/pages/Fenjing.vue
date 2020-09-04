@@ -274,7 +274,6 @@ export default {
       versionData: [],
       curVersion: '',
       storyData: {},
-      isFirst: true,
       controlBtn: [],
       viewData: {}
     }
@@ -448,12 +447,7 @@ export default {
           const retdata = data.data ? data.data : data
           this.storyData = data
           this.tableData = retdata
-          if (this.isFirst) {
-            this.isFirst = false
-            if (data.allversions.length) {
-              this.curVersion = data.allversions[0]
-            }
-          }
+          this.curVersion = data.version
           this.versionData = this.$util.transSelectOption(data.allversions)
           this.disTabData = true
           this.handleBtn()
@@ -591,7 +585,9 @@ export default {
     backModify () {
       this.$confirm('确定要返回修改吗？').then(() => {
         this.$vux.loading.show()
-        this.$http.post(`${ENV.BokaApi}/api/demands/reworkStoryBoard`, {demandid: this.query.id, version: this.curVersion}).then(res => {
+        this.$http.post(`${ENV.BokaApi}/api/demands/reworkStoryBoard`, {
+          demandid: this.query.id, version: this.curVersion
+        }).then(res => {
           const data = res.data
           if (data.flag) {
             this.$vux.loading.hide()
