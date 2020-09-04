@@ -717,7 +717,7 @@ export default {
     toFenjing () {
       let params = {id: parseInt(this.query.id)}
       if (this.query.type) params.type = this.query.type
-      this.$router.push({path: '/fenJing', query: params})
+      this.$router.push({path: '/fenjing', query: params})
     },
     getData () {
       this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {

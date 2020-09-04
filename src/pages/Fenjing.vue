@@ -51,7 +51,7 @@
             </el-table-column>
           </el-table-column>
           <el-table-column
-            :label="title+version"
+            :label="title"
             min-width="100">
             <el-table-column
               prop="seconds"
