@@ -940,8 +940,11 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/add`, params).then(res => {
         let data = res.data
         this.$vux.toast.text(data.error, 'middle')
-        this.$router.push({path: '/makeList'})
-        this.issubmit = false
+        if (this.isManger || this.isSale) {
+          this.$router.push({path: '/makeList'})
+        } else if (this.isCustomer) {
+          this.issubmit = false
+        }
       })
     },
     handleExamine (id, type) {
@@ -978,7 +981,11 @@ export default {
           this.$vux.loading.hide()
           this.closeModal()
           this.getInfo(this.query.id)
-          this.$router.push({path: '/makeList', query: {status: data.status}})
+          if (this.isManger || this.isSale) {
+            this.$router.push({path: '/makeList', query: {status: data.status}})
+          } else {
+            this.$router.push({path: '/makeUserList', query: {status: data.status}})
+          }
         }
       })
     },
@@ -1153,7 +1160,11 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/invite`, params).then(res => {
         let data = res.data
         this.$vux.toast.text(data.error, 'middle')
-        this.$router.push({path: '/makeList', query: {status: 2}})
+        if (this.isManger || this.isSale) {
+          this.$router.push({path: '/makeList', query: {status: 2}})
+        } else {
+          this.$router.push({path: '/makeUserList', query: {status: 2}})
+        }
         this.issubmit = false
       })
     },
@@ -1220,9 +1231,14 @@ export default {
               time: this.$util.delay(data.error),
               onHide: () => {
                 if (data.flag === 1) {
-                  this.$router.push({path: '/makeList', query: {status: 2}})
+                  if (this.isManger || this.isSale) {
+                    this.$router.push({path: '/makeList', query: {status: 2}})
+                  } else {
+                    this.$router.push({path: '/makeUserList', query: {status: 2}})
+                  }
                 } else {
                   this.issubmit = false
+                  this.refresh()
                 }
               }
             })
