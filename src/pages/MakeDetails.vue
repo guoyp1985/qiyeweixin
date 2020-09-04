@@ -951,7 +951,7 @@ export default {
       if (type && type !== '') {
         this.modalType = type
         if (type === 'trans' && item) {
-          this.reason = item.customeradvice
+          this.reason = `【客户意见】${item.customeradvice}`
         }
       } else {
         this.modalType = ''
