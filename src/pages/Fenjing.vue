@@ -474,11 +474,9 @@ export default {
           const data = res.data
           if (data.flag) {
             this.$vux.loading.hide()
-            if (this.isManger || this.isSale) {
-              this.$router.push({path: '/makeList', query: {status: 5}})
-            } else {
-              this.$router.push({path: '/makeUserList', query: {status: 5}})
-            }
+            this.refresh()
+          } else {
+            this.$vux.toast.text(data.error, 'middle')
           }
         })
       })
@@ -490,11 +488,9 @@ export default {
           const data = res.data
           if (data.flag) {
             this.$vux.loading.hide()
-            if (this.isManger || this.isSale) {
-              this.$router.push({path: '/makeList', query: {status: 5}})
-            } else {
-              this.$router.push({path: '/makeUserList', query: {status: 5}})
-            }
+            this.refresh()
+          } else {
+            this.$vux.toast.text(data.error, 'middle')
           }
         })
       })
