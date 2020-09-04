@@ -391,11 +391,17 @@
            </template>
          </el-table-column>
          <el-table-column
-           label="审核意见"
+           :label="isCustomer ? '我的意见' : '审核意见'"
            min-width="120">
              <template slot-scope="scope">
-               <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
-               <template v-else>{{scope.row.checkresult}}</template>
+               <template v-if="isCustomer">
+                 <template v-if="!scope.row.customeradvice || scope.row.customeradvice == ''">无</template>
+                 <template v-else>{{scope.row.customeradvice}}</template>
+               </template>
+               <template v-else>
+                 <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
+                 <template v-else>{{scope.row.checkresult}}</template>
+               </template>
              </template>
          </el-table-column>
          <el-table-column
