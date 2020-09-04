@@ -753,7 +753,7 @@ export default {
         this.controlBtn.push({id: 4, title: '分发', type: 'primary'})
       }
       if (this.viewData.status === 4) {
-        this.controlBtn.push({id: 5, title: '分镜脚本', type: 'info'})
+        this.controlBtn.push({id: 5, title: '分镜脚本', type: 'primary'})
       }
       if (this.viewData.status === 2 && this.isSupplier) {
         this.controlBtn.push({id: 6, title: '提交创意', type: 'danger'})
