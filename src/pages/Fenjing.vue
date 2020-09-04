@@ -307,7 +307,7 @@ export default {
       this.getData()
     },
     backCensor () {
-      this.$confirm('确定要撤回审批吗？').then(() => {
+      this.$confirm('您是否确认撤回提交的审批？').then(() => {
         this.$vux.loading.show()
         this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {
           demandid: this.query.id, version: this.curVersion, isback: 1
@@ -442,7 +442,7 @@ export default {
       })
     },
     agreeStoryBoard () {
-      this.$confirm('确定要审核通过吗？').then(() => {
+      this.$confirm('您是否确认提交审批？提交审批以后将不能再修改。').then(() => {
         this.$vux.loading.show()
         this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.version}).then(res => {
           const data = res.data
