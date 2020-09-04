@@ -148,14 +148,12 @@
           </el-table-column>
             <el-table-column
               label="操作"
-              v-if="(query.type && storyData.canedit) || !query.type"
+              v-if="!storyData.canback"
               min-width="120">
               <template slot-scope="scope">
                 <el-button v-if="storyData.canedit" size="mini" @click="addFenJing(scope.row)">修改</el-button>
-                <template v-if="!query.type">
-                  <el-button v-if="isManger && scope.row.moderate == 40" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
-                  <el-button v-else size="mini" @click="handleExamine(scope.row.id)">审批</el-button>
-                </template>
+                <el-button v-if="storyData.canzhuan" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
+                <el-button v-if="storyData.cancheck" size="mini" @click="handleExamine(scope.row.id)">审核</el-button>
               </template>
             </el-table-column>
         </el-table>
@@ -246,7 +244,7 @@ export default {
       reason: '',
       examineIndex: '',
       showExamine: false,
-      showReason: '请输入审批意见',
+      showReason: '请输入审核意见',
       title: '',
       demandno: '',
       ratioOptions: '',
@@ -336,7 +334,7 @@ export default {
       this.getData()
     },
     backCensor () {
-      this.$confirm('您是否确认撤回提交的审批？').then(() => {
+      this.$confirm('您是否确认撤回提交的审核？').then(() => {
         this.$vux.loading.show()
         this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {
           demandid: this.query.id, version: this.curVersion, isback: 1
@@ -556,7 +554,7 @@ export default {
     },
     submitModal () {
       if (this.reason === '') {
-        this.$vux.toast.text('请填写审批意见', 'middle')
+        this.$vux.toast.text('请填写审核意见', 'middle')
         return false
       }
       let params = {id: this.id, checkresult: this.reason}
@@ -579,7 +577,7 @@ export default {
       })
     },
     submitExamine () {
-      this.$confirm('您是否确认提交审批？提交审批以后将不能再修改。').then(() => {
+      this.$confirm('您是否确认提交审核？提交审核以后将不能再修改。').then(() => {
         this.$vux.loading.show()
         this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {demandid: this.query.id, version: this.curVersion}).then(res => {
           const data = res.data
