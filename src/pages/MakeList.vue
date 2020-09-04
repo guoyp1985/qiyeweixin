@@ -60,13 +60,6 @@
                 <template v-else>{{scope.row.otherdemand}}</template>
               </template>
             </el-table-column>
-            <!-- 客户列表不要tab, 状态加到列表页后
-            <el-table-column
-              prop="price"
-              label="项目状态"
-              min-width="120">
-            </el-table-column>
-          -->
         </el-table>
       </template>
     </div>

@@ -383,6 +383,14 @@
            </template>
          </el-table-column>
          <el-table-column
+           label="客户意见"
+           min-width="120">
+           <template slot-scope="scope">
+             <template v-if="!scope.row.customeradvice || scope.row.customeradvice == ''">无</template>
+             <template v-else>{{scope.row.customeradvice}}</template>
+           </template>
+         </el-table-column>
+         <el-table-column
            label="审核意见"
            min-width="120">
              <template slot-scope="scope">
