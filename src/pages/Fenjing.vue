@@ -169,6 +169,11 @@
              type="primary"
              @click="agreeRushVideo">审核通过</el-button>
          </div>
+         <div class="align_center mt20" v-if="storyData.canback">
+           <el-button
+             type="primary"
+             @click="backCensor">撤回审批</el-button>
+         </div>
       </template>
       <div class="bg-white mt20" v-if="isAddFenJing">
         <div class="from bg-white from-list">
@@ -284,12 +289,28 @@ export default {
       isCustomer: false, // 2:客户
       isSupplier: false, // 3:供应商
       versionData: [],
-      curVersion: ''
+      curVersion: '',
+      storyData: {}
     }
   },
   methods: {
     versionChange () {
       this.getData()
+    },
+    backCensor () {
+      this.$confirm('确定要撤回审批吗？').then(() => {
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {
+          demandid: this.query.id, version: this.curVersion, isback: 1
+        }).then(res => {
+          this.$vux.loading.hide()
+          const data = res.data
+          this.$vux.toast.text(data.error, 'middle')
+          if (data.flag) {
+            this.getData()
+          }
+        })
+      })
     },
     addFenJing (row) {
       this.isAddFenJing = true
@@ -388,6 +409,7 @@ export default {
           this.$vux.loading.hide()
           const data = res.data
           const retdata = data.data ? data.data : data
+          this.storyData = data
           this.tableData = retdata
           this.version = data.version
           this.canedit = data.canedit
