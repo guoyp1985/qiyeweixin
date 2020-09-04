@@ -445,7 +445,7 @@ export default {
       })
     },
     agreeStoryBoard () {
-      this.$confirm('您是否确认提交审批？提交审批以后将不能再修改。').then(() => {
+      this.$confirm('确定要审批通过').then(() => {
         this.$vux.loading.show()
         this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.version}).then(res => {
           const data = res.data
@@ -546,13 +546,15 @@ export default {
       })
     },
     submitExamine () {
-      this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {demandid: this.query.id, version: this.version}).then(res => {
-        const data = res.data
-        if (data.flag) {
-          this.$vux.loading.hide()
-          this.getData()
-        }
+      this.$confirm('您是否确认提交审批？提交审批以后将不能再修改。').then(() => {
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {demandid: this.query.id, version: this.version}).then(res => {
+          const data = res.data
+          if (data.flag) {
+            this.$vux.loading.hide()
+            this.getData()
+          }
+        })
       })
     },
     backModify () {
