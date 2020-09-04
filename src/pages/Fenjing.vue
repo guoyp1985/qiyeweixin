@@ -153,7 +153,7 @@
               <template slot-scope="scope">
                 <template  v-if="query.type && canedit === 1"><el-button size="mini" @click="addFenJing(scope.row)">修改</el-button></template>
                 <template v-if="!query.type">
-                  <el-button v-if="isManger && scope.row.moderate == 40" size="mini" @click="handleExamine(scope.row.id)">转交供应商</el-button>
+                  <el-button v-if="isManger && scope.row.moderate == 40" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
                   <el-button v-else size="mini" @click="handleExamine(scope.row.id)">审批</el-button>
                 </template>
               </template>
@@ -510,7 +510,10 @@ export default {
         this.issubmit = false
       })
     },
-    handleExamine (id) {
+    handleExamine (id, type, item) {
+      if (type === 'trans') {
+        this.reason = `【客户意见】${item.customeradvice}`
+      }
       this.showExamine = true
       if (id) this.id = id
     },
