@@ -419,7 +419,7 @@
            min-width="120">
            <template slot-scope="scope">
              <template v-if="scope.row.cancheck === 1">
-               <el-button v-if="scope.row.moderate == 4" type="primary" @click="handleExamine(scope.row.id, 'trans')">转交供应商</el-button>
+               <el-button v-if="scope.row.moderate == 4" type="primary" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
                <el-button v-else type="primary" @click="handleExamine(scope.row.id, 'censor')">审批</el-button>
              </template>
            </template>
@@ -947,9 +947,12 @@ export default {
         }
       })
     },
-    handleExamine (id, type) {
+    handleExamine (id, type, item) {
       if (type && type !== '') {
         this.modalType = type
+        if (type === 'trans' && item) {
+          this.reason = item.customeradvice
+        }
       } else {
         this.modalType = ''
       }
