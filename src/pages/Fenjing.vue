@@ -3,7 +3,7 @@
     <div class="vux-tab-wrap">分镜脚本</div>
     <div class="s-container scroll-container mb20" style="top:44px;">
       <template v-if="disTabData">
-        <div class="flex_left padding10">
+        <div class="flex_left padding10" v-if="versionData.length">
           <div class="pr10">版本号</div>
           <div class="flex_cell">
             <el-select v-model="curVersion" placeholder="请选择版本号" @change="versionChange()">
