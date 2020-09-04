@@ -412,7 +412,7 @@
            min-width="120">
            <template slot-scope="scope">
              <template v-if="scope.row.cancheck === 1">
-               <el-button @click="handleExamine(scope.row.id)">审批</el-button>
+               <el-button @click="handleExamine(scope.row.id, 'censor')">审批</el-button>
              </template>
            </template>
          </el-table-column>
@@ -545,8 +545,14 @@
        <div class="modal-content padding20">
            <div class="modal-header mb20">
              <el-radio-group v-model="radio" @change="changeExamine">
-               <el-radio :label= "1">需求确认</el-radio>
-               <el-radio :label= "2">需求驳回</el-radio>
+               <template v-if="modalType == 'censor'">
+                 <el-radio :label= "1">创意通过</el-radio>
+                 <el-radio :label= "2">创意不通过</el-radio>
+               </template>
+               <template v-else>
+                 <el-radio :label= "1">需求确认</el-radio>
+                 <el-radio :label= "2">需求驳回</el-radio>
+               </template>
              </el-radio-group>
            </div>
            <div class="modal-body mb20">
@@ -691,7 +697,8 @@ export default {
       isCustomer: false, // 2:客户
       isSupplier: false, // 3:供应商
       controlBtn: [],
-      inviteObject: {}
+      inviteObject: {},
+      modalType: ''
     }
   },
   methods: {
@@ -936,7 +943,12 @@ export default {
         this.issubmit = false
       })
     },
-    handleExamine (id) {
+    handleExamine (id, type) {
+      if (type && type !== '') {
+        this.modalType = type
+      } else {
+        this.modalType = ''
+      }
       this.showExamine = true
       if (id) this.censorid = id
     },
@@ -955,7 +967,7 @@ export default {
       }
       let params = {id: this.censorid, agree: this.radio}
       if (this.reason) params.reason = this.reason
-      if (this.viewData.status === 3) {
+      if (this.modalType === 'censor') {
         params.module = 'ideas'
       }
       this.$vux.loading.show()
