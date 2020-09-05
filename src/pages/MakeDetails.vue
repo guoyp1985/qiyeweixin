@@ -767,13 +767,12 @@ export default {
             this.controlBtn.push({id: 9, title: '上传成片', type: 'primary'})
           }
         }
-      } else {
-        if (this.viewData.status === 6) {
-          this.controlBtn.push({id: 11, title: '审核成片', type: 'success'})
-        }
       }
       if (this.viewData.cancheckrush) {
         this.controlBtn.push({id: 10, title: '审核样片', type: 'success'})
+      }
+      if (this.viewData.cancheckfinal) {
+        this.controlBtn.push({id: 11, title: '审核成片', type: 'success'})
       }
     },
     buttonEvent (id) {
