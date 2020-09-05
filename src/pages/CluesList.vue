@@ -65,7 +65,7 @@ export default {
       limit: 20,
       pageStart: 0,
       disTabData: false,
-      isManger: false, // 1:管理员
+      isManager: false, // 1:管理员
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
       isSupplier: false // 3:供应商

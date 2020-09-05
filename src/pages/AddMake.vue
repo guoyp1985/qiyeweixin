@@ -122,7 +122,7 @@
         </el-select>
       </td>
      </tr>
-     <tr v-if="isManger">
+     <tr v-if="isManager">
        <td class="title">选择客户</td>
        <td colspan="3" class="align_left">
          <div class="padding10">
@@ -131,7 +131,7 @@
          </div>
        </td>
      </tr>
-     <tr v-if="isManger && !isSale">
+     <tr v-if="isManager && !isSale">
        <td class="title">选择业务员</td>
        <td colspan="3" class="align_left">
          <div class="padding10">
@@ -294,7 +294,7 @@ export default {
       fileList: [],
       disUploadBtn: false,
       viewData: {},
-      isManger: false, // 1:管理员
+      isManager: false, // 1:管理员
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
       isSupplier: false, // 3:供应商
@@ -419,7 +419,7 @@ export default {
       if (this.keyinfo !== '') params.keyinfo = this.keyinfo
       if (this.otherdemand !== '') params.otherdemand = this.otherdemand
       if (this.customeridea !== '') params.customeridea = this.customeridea
-      if (this.isManger || this.isSale) {
+      if (this.isManager || this.isSale) {
         if (!this.selectedCustomerUid) {
           this.$vux.toast.text('请选择客户', 'middle')
           return false

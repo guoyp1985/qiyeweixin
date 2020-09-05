@@ -222,7 +222,7 @@
          <template v-else>{{viewData.customeridea}}</template>
        </td>
      </tr>
-     <tr v-if="isManger || isSale">
+     <tr v-if="isManager || isSale">
        <td class="title">客户资料</td>
        <td colspan="3">{{viewData.customerdata}}</td>
      </tr>
@@ -308,7 +308,7 @@
        </td>
      </tr>
    </table>
-   <div v-if="viewData.status == 2 && (isManger || isSale)" class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
+   <div v-if="viewData.status == 2 && (isManager || isSale)" class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
      <template v-if="disTabData2">
        <el-table
          :data="tableData2"
@@ -575,7 +575,7 @@
          <div class="modal-content padding20">
              <div class="modal-header mb20 align_center">选择用户</div>
              <div class="modal-body mb20">
-               <template v-if="viewData.status == 1 && (isManger || isSale)">
+               <template v-if="viewData.status == 1 && (isManager || isSale)">
                  <div class="flex_left">
                    <div class="pr10">项目来源</div>
                    <el-select class="flex_cell" v-model="viewData.comefrom" placeholder="请选择项目来源">
@@ -693,7 +693,7 @@ export default {
       viewData: {},
       allowEdit: true,
       fieldsData: {},
-      isManger: false, // 1:管理员
+      isManager: false, // 1:管理员
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
       isSupplier: false, // 3:供应商
@@ -737,7 +737,7 @@ export default {
     },
     handleBtn () {
       this.controlBtn = []
-      if (this.viewData.status < 100 && this.isManger) {
+      if (this.viewData.status < 100 && (this.isManager || this.isSale)) {
         this.controlBtn.push({id: 1, title: '分配业务员', type: 'warning'})
       }
       if (this.viewData.canedit) {
@@ -746,7 +746,7 @@ export default {
       if (this.viewData.cancensor) {
         this.controlBtn.push({id: 3, title: '需求确认', type: 'danger'})
       }
-      if (this.viewData.status === 1 && (this.isManger || this.isSale)) {
+      if (this.viewData.status === 1 && (this.isManager || this.isSale)) {
         this.controlBtn.push({id: 4, title: '分发', type: 'primary'})
       }
       if (this.viewData.status === 4) {
@@ -779,7 +779,7 @@ export default {
     buttonEvent (id) {
       switch (id) {
         case 1:
-          // 分配业务员 viewData.status < 100 && isManger
+          // 分配业务员 viewData.status < 100 && (isManager || isSale)
           this.toSale()
           break
         case 2:
@@ -859,7 +859,7 @@ export default {
         // if (retdata.confirmedidea) {
         //   this.idea = retdata.confirmedidea
         // }
-        if (retdata.status === 2 && (this.isManger || this.isSale)) {
+        if (retdata.status === 2 && (this.isManager || this.isSale)) {
           this.getData3()
         }
         if (retdata.attachment && retdata.attachment !== '') {
@@ -940,7 +940,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/add`, params).then(res => {
         let data = res.data
         this.$vux.toast.text(data.error, 'middle')
-        if (this.isManger || this.isSale) {
+        if (this.isManager || this.isSale) {
           this.$router.push({path: '/makeList'})
         } else if (this.isCustomer) {
           this.issubmit = false
@@ -984,7 +984,7 @@ export default {
           this.$vux.loading.hide()
           this.closeModal()
           this.getInfo(this.query.id)
-          if (this.isManger || this.isSale) {
+          if (this.isManager || this.isSale) {
             this.$router.push({path: '/makeList', query: {status: data.status}})
           } else {
             this.$router.push({path: '/makeUserList', query: {status: data.status}})
@@ -1021,7 +1021,7 @@ export default {
         uids: this.checkList,
         id: parseInt(this.query.id)
       }
-      if (this.viewData.status === 1 && (this.isManger || this.isSale)) {
+      if (this.viewData.status === 1 && (this.isManager || this.isSale)) {
         params = {
           ...params,
           comefrom: this.viewData.comefrom,
@@ -1163,7 +1163,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/invite`, params).then(res => {
         let data = res.data
         this.$vux.toast.text(data.error, 'middle')
-        if (this.isManger || this.isSale) {
+        if (this.isManager || this.isSale) {
           this.$router.push({path: '/makeList', query: {status: 2}})
         } else {
           this.$router.push({path: '/makeUserList', query: {status: 2}})
@@ -1234,7 +1234,7 @@ export default {
               time: this.$util.delay(data.error),
               onHide: () => {
                 if (data.flag === 1) {
-                  if (this.isManger || this.isSale) {
+                  if (this.isManager || this.isSale) {
                     this.$router.push({path: '/makeList', query: {status: 2}})
                   } else {
                     this.$router.push({path: '/makeUserList', query: {status: 2}})

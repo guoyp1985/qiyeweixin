@@ -14,7 +14,7 @@
           <div class="flex_cell">服务</div>
         </div>
         <div class="listicon list">
-          <template v-if="isManger || isSale">
+          <template v-if="isManager || isSale">
             <div class="item" @click="toLink('/userList')">
               <div class="item-inner">
                 <div class="w_100">
@@ -87,7 +87,7 @@ export default {
     return {
       loginUser: {},
       query: {},
-      isManger: false, // 1:管理员
+      isManager: false, // 1:管理员
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
       isSupplier: false // 3:供应商
@@ -111,7 +111,7 @@ export default {
       this.loginUser = User.get()
       console.log(this.loginUser)
       this.$util.setUserRole(this)
-      console.log(this.isManger)
+      console.log(this.isManager)
       console.log(this.isCustomer)
     }
   },

@@ -80,7 +80,7 @@ export default {
         value: 2,
         label: '我是视频制作团队，求合作'
       }],
-      isManger: false, // 1:管理员
+      isManager: false, // 1:管理员
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
       isSupplier: false // 3:供应商
