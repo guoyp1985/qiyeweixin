@@ -267,7 +267,7 @@
             accept=".jpg,.jpeg,.png,.JPG,.JPEG"
             >
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload2')" v-if="disUploadBtn">上传文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload2')" v-if="disUploadBtn1">上传文件</el-button>
             </el-upload>
         </div>
        </td>
@@ -283,15 +283,15 @@
             :headers="uploadHeaders"
             :multiple="1 == 1"
             name="photo"
-            :on-change="handleChange1"
-            :on-remove="handleRemove1"
-            :on-success="afterUpload1"
+            :on-change="handleChange2"
+            :on-remove="handleRemove2"
+            :on-success="afterUpload2"
             :file-list="samplePiece"
             :auto-upload="false"
             :limit="1"
             >
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload3')" v-if="disUploadBtn">上传文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload3')" v-if="disUploadBtn2">上传文件</el-button>
             </el-upload>
         </div>
        </td>
@@ -699,7 +699,9 @@ export default {
       isSupplier: false, // 3:供应商
       controlBtn: [],
       inviteObject: {},
-      modalType: ''
+      modalType: '',
+      disUploadBtn1: false,
+      disUploadBtn2: false
     }
   },
   methods: {
@@ -1244,6 +1246,10 @@ export default {
         }
       })
     },
+    submitUpload (refname) {
+      console.log('in upload')
+      this.$refs[refname].submit()
+    },
     handleUploadBtn (fileList) {
       console.log('in handleUploadBtn')
       console.log(fileList)
@@ -1257,10 +1263,6 @@ export default {
       }
       this.disUploadBtn = isDis
     },
-    submitUpload (refname) {
-      console.log('in upload')
-      this.$refs[refname].submit()
-    },
     handleRemove (file, fileList) {
       console.log('in handleRemove')
       console.log(fileList)
@@ -1273,8 +1275,6 @@ export default {
       this.handleUploadBtn(fileList)
     },
     afterUpload (res, file, fileList) {
-      console.log('in afterUpload')
-      console.log(fileList)
       for (let i = 0; i < fileList.length; i++) {
         let cur = fileList[i]
         if (cur.response && cur.response.flag) {
@@ -1286,20 +1286,55 @@ export default {
       this.fileList = fileList
       this.handleUploadBtn(fileList)
     },
+    handleUploadBtn1 (fileList) {
+      let isDis = false
+      for (let i = 0; i < fileList.length; i++) {
+        let cur = fileList[i]
+        if (!cur.issuccess) {
+          isDis = true
+          break
+        }
+      }
+      this.disUploadBtn1 = isDis
+    },
     handleRemove1 (file, fileList) {
-      console.log('in handleRemove1')
-      console.log(fileList)
-      this.fileList = fileList
-      this.handleUploadBtn(fileList)
+      this.photos = fileList
+      this.handleUploadBtn1(fileList)
     },
     handleChange1 (file, fileList) {
-      console.log('in handleChange1')
-      console.log(fileList)
-      this.handleUploadBtn(fileList)
+      this.handleUploadBtn1(fileList)
     },
     afterUpload1 (res, file, fileList) {
-      console.log('in afterUpload1')
-      console.log(fileList)
+      for (let i = 0; i < fileList.length; i++) {
+        let cur = fileList[i]
+        if (cur.response && cur.response.flag) {
+          cur.name = cur.response.data
+          cur.issuccess = true
+          cur.url = cur.response.data
+        }
+      }
+      this.photos = fileList
+      this.handleUploadBtn1(fileList)
+    },
+    handleUploadBtn2 (fileList) {
+      let isDis = false
+      for (let i = 0; i < fileList.length; i++) {
+        let cur = fileList[i]
+        if (!cur.issuccess) {
+          isDis = true
+          break
+        }
+      }
+      this.disUploadBtn2 = isDis
+    },
+    handleRemove2 (file, fileList) {
+      this.samplePiece = fileList
+      this.handleUploadBtn2(fileList)
+    },
+    handleChange2 (file, fileList) {
+      this.handleUploadBtn2(fileList)
+    },
+    afterUpload2 (res, file, fileList) {
       for (let i = 0; i < fileList.length; i++) {
         let cur = fileList[i]
         if (cur.response && cur.response.flag) {
@@ -1309,7 +1344,7 @@ export default {
         }
       }
       this.samplePiece = fileList
-      this.handleUploadBtn(fileList)
+      this.handleUploadBtn2(fileList)
     },
     uploadSamplePiece () {
       if (!this.issubmit) {
