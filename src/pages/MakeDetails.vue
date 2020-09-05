@@ -1350,9 +1350,11 @@ export default {
     uploadSamplePiece () {
       if (!this.issubmit) {
         let params = {demandid: parseInt(this.query.id)}
-        if (!this.photos.length) {
-          this.$vux.toast.text('请选择上传演员身份证及肖像权协议扫描件', 'middle')
-          return false
+        if (!this.tableData4.length) {
+          if (!this.photos.length) {
+            this.$vux.toast.text('请选择上传演员身份证及肖像权协议扫描件', 'middle')
+            return false
+          }
         }
         if (!this.samplePiece.length) {
           this.$vux.toast.text('请选择上传样片', 'middle')

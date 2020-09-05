@@ -208,6 +208,19 @@
           </div>
         </div>
       </div>
+      <div class="mt20" v-if="showPhotoSwiper && viewData.videophotos_arr && viewData.videophotos_arr.length">
+        <swiper
+          class="pic-swiper"
+          dots-position="center"
+          :interval=6000
+          :show-dots="viewData.videophotos_arr && viewData.videophotos_arr.length > 1"
+          :aspect-ratio="1/1"
+          loop>
+          <swiper-item v-for="(item,index) in viewData.videophotos_arr" :key="index">
+            <img class="db imgcover w_100 h_100" :src="item" default-src="https://tossharingsales.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
+          </swiper-item>
+        </swiper>
+      </div>
     </div>
     <div class="auto-modal flex_center" style="position:fixed;" v-if="showExamine">
       <div class="modal-inner">
@@ -228,9 +241,11 @@
 </template>
 
 <script>
+import {Swiper, SwiperItem} from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 export default {
+  components: {Swiper, SwiperItem},
   data () {
     return {
       loginUser: {},
@@ -272,7 +287,8 @@ export default {
       storyData: {},
       controlBtn: [],
       viewData: {},
-      disCensorBtn: true
+      disCensorBtn: true,
+      showPhotoSwiper: false
     }
   },
   methods: {
@@ -297,6 +313,9 @@ export default {
       }
       if (this.storyData.cancheck) {
         this.controlBtn.push({id: 6, title: '审核通过', type: 'primary'})
+      }
+      if (this.storyData.cancheckphoto) {
+        this.controlBtn.push({id: 7, title: '审核照片', type: 'primary'})
       }
     },
     buttonEvent (id) {
@@ -324,6 +343,10 @@ export default {
         case 6:
           // 审核通过 storyData.cancheck
           this.agreeStoryBoard()
+          break
+        case 7:
+          // 审核通过 storyData.cancheck
+          this.showPhotoSwiper = true
           break
       }
     },
@@ -391,6 +414,10 @@ export default {
         const data = res.data
         const retdata = data.data ? data.data : data
         this.viewData = retdata
+        this.viewData.videophotos_arr = []
+        if (retdata.videophotos && retdata.videophotos !== '') {
+          this.viewData.videophotos_arr = retdata.videophotos.split(',')
+        }
         this.status = retdata.status
         if (retdata.video && retdata.video !== '') {
           if (location.href.indexOf('https') < 0) {
@@ -682,6 +709,12 @@ export default {
   .videobox{
     width: 50%;
     margin: auto;
+  }
+
+  .pic-swiper{box-sizing: border-box;width:100%;}
+  .pic-swiper:after{content:"";padding-top:80%;display:block;}
+  .pic-swiper .vux-swiper{
+    position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
   }
 }
 </style>
