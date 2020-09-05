@@ -147,7 +147,7 @@
          <div v-if="allowEdit" class="align_left padding10" style="display:inline-block;">
             <el-upload
             class="upload-demo"
-            ref="upload"
+            ref="upload1"
             :action="uploadApi"
             :headers="uploadHeaders"
             :multiple="1 == 1"
@@ -159,7 +159,7 @@
             :auto-upload="false"
             >
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload1')" v-if="disUploadBtn">上传文件</el-button>
             </el-upload>
         </div>
         <div v-else class="file-list">
@@ -254,7 +254,7 @@
          <div class="align_left padding10" style="display:inline-block;">
             <el-upload
             class="upload-demo"
-            ref="upload"
+            ref="upload2"
             :action="uploadApi"
             :headers="uploadHeaders"
             :multiple="1 == 1"
@@ -267,7 +267,7 @@
             accept=".jpg,.jpeg,.png,.JPG,.JPEG"
             >
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload2')" v-if="disUploadBtn">上传文件</el-button>
             </el-upload>
         </div>
        </td>
@@ -278,7 +278,7 @@
          <div class="align_left padding10" style="display:inline-block;">
             <el-upload
             class="upload-demo"
-            ref="upload"
+            ref="upload3"
             :action="uploadApi"
             :headers="uploadHeaders"
             :multiple="1 == 1"
@@ -291,7 +291,7 @@
             :limit="1"
             >
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload3')" v-if="disUploadBtn">上传文件</el-button>
             </el-upload>
         </div>
        </td>
@@ -1257,8 +1257,9 @@ export default {
       }
       this.disUploadBtn = isDis
     },
-    submitUpload () {
-      this.$refs.upload.submit()
+    submitUpload (refname) {
+      console.log('in upload')
+      this.$refs[refname].submit()
     },
     handleRemove (file, fileList) {
       console.log('in handleRemove')
