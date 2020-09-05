@@ -153,6 +153,7 @@
               <template slot-scope="scope">
                 <el-button v-if="storyData.canedit" type="primary" size="mini" @click="addFenJing(scope.row)">修改</el-button>
                 <el-button v-if="storyData.canzhuan" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
+                <el-button v-if="storyData.canzhuanvideo" type="primary" size="mini" @click="handleExamine(scope.row.id)">转发客户意见</el-button>
                 <el-button v-if="storyData.cancheckvideo" type="primary" size="mini" @click="handleExamine(scope.row.id)">审核</el-button>
               </template>
             </el-table-column>
