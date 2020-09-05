@@ -129,7 +129,7 @@
             :label="viewData.demandno"
             min-width="100">
             <el-table-column
-              v-if="isManger || isSale || isCustomer"
+              v-if="!isSupplier"
               label="客户意见"
               min-width="200">
                 <template slot-scope="scope">
