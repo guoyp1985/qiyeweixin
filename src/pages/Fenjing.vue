@@ -153,7 +153,7 @@
               <template slot-scope="scope">
                 <el-button v-if="storyData.canedit" type="primary" size="mini" @click="addFenJing(scope.row)">修改</el-button>
                 <el-button v-if="storyData.canzhuan" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
-                <el-button v-if="storyData.cancheck" type="primary" size="mini" @click="handleExamine(scope.row.id)">审核</el-button>
+                <el-button v-if="storyData.cancheckvideo" type="primary" size="mini" @click="handleExamine(scope.row.id)">审核</el-button>
               </template>
             </el-table-column>
         </el-table>
@@ -291,9 +291,10 @@ export default {
       if (this.storyData.cancheck || this.storyData.canzhuan) {
         this.controlBtn.push({id: 4, title: '返回修改', type: 'success'})
       }
-      if (this.viewData.status === 5 || this.viewData.status === 6) {
+      if (this.storyData.cancheckvideo) {
         this.controlBtn.push({id: 5, title: '审核通过', type: 'primary'})
-      } else if (this.storyData.cancheck) {
+      }
+      if (this.storyData.cancheck) {
         this.controlBtn.push({id: 6, title: '审核通过', type: 'primary'})
       }
     },
@@ -316,7 +317,7 @@ export default {
           this.backModify()
           break
         case 5:
-          // 审核通过 status === 5 || status === 6
+          // 审核通过 storyData.cancheckvideo
           this.agreeRushVideo()
           break
         case 6:
