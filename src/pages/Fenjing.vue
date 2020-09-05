@@ -459,6 +459,7 @@ export default {
           this.storyData = data
           this.tableData = retdata
           this.disTabData = true
+          this.handleBtn()
         }
       })
     },
