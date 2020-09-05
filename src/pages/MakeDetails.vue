@@ -694,7 +694,7 @@ export default {
       memo: '',
       disTabData4: false,
       tableData4: [],
-      photos: '',
+      photos: [],
       viewData: {},
       allowEdit: true,
       fieldsData: {},
@@ -1250,6 +1250,8 @@ export default {
       })
     },
     handleUploadBtn (fileList) {
+      console.log('in handleUploadBtn')
+      console.log(fileList)
       let isDis = false
       for (let i = 0; i < fileList.length; i++) {
         let cur = fileList[i]
@@ -1264,13 +1266,19 @@ export default {
       this.$refs.upload.submit()
     },
     handleRemove (file, fileList) {
+      console.log('in handleRemove')
+      console.log(fileList)
       this.fileList = fileList
       this.handleUploadBtn(fileList)
     },
     handleChange (file, fileList) {
+      console.log('in handleChange')
+      console.log(fileList)
       this.handleUploadBtn(fileList)
     },
     afterUpload (res, file, fileList) {
+      console.log('in afterUpload')
+      console.log(fileList)
       for (let i = 0; i < fileList.length; i++) {
         let cur = fileList[i]
         if (cur.response && cur.response.flag) {
@@ -1283,13 +1291,19 @@ export default {
       this.handleUploadBtn(fileList)
     },
     handleRemove1 (file, fileList) {
+      console.log('in handleRemove1')
+      console.log(fileList)
       this.fileList = fileList
       this.handleUploadBtn(fileList)
     },
     handleChange1 (file, fileList) {
+      console.log('in handleChange1')
+      console.log(fileList)
       this.handleUploadBtn(fileList)
     },
     afterUpload1 (res, file, fileList) {
+      console.log('in afterUpload1')
+      console.log(fileList)
       for (let i = 0; i < fileList.length; i++) {
         let cur = fileList[i]
         if (cur.response && cur.response.flag) {
