@@ -765,6 +765,7 @@ Util.install = function (Vue, options) {
       }
     },
     setUserRole: (curpage) => {
+      console.log(curpage.loginUser)
       if (!curpage.loginUser) return false
       curpage.isManager = false
       curpage.isCustomer = false

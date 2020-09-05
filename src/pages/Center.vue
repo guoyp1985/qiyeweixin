@@ -109,10 +109,7 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
-      console.log(this.loginUser)
       this.$util.setUserRole(this)
-      console.log(this.isManager)
-      console.log(this.isCustomer)
     }
   },
   activated () {
