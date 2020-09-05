@@ -456,6 +456,7 @@ export default {
           this.$vux.loading.hide()
           const data = res.data
           const retdata = data.data ? data.data : data
+          this.storyData = data
           this.tableData = retdata
           this.disTabData = true
         }
