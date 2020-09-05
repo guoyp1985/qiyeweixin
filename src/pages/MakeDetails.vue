@@ -441,7 +441,7 @@
          label="《制作需求单》附件："
          min-width="100">
          <el-table-column
-           prop="id"
+           type="index"
            label="镜号"
            min-width="100">
          </el-table-column>
@@ -768,11 +768,12 @@ export default {
           }
         }
       } else {
-        if (this.viewData.status === 5) {
-          this.controlBtn.push({id: 10, title: '审核样片', type: 'success'})
-        } else if (this.viewData.status === 6) {
+        if (this.viewData.status === 6) {
           this.controlBtn.push({id: 11, title: '审核成片', type: 'success'})
         }
+      }
+      if (this.viewData.cancheckrush) {
+        this.controlBtn.push({id: 10, title: '审核样片', type: 'success'})
       }
     },
     buttonEvent (id) {
@@ -814,7 +815,7 @@ export default {
           this.uploadFinalVideo()
           break
         case 10:
-          // 审核样片 !query.type && viewData.status === 5
+          // 审核样片 this.viewData.cancheckrush
           this.toFenjing()
           break
         case 11:
