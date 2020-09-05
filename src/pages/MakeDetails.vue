@@ -830,6 +830,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: this.query.id}).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
+        this.$util.infoSetRole(data.identity, this)
         if (retdata.canedit) {
           this.allowEdit = true
         } else {

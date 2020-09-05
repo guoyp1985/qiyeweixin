@@ -782,6 +782,28 @@ Util.install = function (Vue, options) {
         }
       }
     },
+    infoSetRole: (role, curpage) => {
+      if (!curpage.loginUser) return false
+      curpage.isManager = false
+      curpage.isCustomer = false
+      curpage.isSupplier = false
+      curpage.isSale = false
+      // 管理员：admin  业务员：pm  客户：customer  供应商：supplier  被邀请提交创意的：invitor  游客：guest
+      switch (role) {
+        case 'admin':
+          curpage.isManager = true
+          break
+        case 'pm':
+          curpage.isSale = true
+          break
+        case 'customer':
+          curpage.isCustomer = true
+          break
+        case 'supplier':
+          curpage.isSupplier = true
+          break
+      }
+    },
     transSelectOption: (data) => {
       let arr = []
       for (let key in data) {

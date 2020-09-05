@@ -415,6 +415,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: id}).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
+        this.$util.infoSetRole(data.identity, this)
         this.viewData = retdata
         this.viewData.videophotos_arr = []
         if (retdata.videophotos && retdata.videophotos !== '') {
