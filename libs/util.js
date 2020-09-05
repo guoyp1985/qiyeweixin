@@ -766,7 +766,7 @@ Util.install = function (Vue, options) {
     },
     setUserRole: (curpage) => {
       if (!curpage.loginUser) return false
-      curpage.isManger = false
+      curpage.isManager = false
       curpage.isCustomer = true
       curpage.isSupplier = false
       curpage.isSale = false
@@ -774,7 +774,7 @@ Util.install = function (Vue, options) {
       for (let i = 0; i < curpage.loginUser.usergroup.length; i++) {
         let gid = curpage.loginUser.usergroup[i]
         if (gid === 1) {
-          curpage.isManger = true
+          curpage.isManager = true
         } else if (gid === 3) {
           curpage.isSupplier = true
         } else if (gid === 4) {
