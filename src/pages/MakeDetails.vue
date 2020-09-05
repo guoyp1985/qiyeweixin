@@ -426,12 +426,8 @@
          </el-table-column>
      </el-table>
       <div class="align_center mt20" v-if="viewData.status === 2">
-        <el-button
-          type="primary"
-          @click="onSubmit2">提交选择</el-button>
-        <el-button
-          type="primary"
-          @click="chooseUser">新增邀请</el-button>
+        <el-button type="primary" @click="onSubmit2">提交选择</el-button>
+        <el-button type="primary" @click="chooseUser">新增邀请</el-button>
       </div>
    </div>
    <div class="scroll-container mb20" v-if="disTabData4">
@@ -654,8 +650,7 @@ import ENV from 'env'
 import Time from '#/time'
 import {User, Token} from '#/storage'
 export default {
-  components: {
-  },
+  components: {},
   data () {
     return {
       loginUser: {},
