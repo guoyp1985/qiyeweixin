@@ -391,6 +391,9 @@ export default {
         this.viewData = retdata
         this.status = retdata.status
         if (retdata.video && retdata.video !== '') {
+          if (location.href.indexOf('https') < 0) {
+            retdata.video = retdata.video.replace(/https/g, 'http')
+          }
           let arr = retdata.video.split(',')
           for (let i = 0; i < arr.length; i++) {
             let arrs = {
