@@ -771,6 +771,7 @@ export default {
       if (this.viewData.cancheckrush) {
         this.controlBtn.push({id: 10, title: '审核样片', type: 'success'})
       }
+      
       if (this.viewData.cancheckfinal) {
         this.controlBtn.push({id: 11, title: '审核成片', type: 'success'})
       }
