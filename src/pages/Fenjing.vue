@@ -312,7 +312,7 @@ export default {
       if (this.storyData.cancheckvideo && this.disCensorBtn) {
         this.controlBtn.push({id: 5, title: '审核通过', type: 'primary'})
       }
-      if (this.storyData.cancheck) {
+      if (this.storyData.cantongguo) {
         this.controlBtn.push({id: 6, title: '审核通过', type: 'primary'})
       }
       if (this.storyData.cancheckphoto) {
