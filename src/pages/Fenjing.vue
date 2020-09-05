@@ -271,7 +271,8 @@ export default {
       curVersion: '',
       storyData: {},
       controlBtn: [],
-      viewData: {}
+      viewData: {},
+      disCensorBtn: true
     }
   },
   methods: {
@@ -291,7 +292,7 @@ export default {
       if (this.storyData.cancheck || this.storyData.canzhuan) {
         this.controlBtn.push({id: 4, title: '返回修改', type: 'success'})
       }
-      if (this.storyData.cancheckvideo) {
+      if (this.storyData.cancheckvideo && this.disCensorBtn) {
         this.controlBtn.push({id: 5, title: '审核通过', type: 'primary'})
       }
       if (this.storyData.cancheck) {
@@ -555,6 +556,7 @@ export default {
         if (data.flag) {
           this.$vux.loading.hide()
           this.closeModal()
+          this.disCensorBtn = false
           if (this.status === 4) {
             this.getData()
           } else {
