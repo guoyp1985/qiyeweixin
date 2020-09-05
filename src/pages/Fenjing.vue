@@ -309,10 +309,10 @@ export default {
       if (this.storyData.cancheck || this.storyData.canzhuan) {
         this.controlBtn.push({id: 4, title: '返回修改', type: 'success'})
       }
-      if (this.storyData.cancheckvideo && this.disCensorBtn) {
+      if (this.storyData.cantongguo && this.disCensorBtn) {
         this.controlBtn.push({id: 5, title: '审核通过', type: 'primary'})
       }
-      if (this.storyData.cantongguo) {
+      if (this.storyData.cancheck) {
         this.controlBtn.push({id: 6, title: '审核通过', type: 'primary'})
       }
       if (this.storyData.cancheckphoto) {
@@ -338,7 +338,7 @@ export default {
           this.backModify()
           break
         case 5:
-          // 审核通过 storyData.cancheckvideo
+          // 审核通过 storyData.cantongguo
           this.agreeRushVideo()
           break
         case 6:
@@ -346,7 +346,7 @@ export default {
           this.agreeStoryBoard()
           break
         case 7:
-          // 审核通过 storyData.cancheck
+          // 审核通过 storyData.cancheckphoto
           this.showPhotoSwiper = true
           break
       }
