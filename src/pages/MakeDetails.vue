@@ -467,7 +467,7 @@
          </el-table-column>
        </el-table-column>
        <el-table-column
-         :label="title"
+         :label="viewData.title"
          min-width="100">
          <el-table-column
            prop="seconds"
@@ -529,7 +529,7 @@
          </el-table-column>
        </el-table-column>
        <el-table-column
-         :label="demandno"
+         :label="viewData.demandno"
          min-width="100">
          <el-table-column
            label="审核意见"
@@ -867,6 +867,7 @@ export default {
             this.fileList.push({name: arr[i], issuccess: true, url: arr[i]})
           }
         }
+        this.samplePiece = []
         if (retdata.video && retdata.video !== '') {
           let arr = retdata.video.split(',')
           for (let i = 0; i < arr.length; i++) {
@@ -911,7 +912,7 @@ export default {
       let attachment = []
       for (let i = 0; i < this.fileList.length; i++) {
         let cur = this.fileList[i]
-        if (cur.response && cur.response.flag) {
+        if (cur.issuccess) {
           attachment.push(cur.name)
         }
       }
@@ -1363,7 +1364,7 @@ export default {
         let attachmentPhotos = []
         for (let i = 0; i < this.photos.length; i++) {
           let cur = this.photos[i]
-          if (cur.response && cur.response.flag) {
+          if (cur.issuccess) {
             attachmentPhotos.push(cur.name)
           }
         }
@@ -1371,7 +1372,7 @@ export default {
         let attachment = []
         for (let i = 0; i < this.samplePiece.length; i++) {
           let cur = this.samplePiece[i]
-          if (cur.response && cur.response.flag) {
+          if (cur.issuccess) {
             attachment.push(cur.name)
           }
         }
@@ -1395,7 +1396,7 @@ export default {
         let attachment = []
         for (let i = 0; i < this.samplePiece.length; i++) {
           let cur = this.samplePiece[i]
-          if (cur.response && cur.response.flag) {
+          if (cur.issuccess) {
             attachment.push(cur.name)
           }
         }
