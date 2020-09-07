@@ -738,6 +738,11 @@ export default {
       if (this.query.type) params.type = this.query.type
       this.$router.push({path: '/fenjing', query: params})
     },
+    handleClose () {
+      this.showInvite = false
+      this.postName = ''
+      this.postPhone = ''
+    },
     submitInvite () {
       if (this.issubmit) return false
       if (this.postName === '' || this.postPhone === '') {
