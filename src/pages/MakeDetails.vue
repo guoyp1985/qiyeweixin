@@ -643,10 +643,32 @@
        </div>
      </div>
    </div>
+    <el-dialog
+      class="inviteDialog"
+      title="邀请共审"
+      :visible.sync="showInvite"
+      width="30%"
+      :before-close="handleClose">
+      <div>
+        <el-input placeholder="姓名" v-model="postName">
+          <template slot="prepend">姓名</template>
+        </el-input>
+      </div>
+      <div class="mt10">
+        <el-input placeholder="手机号" v-model="postPhone" type="tel">
+          <template slot="prepend">手机号</template>
+        </el-input>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showInvite = false">取 消</el-button>
+        <el-button type="primary" @click="submitInvite">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import ENV from 'env'
+import Reg from '#/reg'
 import Time from '#/time'
 import {User, Token} from '#/storage'
 export default {
@@ -701,13 +723,13 @@ export default {
       inviteObject: {},
       modalType: '',
       disUploadBtn1: false,
-      disUploadBtn2: false
+      disUploadBtn2: false,
+      showInvite: false,
+      postName: '',
+      postPhone: ''
     }
   },
   methods: {
-    toSale () {
-      this.$router.push({path: '/assignSale', query: {id: this.query.id}})
-    },
     toLink (link) {
       this.$router.push({path: link})
     },
@@ -715,6 +737,30 @@ export default {
       let params = {id: parseInt(this.query.id)}
       if (this.query.type) params.type = this.query.type
       this.$router.push({path: '/fenjing', query: params})
+    },
+    submitInvite () {
+      if (this.issubmit) return false
+      if (this.postName === '' || this.postPhone === '') {
+        this.$vux.toast.text('请完善信息', 'middle')
+        return false
+      }
+      if (!Reg.rPhone.test(this.postPhone)) {
+        this.$vux.toast.text('请输入正确的手机号', 'middle')
+        return false
+      }
+      this.issubmit = true
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}//api/demands/addCustomer`, {
+        demandid: this.query.id, name: this.postName, mobile: this.postPhone
+      }).then(res => {
+        this.$vux.loading.hide()
+        this.issubmit = false
+        const data = res.data
+        this.$vux.toast.text(data.error, 'middle')
+        if (data.flag) {
+          this.showInvite = false
+        }
+      })
     },
     getData () {
       this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {
@@ -739,6 +785,9 @@ export default {
       this.controlBtn = []
       if (this.viewData.status < 100 && (this.isManager || this.isSale)) {
         this.controlBtn.push({id: 1, title: '分配业务员', type: 'warning'})
+      }
+      if (this.viewData.status > 0 && (this.isCustomer)) {
+        this.controlBtn.push({id: 12, title: '邀请共审', type: 'warning'})
       }
       if (this.viewData.canedit) {
         this.controlBtn.push({id: 2, title: '修改', type: 'success'})
@@ -779,7 +828,7 @@ export default {
       switch (id) {
         case 1:
           // 分配业务员 viewData.status < 100 && (isManager || isSale)
-          this.toSale()
+          this.$router.push({path: '/assignSale', query: {id: this.query.id}})
           break
         case 2:
           // 修改 viewData.canedit === 1
@@ -820,6 +869,10 @@ export default {
         case 11:
           // 审核成片 !query.type && viewData.status === 6
           this.toFenjing()
+          break
+        case 12:
+          // 邀请共审 viewData.status > 0 && isCustomer
+          this.showInvite = true
           break
       }
     },
@@ -1516,5 +1569,8 @@ export default {
 .file-list{
   padding:10px;text-align:left;
   .file-item{display:block;}
+}
+.inviteDialog{
+  .el-input-group__prepend{padding:0;width:80px;text-align:center;}
 }
 </style>
