@@ -810,8 +810,9 @@ export default {
       if (this.viewData.status === 2 && this.isSupplier) {
         this.controlBtn.push({id: 6, title: '提交创意', type: 'danger'})
       }
+      // 个性创意梗概
       if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
-        this.controlBtn.push({id: 7, title: '修改创意梗概', type: 'success'})
+        this.controlBtn.push({id: 7, title: '提交', type: 'success'})
       }
       if (this.query.type) {
         if (this.query.type === 'ongoing') {
@@ -857,7 +858,7 @@ export default {
           this.onInvite3(0)
           break
         case 7:
-          // 修改创意梗概 query.type === 'ongoing' && viewData.status === 3
+          // 修改创意梗概 (this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)
           this.onInvite3(1)
           break
         case 8:
