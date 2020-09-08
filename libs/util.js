@@ -791,6 +791,7 @@ Util.install = function (Vue, options) {
       curpage.isCustomer = false
       curpage.isSupplier = false
       curpage.isSale = false
+      curpage.isInvitor = false
       // 管理员：admin  业务员：pm  客户：customer  供应商：supplier  被邀请提交创意的：invitor  游客：guest
       switch (role) {
         case 'admin':
@@ -804,6 +805,9 @@ Util.install = function (Vue, options) {
           break
         case 'supplier':
           curpage.isSupplier = true
+          break
+        case 'invitor':
+          curpage.isInvitor = true
           break
       }
     },

@@ -284,6 +284,7 @@ export default {
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
       isSupplier: false, // 3:供应商
+      isInvitor: false, // 被邀请者
       versionData: [],
       curVersion: '',
       storyData: {},
