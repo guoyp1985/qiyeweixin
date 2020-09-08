@@ -810,11 +810,11 @@ export default {
       if (this.viewData.status === 2 && this.isSupplier) {
         this.controlBtn.push({id: 6, title: '提交创意', type: 'danger'})
       }
+      if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
+        this.controlBtn.push({id: 7, title: '修改创意梗概', type: 'success'})
+      }
       if (this.query.type) {
         if (this.query.type === 'ongoing') {
-          if (this.viewData.status === 3) {
-            this.controlBtn.push({id: 7, title: '修改创意梗概', type: 'success'})
-          }
           if (this.viewData.status === 5) {
             this.controlBtn.push({id: 8, title: '上传样片', type: 'primary'})
           }
