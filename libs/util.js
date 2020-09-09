@@ -811,9 +811,10 @@ Util.install = function (Vue, options) {
           break
       }
     },
-    transSelectOption: (data) => {
+    transSelectOption: (data, type) => {
       let arr = []
       for (let key in data) {
+        if (type === 'int') key = parseInt(key)
         let item = {value: key, label: data[key]}
         arr.push(item)
       }

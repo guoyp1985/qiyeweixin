@@ -768,25 +768,6 @@ export default {
         }
       })
     },
-    getData () {
-      this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {
-        const data = res.data
-        if (data.flag) {
-          this.$vux.loading.hide()
-          const data = res.data
-          const retdata = data.data ? data.data : data
-          this.fieldsData = retdata
-          this.durationOptions = this.$util.transSelectOption(retdata.duration)
-          this.ratioOptions = this.$util.transSelectOption(retdata.ratio)
-          this.videoclassOptions = this.$util.transSelectOption(retdata.videoclass)
-          this.logo_allOptions = this.$util.transSelectOption(retdata.logo_all)
-          this.logo_endOptions = this.$util.transSelectOption(retdata.logo_end)
-          this.videotypeOptions = this.$util.transSelectOption(retdata.videotype)
-          this.comefromOptions = this.$util.transSelectOption(retdata.comefrom)
-          this.pricetypeOptions = this.$util.transSelectOption(retdata.pricetype)
-        }
-      })
-    },
     handleBtn () {
       this.controlBtn = []
       if (this.viewData.status < 100 && (this.isManager || this.isSale)) {
@@ -882,64 +863,6 @@ export default {
           this.showInvite = true
           break
       }
-    },
-    getInfo (id) {
-      // [0=>'新发布','1'=>'需求已确认','2'=>'需求已分发','3'=>'确认供应商','4'=>'创意已确认',5=>'分镜脚本已确认','6'=>'样片已确认'];
-      // 新发布的可以编辑，其它状态都不可以编辑
-      this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: this.query.id}).then(res => {
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        this.$util.infoSetRole(data.identity, this)
-        if (retdata.canedit) {
-          this.allowEdit = true
-        } else {
-          this.allowEdit = false
-        }
-        this.viewData = retdata
-        if (this.viewData.starttime) {
-          this.viewData.starttime_str = new Time(this.viewData.starttime * 1000).dateFormat('yyyy-MM-dd')
-        } else {
-          this.viewData.starttime_str = ''
-        }
-        if (this.viewData.endtime) {
-          this.viewData.endtime_str = new Time(this.viewData.endtime * 1000).dateFormat('yyyy-MM-dd')
-        } else {
-          this.viewData.endtime_str = ''
-        }
-        this.viewData.v_starttime = new Date(retdata.starttime * 1000)
-        this.viewData.v_endtime = new Date(retdata.endtime * 1000)
-        this.handleBtn()
-        if (retdata.ideas) {
-          for (var i = 0; i < retdata.ideas.length; i++) {
-            let curd = retdata.ideas[i]
-            curd.datetime = new Time(this.viewData.endtime * 1000).dateFormat('yyyy-MM-dd')
-          }
-        }
-        // if (retdata.confirmedidea) {
-        //   this.idea = retdata.confirmedidea
-        // }
-        if (retdata.status === 2 && (this.isManager || this.isSale)) {
-          this.getData3()
-        }
-        if (retdata.attachment && retdata.attachment !== '') {
-          let arr = retdata.attachment.split(',')
-          for (let i = 0; i < arr.length; i++) {
-            this.fileList.push({name: arr[i], issuccess: true, url: arr[i]})
-          }
-        }
-        this.samplePiece = []
-        if (retdata.video && retdata.video !== '') {
-          let arr = retdata.video.split(',')
-          for (let i = 0; i < arr.length; i++) {
-            this.samplePiece.push({name: arr[i], issuccess: true, url: arr[i]})
-          }
-        }
-        if (this.query.type) {
-          if (retdata.status === 5 || retdata.status === 6) {
-            this.getData4()
-          }
-        }
-      })
     },
     onSubmit () {
       if (this.issubmit) return false
@@ -1042,7 +965,7 @@ export default {
         if (data.flag) {
           this.$vux.loading.hide()
           this.closeModal()
-          this.getInfo(this.query.id)
+          this.getInfo()
           if (this.isManager || this.isSale) {
             this.$router.push({path: '/makeList', query: {status: data.status}})
           } else {
@@ -1470,7 +1393,88 @@ export default {
         })
       }
     },
+    getInfo () {
+      // [0=>'新发布','1'=>'需求已确认','2'=>'需求已分发','3'=>'确认供应商','4'=>'创意已确认',5=>'分镜脚本已确认','6'=>'样片已确认'];
+      // 新发布的可以编辑，其它状态都不可以编辑
+      if (!this.query.id) return false
+      this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: this.query.id}).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        this.$util.infoSetRole(data.identity, this)
+        if (retdata.canedit) {
+          this.allowEdit = true
+        } else {
+          this.allowEdit = false
+        }
+        this.viewData = retdata
+        if (this.viewData.starttime) {
+          this.viewData.starttime_str = new Time(this.viewData.starttime * 1000).dateFormat('yyyy-MM-dd')
+        } else {
+          this.viewData.starttime_str = ''
+        }
+        if (this.viewData.endtime) {
+          this.viewData.endtime_str = new Time(this.viewData.endtime * 1000).dateFormat('yyyy-MM-dd')
+        } else {
+          this.viewData.endtime_str = ''
+        }
+        this.viewData.v_starttime = new Date(retdata.starttime * 1000)
+        this.viewData.v_endtime = new Date(retdata.endtime * 1000)
+        this.handleBtn()
+        if (retdata.ideas) {
+          for (var i = 0; i < retdata.ideas.length; i++) {
+            let curd = retdata.ideas[i]
+            curd.datetime = new Time(this.viewData.endtime * 1000).dateFormat('yyyy-MM-dd')
+          }
+        }
+        // if (retdata.confirmedidea) {
+        //   this.idea = retdata.confirmedidea
+        // }
+        if (retdata.status === 2 && (this.isManager || this.isSale)) {
+          this.getData3()
+        }
+        if (retdata.attachment && retdata.attachment !== '') {
+          let arr = retdata.attachment.split(',')
+          for (let i = 0; i < arr.length; i++) {
+            this.fileList.push({name: arr[i], issuccess: true, url: arr[i]})
+          }
+        }
+        this.samplePiece = []
+        if (retdata.video && retdata.video !== '') {
+          let arr = retdata.video.split(',')
+          for (let i = 0; i < arr.length; i++) {
+            this.samplePiece.push({name: arr[i], issuccess: true, url: arr[i]})
+          }
+        }
+        if (this.query.type) {
+          if (retdata.status === 5 || retdata.status === 6) {
+            this.getData4()
+          }
+        }
+      })
+    },
+    getData () {
+      this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          this.fieldsData = retdata
+          this.durationOptions = this.$util.transSelectOption(retdata.duration, 'int')
+          this.ratioOptions = this.$util.transSelectOption(retdata.ratio, 'int')
+          this.videoclassOptions = this.$util.transSelectOption(retdata.videoclass, 'int')
+          this.logo_allOptions = this.$util.transSelectOption(retdata.logo_all, 'int')
+          this.logo_endOptions = this.$util.transSelectOption(retdata.logo_end, 'int')
+          this.videotypeOptions = this.$util.transSelectOption(retdata.videotype)
+          this.comefromOptions = this.$util.transSelectOption(retdata.comefrom)
+          this.pricetypeOptions = this.$util.transSelectOption(retdata.pricetype)
+          console.log(this.ratioOptions)
+          this.getInfo()
+        }
+      })
+    },
     refresh () {
+      this.query = this.$route.query
       this.loginUser = User.get()
       this.$util.setUserRole(this)
       let token = Token.get()
@@ -1501,14 +1505,10 @@ export default {
         this.showChooseUser = false
         this.$vux.loading.show()
         this.getData()
-        if (this.query.id) {
-          this.getInfo(this.query.id)
-        }
       }
     }
   },
   activated () {
-    this.query = this.$route.query
     this.refresh()
   }
 }
