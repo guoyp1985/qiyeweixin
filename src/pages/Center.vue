@@ -127,7 +127,7 @@ export default {
       background: linear-gradient(#6f6e6e, #000);border-radius:10px;width:100%;color:#F5CD91;margin:0 auto;position:relative;z-index:2;
       padding:10px;box-sizing: border-box;
       .avatar{
-        margin:0 auto;width:65px;height:65px;border-radius:50%;border:#fff 3px solid;box-sizing: border-box;
+        margin:0 auto;width:65px;height:65px;border-radius:50%;box-sizing: border-box;
         img{width:100%;height:100%;border-radius:50%;}
       }
       .txt{text-align:center;margin-top:5px;}
