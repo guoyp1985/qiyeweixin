@@ -7,17 +7,17 @@
      <tr>
        <td class="title">项目名称<span>*</span></td>
        <td colspan="3">
-         <el-input v-model="title" placeholder="请输入项目名称"></el-input>
+         <el-input v-model="submitData.title" placeholder="请输入项目名称"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">品牌名称</td>
        <td>
-         <el-input v-model="brand" placeholder="请输入品牌名称"></el-input>
+         <el-input v-model="submitData.brand" placeholder="请输入品牌名称"></el-input>
        </td>
        <td class="title">视频类型<span>*</span></td>
        <td>
-         <el-select v-model="videotype" placeholder="请选择视频类型">
+         <el-select v-model="submitData.videotype" placeholder="请选择视频类型">
            <el-option
               v-for="item in videotypeOptions"
               :key="item.value"
@@ -30,17 +30,17 @@
      <tr>
        <td class="title">产品名称</td>
        <td>
-         <el-input v-model="product" placeholder="请输入产品名称"></el-input>
+         <el-input v-model="submitData.product" placeholder="请输入产品名称"></el-input>
        </td>
        <td class="title">效果目标</td>
        <td>
-         <el-input v-model="target" placeholder="请输入效果目标"></el-input>
+         <el-input v-model="submitData.target" placeholder="请输入效果目标"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">视频时长<span>*</span></td>
        <td>
-         <el-select v-model="duration" placeholder="请选择视频时长">
+         <el-select v-model="submitData.duration" placeholder="请选择视频时长">
            <el-option
               v-for="item in durationOptions"
               :key="item.value"
@@ -51,7 +51,7 @@
         </td>
         <td class="title">视频比例<span>*</span></td>
         <td>
-          <el-select v-model="ratio" placeholder="请选择视频比例">
+          <el-select v-model="submitData.ratio" placeholder="请选择视频比例">
             <el-option
               v-for="item in ratioOptions"
               :key="item.value"
@@ -64,11 +64,11 @@
      <tr>
        <td class="title">视频数量</td>
        <td>
-         <el-input v-model="videocount" placeholder="请输入视频数量"></el-input>
+         <el-input v-model="submitData.videocount" placeholder="请输入视频数量"></el-input>
        </td>
        <td class="title">视频分类<span>*</span></td>
        <td>
-         <el-select v-model="videoclass" placeholder="请选择视频分类">
+         <el-select v-model="submitData.videoclass" placeholder="请选择视频分类">
             <el-option
               v-for="item in videoclassOptions"
               :key="item.value"
@@ -82,7 +82,7 @@
        <td class="title">立项日期<span>*</span></td>
        <td>
          <el-date-picker
-            v-model="starttime"
+            v-model="submitData.starttime"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="选择立项日期">
@@ -91,7 +91,7 @@
         <td class="title">交付日期<span>*</span></td>
         <td>
           <el-date-picker
-            v-model="endtime"
+            v-model="submitData.endtime"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="选择交付日期">
@@ -101,7 +101,7 @@
     <tr>
       <td class="title">全片LOGO<span>*</span></td>
       <td>
-        <el-select v-model="logo_all" placeholder="请选择全片LOGO">
+        <el-select v-model="submitData.logo_all" placeholder="请选择全片LOGO">
           <el-option
             v-for="item in logo_allOptions"
             :key="item.value"
@@ -112,7 +112,7 @@
       </td>
       <td class="title">片尾LOGO<span>*</span></td>
       <td>
-        <el-select v-model="logo_end" placeholder="请选择片尾LOGO">
+        <el-select v-model="submitData.logo_end" placeholder="请选择片尾LOGO">
           <el-option
             v-for="item in logo_endOptions"
             :key="item.value"
@@ -166,52 +166,58 @@
      <tr>
        <td class="title">相关链接</td>
        <td colspan="3">
-         <el-input v-model="linkurl" placeholder="请输入相关链接"></el-input>
+         <el-input v-model="submitData.linkurl" placeholder="请输入相关链接"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户诉求</td>
        <td colspan="3">
-         <el-input v-model="customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input v-model="submitData.customerdemand" placeholder="请输入投诉内容"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户信息</td>
        <td colspan="3">
-         <el-input v-model="customerinfo" placeholder="请输入客户信息"></el-input>
+         <el-input v-model="submitData.customerinfo" placeholder="请输入客户信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">产品定位</td>
-       <td colspan="3"><el-input v-model="productorientation" placeholder="请输入产品定位"></el-input>
+       <td colspan="3"><el-input v-model="submitData.productorientation" placeholder="请输入产品定位"></el-input>
        </td>
      </tr>
      <tr>
-       <td class="title">产品卖点<span class="font12 color-gray5">（核心卖点需标注）</span></td>
+       <td class="title">
+         <div>产品卖点</div>
+         <div class="font12 color-gray5">（核心卖点需标注）</div>
+       </td>
        <td colspan="3">
-         <el-input type="textarea" v-model="sellerpoint" placeholder="请输入产品卖点"></el-input>
+         <el-input type="textarea" v-model="submitData.sellerpoint" placeholder="请输入产品卖点"></el-input>
        </td>
      </tr>
      <tr>
-       <td class="title">视频内必须展示的关键信息</td>
+       <td class="title">
+         <div>视频内必须展示的</div>
+         <div>关键信息</div>
+       </td>
        <td colspan="3">
-         <el-input type="textarea" v-model="keyinfo" placeholder="请输入关键信息"></el-input>
+         <el-input type="textarea" v-model="submitData.keyinfo" placeholder="请输入关键信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">创意思路</td>
        <td colspan="3">
-         <el-input type="textarea" v-model="customeridea" placeholder="请输入创意思路"></el-input>
+         <el-input type="textarea" v-model="submitData.customeridea" placeholder="请输入创意思路"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">特殊备注</td>
        <td>
-         <el-input v-model="otherdemand" placeholder="请输入特殊备注"></el-input>
+         <el-input v-model="submitData.otherdemand" placeholder="请输入特殊备注"></el-input>
        </td>
        <td>制作价格</td>
        <td>
-         <el-input v-model="price" placeholder="请输入制作价格"></el-input>
+         <el-input v-model="submitData.price" placeholder="请输入制作价格"></el-input>
        </td>
      </tr>
      <tr>
@@ -260,28 +266,31 @@ export default {
     return {
       loginUser: {},
       query: {},
-      title: '',
-      brand: '',
-      videotype: '',
-      product: '',
-      target: '',
-      videocount: '',
-      linkurl: '',
-      customerdemand: '',
-      customerinfo: '',
-      productorientation: '',
-      sellerpoint: '',
-      keyinfo: '',
-      otherdemand: '',
-      price: '',
-      starttime: '',
-      endtime: '',
-      duration: '',
-      ratio: '',
-      videoclass: '',
-      logo_all: '',
-      logo_end: '',
-      customeridea: '',
+      submitData: {
+        title: '',
+        brand: '',
+        videotype: '',
+        product: '',
+        target: '',
+        duration: '',
+        ratio: '',
+        videocount: '',
+        videoclass: '',
+        starttime: '',
+        endtime: '',
+        logo_all: '',
+        logo_end: '',
+        linkurl: '',
+        customerdemand: '',
+        customerinfo: '',
+        productorientation: '',
+        sellerpoint: '',
+        keyinfo: '',
+        customeridea: '',
+        otherdemand: '',
+        price: ''
+      },
+      requiredData: ['title', 'starttime', 'endtime', 'duration', 'ratio', 'videoclass', 'logo_all', 'logo_end', 'videotype'],
       durationOptions: [],
       ratioOptions: [],
       videoclassOptions: [],
@@ -293,7 +302,6 @@ export default {
       uploadHeaders: {},
       fileList: [],
       disUploadBtn: false,
-      viewData: {},
       isManager: false, // 1:管理员
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
@@ -368,57 +376,10 @@ export default {
       this.selectedSale = this.saleObject[this.selectedSaleUid]
       this.showSaleDialog = false
     },
-    toLink (link) {
-      this.$router.push({path: link})
-    },
-    getData () {
-      this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {
-        const data = res.data
-        if (data.flag) {
-          this.$vux.loading.hide()
-          const data = res.data
-          const retdata = data.data ? data.data : data
-          for (let i in retdata.duration) {
-            let item = {value: parseInt(i), label: retdata.duration[i]}
-            this.durationOptions.push(item)
-          }
-          for (let i in retdata.ratio) {
-            let item = {value: parseInt(i), label: retdata.ratio[i]}
-            this.ratioOptions.push(item)
-          }
-          for (let i in retdata.videoclass) {
-            let item = {value: parseInt(i), label: retdata.videoclass[i]}
-            this.videoclassOptions.push(item)
-          }
-          for (let i in retdata.logo_all) {
-            let item = {value: parseInt(i), label: retdata.logo_all[i]}
-            this.logo_allOptions.push(item)
-          }
-          for (let i in retdata.logo_end) {
-            let item = {value: parseInt(i), label: retdata.logo_end[i]}
-            this.logo_endOptions.push(item)
-          }
-          for (let i in retdata.videotype) {
-            let item = {value: i, label: retdata.videotype[i]}
-            this.videotypeOptions.push(item)
-          }
-        }
-      })
-    },
     onSubmit () {
       if (this.issubmit) return false
-      let params = {title: this.title, starttime: this.starttime, endtime: this.endtime, duration: this.duration, ratio: this.ratio, videoclass: this.videoclass, logo_all: this.logo_all, logo_end: this.logo_end, price: this.price, videocount: this.videocount, videotype: this.videotype}
-      if (this.brand !== '') params.brand = this.brand
-      if (this.product !== '') params.product = this.product
-      if (this.target !== '') params.target = this.target
-      if (this.linkurl !== '') params.linkurl = this.linkurl
-      if (this.customerdemand !== '') params.customerdemand = this.customerdemand
-      if (this.customerinfo !== '') params.customerinfo = this.customerinfo
-      if (this.productorientation !== '') params.productorientation = this.productorientation
-      if (this.sellerpoint !== '') params.sellerpoint = this.sellerpoint
-      if (this.keyinfo !== '') params.keyinfo = this.keyinfo
-      if (this.otherdemand !== '') params.otherdemand = this.otherdemand
-      if (this.customeridea !== '') params.customeridea = this.customeridea
+      let iscontinue = true
+      let params = {...this.submitData}
       if (this.isManager || this.isSale) {
         if (!this.selectedCustomerUid) {
           this.$vux.toast.text('请选择客户', 'middle')
@@ -428,39 +389,53 @@ export default {
       let attachment = []
       for (let i = 0; i < this.fileList.length; i++) {
         let cur = this.fileList[i]
-        if (cur.response && cur.response.flag) {
+        if (cur.issuccess) {
           attachment.push(cur.name)
         }
       }
       if (attachment.length) params.attachment = attachment.join(',')
-      var rule1 = /^(0+)|[^\d]+/g
-      if (this.title === '' || this.starttime === '' || this.endtime === '' || this.duration === '' || this.ratio === '' || this.videoclass === '' ||
-    this.logo_all === '' || this.logo_end === '' || this.videotype === '') {
-        this.$vux.toast.text('必填项不能为空', 'middle')
-        return false
+      for (let i = 0; i < this.requiredData.length; i++) {
+        let curName = this.requiredData[i]
+        let curVal = params[curName]
+        if (!curVal || this.$util.trim(curVal) === '') {
+          iscontinue = false
+          this.$vux.toast.text('必填项不能为空', 'middle')
+          break
+        }
       }
-      if (this.endtime <= this.starttime) {
+      if (!iscontinue) return false
+      if (params.endtime <= params.starttime) {
         this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
         return false
       }
-      if (this.price !== '' && (isNaN(this.price) || parseFloat(this.price) < 0 || parseFloat(this.price).length > 7)) {
+      if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) <= 0 || parseFloat(params.price).length > 7)) {
         this.$vux.toast.text('请输入正确的制作价格', 'middle')
         return false
       }
-      if (this.videocount !== '' && (isNaN(this.videocount) || parseInt(this.videocount) < 0 || rule1.test(this.videocount))) {
+      var rule1 = /^(0+)|[^\d]+/g
+      if (params.videocount !== '' && (isNaN(params.videocount) || parseInt(params.videocount) <= 0 || rule1.test(params.videocount))) {
         this.$vux.toast.text('请输入正确的视频数量', 'middle')
         return false
       }
       this.issubmit = true
       this.$http.post(`${ENV.BokaApi}/api/demands/add`, params).then(res => {
         let data = res.data
-        this.$vux.toast.text(data.error, 'middle')
-        if (this.isCustomer) {
-          this.$router.push({path: '/makeUserList'})
-        } else {
-          this.$router.push({path: '/makeList'})
-        }
-        this.issubmit = false
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              if (this.isCustomer) {
+                this.$router.push({path: '/makeUserList'})
+              } else {
+                this.$router.push({path: '/makeList'})
+              }
+            } else {
+              this.issubmit = false
+            }
+          }
+        })
       })
     },
     handleUploadBtn (fileList) {
@@ -496,7 +471,23 @@ export default {
       this.fileList = fileList
       this.handleUploadBtn(fileList)
     },
+    getData () {
+      this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {
+        const data = res.data
+        this.$vux.loading.hide()
+        if (data.flag) {
+          const retdata = data.data
+          this.durationOptions = this.$util.transSelectOption(retdata.duration)
+          this.ratioOptions = this.$util.transSelectOption(retdata.ratio)
+          this.videoclassOptions = this.$util.transSelectOption(retdata.videoclass)
+          this.logo_allOptions = this.$util.transSelectOption(retdata.logo_all)
+          this.logo_endOptions = this.$util.transSelectOption(retdata.logo_end)
+          this.videotypeOptions = this.$util.transSelectOption(retdata.videotype)
+        }
+      })
+    },
     refresh () {
+      this.query = this.$route.query
       this.loginUser = User.get()
       this.$util.setUserRole(this)
       let token = Token.get()
@@ -508,28 +499,9 @@ export default {
         this.logo_allOptions = []
         this.logo_endOptions = []
         this.videotypeOptions = []
-        this.title = ''
-        this.brand = ''
-        this.videotype = ''
-        this.product = ''
-        this.target = ''
-        this.videocount = ''
-        this.linkurl = ''
-        this.customerdemand = ''
-        this.customerinfo = ''
-        this.productorientation = ''
-        this.sellerpoint = ''
-        this.keyinfo = ''
-        this.otherdemand = ''
-        this.price = ''
-        this.starttime = ''
-        this.endtime = ''
-        this.duration = ''
-        this.ratio = ''
-        this.videoclass = ''
-        this.logo_all = ''
-        this.logo_end = ''
-        this.customeridea = ''
+        for (let key in this.submitData) {
+          this.submitData[key] = ''
+        }
         this.issubmit = false
         this.$vux.loading.show()
         this.getData()
