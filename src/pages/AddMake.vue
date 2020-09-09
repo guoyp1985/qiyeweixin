@@ -482,6 +482,7 @@ export default {
           this.videoclassOptions = this.$util.transSelectOption(retdata.videoclass, 'int')
           this.logo_allOptions = this.$util.transSelectOption(retdata.logo_all, 'int')
           this.logo_endOptions = this.$util.transSelectOption(retdata.logo_end, 'int')
+          this.videotypeOptions = this.$util.transSelectOption(retdata.videotype)
         }
       })
     },
