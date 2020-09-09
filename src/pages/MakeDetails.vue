@@ -1552,7 +1552,7 @@ export default {
 <style lang="less">
 .make-detail-page{
   padding:10px;box-sizing: border-box;
-  .diff-css{color:#ff0000;text-decoration:underline;text-align:left;padding:0 15px 5px;}
+  .diff-css{color:#ff0000;text-decoration:line-through;text-align:left;padding:0 15px 5px;}
   .add-make-list{
     width: 99.9%;
     border-collapse:collapse;
