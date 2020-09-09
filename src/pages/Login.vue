@@ -8,9 +8,9 @@
     <div class="bg" :style="`${themeObject.bgStyle}`"></div>
     <div class="login-area">
       <div class="avatar-area">
-        <img :src="miniInfo.photo" />
+        <img src="https://toszhenlu.boka.cn/zhenlu.png" />
       </div>
-      <div class="mt10 bold font16 flex_center">{{miniInfo.title}}</div>
+      <div class="mt10 bold font16 flex_center"></div>
       <div class="form-area flex_left" :style="`${themeObject.borderStyle}margin-top:40px;`">
         <div class="ico flex_center">
           <div class="al al-yonghu"></div>
@@ -44,10 +44,6 @@ export default {
     return {
       query: {},
       themeObject: {},
-      miniInfo: {
-        title: '',
-        photo: 'https://tossharingsales.boka.cn/images/nopic.jpg'
-      },
       syspara: {},
       mobile: '',
       code: '',
