@@ -1431,7 +1431,7 @@ export default {
           this.allowEdit = false
         }
         this.viewData = retdata
-        this.historyData = data.historydata
+        if (data.historydata) this.historyData = data.historydata
         if (this.viewData.starttime) {
           this.viewData.starttime_str = new Time(this.viewData.starttime * 1000).dateFormat('yyyy-MM-dd')
         } else {
