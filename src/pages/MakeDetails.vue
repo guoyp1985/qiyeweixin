@@ -253,7 +253,7 @@
          <div v-else>{{viewData.otherdemand}}</div>
          <div class="diff-css" v-if="historyData.otherdemand && historyData.otherdemand != '' && viewData.otherdemand != historyData.otherdemand">{{historyData.otherdemand}}</div>
        </td>
-       <td v-if="!query.type">制作价格</td>
+       <td class="title" v-if="!query.type">制作价格</td>
        <td v-if="!query.type">
          <el-input v-if="allowEdit" v-model="viewData.price" placeholder="请输入制作价格"></el-input>
          <div v-else>{{viewData.price}}</div>
@@ -1555,13 +1555,12 @@ export default {
   .diff-css{color:#ff0000;text-decoration:underline;text-align:left;padding:0 15px 5px;}
   .add-make-list{
     width: 99.9%;
-    text-align: center;
     border-collapse:collapse;
     td{
       border: 1px solid #333;
     }
     .title{
-      width: 10%;
+      width: 10%;text-align: center;
       min-width: 80px;
       padding: 9px;
       span{
