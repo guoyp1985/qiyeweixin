@@ -1,5 +1,6 @@
 <template>
   <div class="bg-white font14 make-detail-page">
+    <div v-if="showSos" class="sos-area">{{sosTxt}}</div>
    <table class="add-make-list bg-white" v-if="!query.id || viewData.id">
      <tr>
        <th colspan="4" class="align_center font20 padding15">制作需求单</th>
@@ -751,7 +752,9 @@ export default {
       disUploadBtn2: false,
       showInvite: false,
       postName: '',
-      postPhone: ''
+      postPhone: '',
+      showSos: false,
+      sosTxt: ''
     }
   },
   methods: {
@@ -1423,6 +1426,11 @@ export default {
       if (!this.query.id) return false
       this.$http.post(`${ENV.BokaApi}/api/demands/info`, {id: this.query.id}).then(res => {
         const data = res.data
+        if (!data.flag) {
+          this.showSos = true
+          this.sosTxt = data.error
+          return false
+        }
         const retdata = data.data ? data.data : data
         this.$util.infoSetRole(data.identity, this)
         if (retdata.canedit) {
@@ -1552,6 +1560,9 @@ export default {
 <style lang="less">
 .make-detail-page{
   padding:10px;box-sizing: border-box;
+  .sos-area{
+    width:100%;display:flex;justify-content: center;align-items: center;color:#ff0000;
+  }
   .diff-css{color:#ff0000;text-decoration:line-through;text-align:left;padding:0 15px 5px;}
   .add-make-list{
     width: 99.9%;
