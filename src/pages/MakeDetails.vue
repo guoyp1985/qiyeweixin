@@ -326,7 +326,7 @@
        </td>
      </tr>
      <tr v-if="controlBtn.length">
-       <td class="padding10" colspan="4">
+       <td class="padding10 align_center" colspan="4">
          <el-button v-for="(item,index) in controlBtn" :key="index" :type="item.type" @click="buttonEvent(item.id)">{{item.title}}</el-button>
        </td>
      </tr>
