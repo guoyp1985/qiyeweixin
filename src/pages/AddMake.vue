@@ -477,12 +477,11 @@ export default {
         this.$vux.loading.hide()
         if (data.flag) {
           const retdata = data.data
-          this.durationOptions = this.$util.transSelectOption(retdata.duration)
-          this.ratioOptions = this.$util.transSelectOption(retdata.ratio)
-          this.videoclassOptions = this.$util.transSelectOption(retdata.videoclass)
-          this.logo_allOptions = this.$util.transSelectOption(retdata.logo_all)
-          this.logo_endOptions = this.$util.transSelectOption(retdata.logo_end)
-          this.videotypeOptions = this.$util.transSelectOption(retdata.videotype)
+          this.durationOptions = this.$util.transSelectOption(retdata.duration, 'int')
+          this.ratioOptions = this.$util.transSelectOption(retdata.ratio, 'int')
+          this.videoclassOptions = this.$util.transSelectOption(retdata.videoclass, 'int')
+          this.logo_allOptions = this.$util.transSelectOption(retdata.logo_all, 'int')
+          this.logo_endOptions = this.$util.transSelectOption(retdata.logo_end, 'int')
         }
       })
     },
