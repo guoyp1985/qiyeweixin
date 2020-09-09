@@ -3,7 +3,7 @@
     <div class="toparea">
       <div class="box-area">
         <div class="avatar">
-          <img :src="loginUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+          <img :src="loginUser.avatar" onerror="javascript:this.src='https://toszhenlu.boka.cn/zhenlu.png';" />
         </div>
         <div class="txt">{{loginUser.linkman}}</div>
       </div>
