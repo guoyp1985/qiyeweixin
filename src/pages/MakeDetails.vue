@@ -342,13 +342,13 @@
          @current-change="handleCurrentChange"
          :header-cell-style="{'text-align':'center'}"
          :cell-style="{'text-align':'center'}">
-           <el-table-column
+           <!-- <el-table-column
              label="选择"
              min-width="60">
                <template slot-scope="scope">
                  <el-radio size="medium" v-model="ideaRadio" :label="scope.row.uid"><i></i></el-radio>
                </template>
-           </el-table-column>
+           </el-table-column> -->
            <el-table-column
             v-if="!isCustomer"
              prop="linkman"
