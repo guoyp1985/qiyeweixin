@@ -367,7 +367,7 @@
              min-width="500">
              <template slot-scope="scope">
                <template v-if="!scope.row.idea || scope.row.idea == ''">无</template>
-               <template v-else>{{scope.row.idea}}</template>
+               <template v-else>{{scope.row.ideaObject.juqing}}</template>
              </template>
            </el-table-column>
            <el-table-column
@@ -1314,6 +1314,10 @@ export default {
           const data = res.data
           const retdata = data.data ? data.data : data
           for (let i = 0; i < retdata.length; i++) {
+            retdata[i].ideaObject = {}
+            if (retdata[i].idea && retdata[i].idea !== '') {
+              retdata[i].ideaObject = JSON.parse(retdata[i].idea)
+            }
             this.inviteObject[retdata[i].uid] = retdata[i]
           }
           this.checkList = data.uids
