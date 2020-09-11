@@ -824,7 +824,7 @@ export default {
       this.postCName = ''
       this.postCPhone = ''
     },
-    submitInvite () {
+    submitAddCustomer () {
       if (this.issubmit) return false
       if (this.postCName === '' || this.postCPhone === '') {
         this.$vux.toast.text('请完善信息', 'middle')
