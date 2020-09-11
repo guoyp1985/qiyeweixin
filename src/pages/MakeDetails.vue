@@ -870,7 +870,8 @@ export default {
     changeIdea (data) {
       this.selectedIdeaData = data
       this.newIdea = data.idea
-      this.showIdeaDialog = true
+      this.ideaObject = data.ideaObject
+      // this.showIdeaDialog = true
     },
     clickIdeaCustomer (data) {
       this.selectedIdeaData = data
