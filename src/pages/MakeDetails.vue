@@ -688,6 +688,27 @@
         <el-button type="primary" @click="submitInvite">确 定</el-button>
       </span>
     </el-dialog>
+     <el-dialog
+       class="inviteDialog"
+       title="添加客户"
+       :visible.sync="showAddCustomer"
+       width="30%"
+       :before-close="handleClose1">
+       <div>
+         <el-input placeholder="姓名" v-model="postCName">
+           <template slot="prepend">姓名</template>
+         </el-input>
+       </div>
+       <div class="mt10">
+         <el-input placeholder="手机号" v-model="postCPhone" type="tel">
+           <template slot="prepend">手机号</template>
+         </el-input>
+       </div>
+       <span slot="footer" class="dialog-footer">
+         <el-button @click="showAddCustomer = false">取 消</el-button>
+         <el-button type="primary" @click="submitAddCustomer">确 定</el-button>
+       </span>
+     </el-dialog>
   </div>
 </template>
 <script>
@@ -754,7 +775,10 @@ export default {
       postName: '',
       postPhone: '',
       showSos: false,
-      sosTxt: ''
+      sosTxt: '',
+      showAddCustomer: false,
+      postCName: '',
+      postCPhone: ''
     }
   },
   methods: {
@@ -792,6 +816,35 @@ export default {
         this.$vux.toast.text(data.error, 'middle')
         if (data.flag) {
           this.showInvite = false
+        }
+      })
+    },
+    handleClose1 () {
+      this.showAddCustomer = false
+      this.postCName = ''
+      this.postCPhone = ''
+    },
+    submitInvite () {
+      if (this.issubmit) return false
+      if (this.postCName === '' || this.postCPhone === '') {
+        this.$vux.toast.text('请完善信息', 'middle')
+        return false
+      }
+      if (!Reg.rPhone.test(this.postCPhone)) {
+        this.$vux.toast.text('请输入正确的手机号', 'middle')
+        return false
+      }
+      this.issubmit = true
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}//api/demands/addCustomer`, {
+        demandid: this.query.id, name: this.postCName, mobile: this.postCPhone
+      }).then(res => {
+        this.$vux.loading.hide()
+        this.issubmit = false
+        const data = res.data
+        this.$vux.toast.text(data.error, 'middle')
+        if (data.flag) {
+          this.showAddCustomer = false
         }
       })
     },
@@ -837,6 +890,9 @@ export default {
       }
       if (this.viewData.cancheckfinal) {
         this.controlBtn.push({id: 11, title: '审核成片', type: 'success'})
+      }
+      if (this.viewData.canedit && (this.isManager || this.isSale)) {
+        this.controlBtn.push({id: 13, title: '添加客户', type: 'primary'})
       }
     },
     buttonEvent (id) {
@@ -888,6 +944,10 @@ export default {
         case 12:
           // 邀请共审 viewData.status > 0 && isCustomer
           this.showInvite = true
+          break
+        case 13:
+          // 添加客户 this.viewData.canedit && (this.isManager || this.isSale)
+          this.showAddCustomer = true
           break
       }
     },
