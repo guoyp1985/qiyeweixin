@@ -261,7 +261,7 @@
          <div class="diff-css" v-if="historyData.price && historyData.price != '' && viewData.price != historyData.price">{{historyData.price}}</div>
        </td>
      </tr>
-     <tr v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">
+     <!-- <tr v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">
        <td class="title">创意梗概</td>
        <td colspan="3">
          <el-input type="textarea" v-model="viewData.myidea" placeholder="请输入创意梗概"></el-input>
@@ -271,7 +271,7 @@
      <tr v-if="viewData.status >= 4">
        <td class="title">创意梗概</td>
        <td colspan="3" class="txt-css">{{viewData.confirmedidea}}</td>
-     </tr>
+     </tr> -->
      <tr v-if="viewData.status === 5 && query.type">
        <td class="title">上传演员身份证及肖像权协议扫描件<span>（只能上传图片）</span></td>
        <td colspan="3" class="align_left">
@@ -370,6 +370,15 @@
                <template v-else>{{scope.row.idea}}</template>
              </template>
            </el-table-column>
+           <el-table-column
+             label="操作"
+             class="align_center"
+             min-width="150">
+               <template slot-scope="scope" v-if="scope.row.ideaid">
+                 <el-button size="mini" type="primary" @click="changeIdea(scope.row)">修改</el-button>
+                 <el-button size="mini" type="primary" @click="clickIdeaCustomer(scope.row)">提交客户</el-button>
+               </template>
+           </el-table-column>
        </el-table>
         <div class="align_center mt20" v-if="viewData.status === 2">
           <el-button
@@ -381,6 +390,62 @@
         </div>
      </template>
    </div>
+   <el-card class="box-card mt20"  v-if="((viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)) || selectedIdeaData || viewData.status >= 4">
+    <div slot="header" class="clearfix">
+      <span>创意梗概</span>
+      <el-button style="float: right; padding: 3px 0" type="text" @click="submitIdeaEvent">提交</el-button>
+    </div>
+    <div class="text item">
+      <table class="idea-table">
+        <tr>
+          <td>项目</td>
+          <td>请按照如下格式编写创意梗概，注意控制字数</td>
+          <td v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">举例</td>
+        </tr>
+        <tr>
+          <td>场景</td>
+          <td>
+            <el-input v-model="ideaObject.changjing" max="30" placeholder="交代场景(一两组词)【30字以内】"></el-input>
+          </td>
+          <td v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">办公室内</td>
+        </tr>
+        <tr>
+          <td>人物和关系</td>
+          <td>
+            <el-input v-model="ideaObject.rwgx" max="30" placeholder="交代人物(含性别年龄)和关系【30字以内】"></el-input>
+          </td>
+          <td v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">男女两位同事</td>
+        </tr>
+        <tr>
+          <td>剧情概括</td>
+          <td>
+            <el-input
+              v-model="ideaObject.juqing"
+              max="150"
+              type="textarea"
+              :rows="10"
+              placeholder="剧情的简单描述，不需要体现台词，不需要画面感，仅提供创意方向和剧情梗概【150字以内】">
+            </el-input>
+          </td>
+          <td v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">男主朋友亲属患重疾呼吁捐款，一边给朋友捐款转账一边跟身旁的女主议论，说如果家里亲属患重疾真的对家庭压力大，朋友们捐这点儿估计也帮不上大忙，女主很同意男主观点，说自己一直想给家人申请重疾险，最近看了个比较好的产品，拿出手机跟男主一起研究产品和服务内容，最后双双提出了申请，还招呼镜头前的观众一起申请。</td>
+        </tr>
+        <tr>
+          <td>重点部分</td>
+          <td>
+            <el-input v-model="ideaObject.zhongdian" max="30" placeholder="例如如何引出广告产品（服务）【30字以内】"></el-input>
+          </td>
+          <td v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">女同事拿出手机，录屏出产品介绍。</td>
+        </tr>
+        <tr>
+          <td>视频风格</td>
+          <td>
+            <el-input v-model="ideaObject.fengge" max="30" placeholder="描述视频风格【30字以内】"></el-input>
+          </td>
+          <td v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">从凝重到轻松。</td>
+        </tr>
+      </table>
+    </div>
+  </el-card>
    <div class="scroll-container" v-if="viewData.ideas && viewData.ideas.length && viewData.status === 3">
      <el-table
        :data="viewData.ideas"
@@ -667,70 +732,42 @@
        </div>
      </div>
    </div>
-    <el-dialog
-      class="inviteDialog"
-      title="邀请共审"
-      :visible.sync="showInvite"
-      width="30%"
-      :before-close="handleClose">
-      <div>
-        <el-input placeholder="姓名" v-model="postName">
-          <template slot="prepend">姓名</template>
-        </el-input>
-      </div>
-      <div class="mt10">
-        <el-input placeholder="手机号" v-model="postPhone" type="tel">
-          <template slot="prepend">手机号</template>
-        </el-input>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="showInvite = false">取 消</el-button>
-        <el-button type="primary" @click="submitInvite">确 定</el-button>
-      </span>
-    </el-dialog>
-     <el-dialog
-       class="inviteDialog"
-       title="添加客户"
-       :visible.sync="showAddCustomer"
-       width="30%"
-       :before-close="handleClose1">
-       <div>
-         <el-input placeholder="姓名" v-model="postCName">
-           <template slot="prepend">姓名</template>
-         </el-input>
-       </div>
-       <div class="mt10">
-         <el-input placeholder="手机号" v-model="postCPhone" type="tel">
-           <template slot="prepend">手机号</template>
-         </el-input>
-       </div>
-       <span slot="footer" class="dialog-footer">
-         <el-button @click="showAddCustomer = false">取 消</el-button>
-         <el-button type="primary" @click="submitAddCustomer">确 定</el-button>
-       </span>
-     </el-dialog>
-     <el-dialog
-       class="inviteDialog"
-       :title="dialogTitle"
-       :visible.sync="showUserDialog"
-       width="30%"
-       :before-close="closeUserDialog">
-       <div>
-         <el-input placeholder="手机号" v-model="uPhone" type="tel">
-           <template slot="prepend">手机号</template>
-           <el-button slot="append" icon="el-icon-search" @click="searchUser"></el-button>
-         </el-input>
-       </div>
-       <div class="mt10">
-         <el-input v-model="uName" :disabled="true">
-           <template slot="prepend">姓名</template>
-         </el-input>
-       </div>
-       <span slot="footer" class="dialog-footer">
-         <el-button @click="showUserDialog = false">取 消</el-button>
-         <el-button type="primary" @click="submitUserEvent">确 定</el-button>
-       </span>
-     </el-dialog>
+   <el-dialog
+     class="inviteDialog"
+     :title="dialogTitle"
+     :visible.sync="showUserDialog"
+     width="30%"
+     :before-close="closeUserDialog">
+     <div>
+       <el-input placeholder="手机号" v-model="uPhone" type="tel">
+         <template slot="prepend">手机号</template>
+         <el-button slot="append" icon="el-icon-search" @click="searchUser"></el-button>
+       </el-input>
+     </div>
+     <div class="mt10">
+       <el-input v-model="uName" :disabled="true">
+         <template slot="prepend">姓名</template>
+       </el-input>
+     </div>
+     <span slot="footer" class="dialog-footer">
+       <el-button @click="showUserDialog = false">取 消</el-button>
+       <el-button type="primary" @click="submitUserEvent">确 定</el-button>
+     </span>
+   </el-dialog>
+   <el-dialog
+     class="inviteDialog"
+     title="修改创意"
+     :visible.sync="showIdeaDialog"
+     width="30%"
+     :before-close="closeIdeaDialog">
+     <div>
+       <el-input v-model="newIdea" type="textarea" :rows="10" placeholder="请输入修改的创意"></el-input>
+     </div>
+     <span slot="footer" class="dialog-footer">
+       <el-button @click="showIdeaDialog = false">取 消</el-button>
+       <el-button type="primary" @click="submitIdeaEvent">确 定</el-button>
+     </span>
+   </el-dialog>
   </div>
 </template>
 <script>
@@ -793,22 +830,89 @@ export default {
       modalType: '',
       disUploadBtn1: false,
       disUploadBtn2: false,
-      showInvite: false,
-      postName: '',
-      postPhone: '',
       showSos: false,
       sosTxt: '',
-      showAddCustomer: false,
-      postCName: '',
-      postCPhone: '',
       showUserDialog: false,
       uName: '',
       uPhone: '',
       submitUser: null,
-      dialogTitle: ''
+      dialogTitle: '',
+      showIdeaDialog: false,
+      selectedIdeaData: null,
+      newIdea: '',
+      ideaObject: {}
     }
   },
   methods: {
+    changeIdea (data) {
+      this.selectedIdeaData = data
+      this.newIdea = data.idea
+      this.showIdeaDialog = true
+    },
+    clickIdeaCustomer (data) {
+      this.selectedIdeaData = data
+    },
+    closeIdeaDialog () {
+      this.showIdeaDialog = false
+      this.newIdea = ''
+    },
+    _submitIdeaEvent () {
+      if (this.issubmit) return false
+      if (this.newIdea === '') {
+        this.$vux.toast.text('请输入创意', 'middle')
+        return false
+      }
+      this.$http.post(`${ENV.BokaApi}/api/demands/addIdea`, {
+        id: this.query.id, idea: this.newIdea, ideaid: this.selectedIdeaData.ideaid
+      }).then(res => {
+        this.$vux.loading.hide()
+        this.issubmit = false
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              this.showIdeaDialog = false
+              this.refresh()
+            }
+          }
+        })
+      })
+    },
+    submitIdeaEvent () {
+      if (this.issubmit) return false
+      let ideaParams = {...this.ideaObject}
+      // if (ideaParams.changjing === '' && ideaParams.rwgx === '' && ideaParams.juqing === '' && ideaParams.zhongdian === '' && ideaParams.fengge === '') {
+      if (ideaParams.juqing === '') {
+        this.$vux.toast.text('请填写剧情', 'middle')
+        return false
+      }
+      this.issubmit = true
+      let selectedIndex = 0
+      let postData = {id: this.query.id, idea: JSON.stringify(ideaParams)}
+      if (this.selectedIdeaData && this.selectedIdeaData.ideaid) {
+        postData.ideaid = this.selectedIdeaData.ideaid
+        selectedIndex = 3
+      }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/addIdea`, postData).then(res => {
+        this.issubmit = false
+        this.$vux.loading.hide()
+        let data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              this.$router.push({path: '/myOrder', query: {type: this.query.type, selectedIndex: selectedIndex}})
+            }
+          }
+        })
+      })
+    },
     closeUserDialog () {
       this.showUserDialog = false
       this.uName = ''
@@ -870,64 +974,6 @@ export default {
       if (this.query.type) params.type = this.query.type
       this.$router.push({path: '/fenjing', query: params})
     },
-    handleClose () {
-      this.showInvite = false
-      this.postName = ''
-      this.postPhone = ''
-    },
-    submitInvite () {
-      if (this.issubmit) return false
-      if (this.postName === '' || this.postPhone === '') {
-        this.$vux.toast.text('请完善信息', 'middle')
-        return false
-      }
-      if (!Reg.rPhone.test(this.postPhone)) {
-        this.$vux.toast.text('请输入正确的手机号', 'middle')
-        return false
-      }
-      this.issubmit = true
-      this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/addCustomer`, {
-        demandid: this.query.id, name: this.postName, mobile: this.postPhone
-      }).then(res => {
-        this.$vux.loading.hide()
-        this.issubmit = false
-        const data = res.data
-        this.$vux.toast.text(data.error, 'middle')
-        if (data.flag) {
-          this.showInvite = false
-        }
-      })
-    },
-    handleClose1 () {
-      this.showAddCustomer = false
-      this.postCName = ''
-      this.postCPhone = ''
-    },
-    submitAddCustomer () {
-      if (this.issubmit) return false
-      if (this.postCName === '' || this.postCPhone === '') {
-        this.$vux.toast.text('请完善信息', 'middle')
-        return false
-      }
-      if (!Reg.rPhone.test(this.postCPhone)) {
-        this.$vux.toast.text('请输入正确的手机号', 'middle')
-        return false
-      }
-      this.issubmit = true
-      this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/addCustomer`, {
-        demandid: this.query.id, name: this.postCName, mobile: this.postCPhone
-      }).then(res => {
-        this.$vux.loading.hide()
-        this.issubmit = false
-        const data = res.data
-        this.$vux.toast.text(data.error, 'middle')
-        if (data.flag) {
-          this.showAddCustomer = false
-        }
-      })
-    },
     handleBtn () {
       this.controlBtn = []
       if (this.viewData.status < 100 && (this.isManager || this.isSale)) {
@@ -952,9 +998,9 @@ export default {
         this.controlBtn.push({id: 6, title: '提交创意', type: 'danger'})
       }
       // 个性创意梗概
-      if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
-        this.controlBtn.push({id: 7, title: '提交', type: 'success'})
-      }
+      // if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
+      //   this.controlBtn.push({id: 7, title: '提交', type: 'success'})
+      // }
       if (this.query.type) {
         if (this.query.type === 'ongoing') {
           if (this.viewData.status === 5) {
@@ -971,7 +1017,7 @@ export default {
       if (this.viewData.cancheckfinal) {
         this.controlBtn.push({id: 11, title: '审核成片', type: 'success'})
       }
-      if (this.viewData.canedit && (this.isManager || this.isSale)) {
+      if (this.viewData.canaddcustomer && this.viewData.status === 0) {
         this.controlBtn.push({id: 13, title: '添加客户', type: 'primary'})
       }
     },
@@ -1023,7 +1069,6 @@ export default {
           break
         case 12:
           // 邀请共审 viewData.status > 0 && isCustomer
-          // this.showInvite = true
           this.dialogTitle = '邀请共审'
           this.showUserDialog = true
           break
@@ -1582,6 +1627,16 @@ export default {
           this.allowEdit = false
         }
         this.viewData = retdata
+        if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
+          if (retdata.myidea && retdata.myidea !== '') {
+            this.ideaObject = JSON.parse(retdata.myidea)
+          }
+        }
+        if (this.viewData.status >= 4) {
+          if (retdata.confirmedidea && retdata.confirmedidea !== '') {
+            this.ideaObject = JSON.parse(retdata.confirmedidea)
+          }
+        }
         if (data.historydata) this.historyData = data.historydata
         if (this.viewData.starttime) {
           this.viewData.starttime_str = new Time(this.viewData.starttime * 1000).dateFormat('yyyy-MM-dd')
@@ -1742,6 +1797,17 @@ export default {
     .el-table__row{
       cursor: pointer;
     }
+  }
+  .idea-table{
+    width: 99.9%;
+    border-collapse: collapse;
+    td{
+      border: 1px solid #333;padding:5px 10px;box-sizing:border-box;
+    }
+    tr:nth-child(1){font-weight:bold;text-align:center;}
+    tr td:nth-child(1){width:100px;text-align:center;}
+    tr td:nth-child(2){width:50%;}
+    tr td:nth-child(3){background-color:#797373;color:#fff;}
   }
 }
 .users-box{
