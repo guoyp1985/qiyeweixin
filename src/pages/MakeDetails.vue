@@ -413,9 +413,9 @@
            </el-table-column>
        </el-table>
         <div class="align_center mt20" v-if="viewData.status === 2">
-          <el-button
+          <!-- <el-button
             type="primary"
-            @click="onSubmit2">提交选择</el-button>
+            @click="onSubmit2">提交选择</el-button> -->
           <el-button
             type="primary"
             @click="chooseUser">新增邀请</el-button>
@@ -881,8 +881,10 @@ export default {
     },
     clickIdeaCustomer (itemdata) {
       this.selectedIdeaData = itemdata
+      let tip = '确定要提交客户吗？'
+      if (this.isCustomer) tip = '确定要确认这个创意吗？'
       this.$vux.confirm.show({
-        content: `确定要提交客户吗？`,
+        content: tip,
         onConfirm: () => {
           this.issubmit = true
           this.$vux.loading.show()
