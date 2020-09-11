@@ -7,13 +7,13 @@
      </tr>
      <tr v-if="query.id">
        <td class="title">项目编号</td>
-       <td colspan="3" class="align_left pl15 pr15">{{viewData.demandno}}</td>
+       <td colspan="3" class="txt-css">{{viewData.demandno}}</td>
      </tr>
      <tr>
        <td class="title">项目名称<span v-if="allowEdit">*</span></td>
        <td colspan="3">
          <el-input v-if="allowEdit" v-model="viewData.title" placeholder="请输入项目名称"></el-input>
-         <template v-else>{{viewData.title}}</template>
+         <div class="txt-css" v-else>{{viewData.title}}</div>
          <div class="diff-css" v-if="historyData.title && historyData.title != '' && viewData.title != historyData.title">{{historyData.title}}</div>
        </td>
      </tr>
@@ -21,7 +21,7 @@
        <td class="title">品牌名称</td>
        <td>
          <el-input v-if="allowEdit" v-model="viewData.brand" placeholder="请输入品牌名称"></el-input>
-         <template v-else>{{viewData.brand}}</template>
+         <div class="txt-css" v-else>{{viewData.brand}}</div>
          <div class="diff-css" v-if="historyData.brand && historyData.brand != '' && viewData.brand != historyData.brand">{{historyData.brand}}</div>
        </td>
        <td class="title">视频类型<span v-if="allowEdit">*</span></td>
@@ -34,7 +34,7 @@
               :value="item.value">
            </el-option>
           </el-select>
-         <template v-else>{{fieldsData.videotype[viewData.videotype]}}</template>
+         <div class="txt-css" v-else>{{fieldsData.videotype[viewData.videotype]}}</div>
          <div class="diff-css" v-if="historyData.videotype && historyData.videotype != '' && viewData.videotype != historyData.videotype">{{fieldsData.videotype[historyData.videotype]}}</div>
        </td>
      </tr>
@@ -42,13 +42,13 @@
        <td class="title">产品名称</td>
        <td>
          <el-input v-if="allowEdit" v-model="viewData.product" placeholder="请输入产品名称"></el-input>
-         <template v-else>{{viewData.product}}</template>
+         <div class="txt-css" v-else>{{viewData.product}}</div>
          <div class="diff-css" v-if="historyData.product && historyData.product != '' && viewData.product != historyData.product">{{historyData.product}}</div>
        </td>
        <td class="title">效果目标</td>
        <td>
          <el-input v-if="allowEdit" v-model="viewData.target" placeholder="请输入效果目标"></el-input>
-         <template v-else>{{viewData.target}}</template>
+         <div class="txt-css" v-else>{{viewData.target}}</div>
          <div class="diff-css" v-if="historyData.target && historyData.target != '' && viewData.target != historyData.target">{{historyData.target}}</div>
        </td>
      </tr>
@@ -63,7 +63,7 @@
               :value="item.value">
            </el-option>
          </el-select>
-         <div v-else>{{fieldsData.duration[viewData.duration]}}</div>
+         <div class="txt-css" v-else>{{fieldsData.duration[viewData.duration]}}</div>
          <div class="diff-css" v-if="historyData.duration && historyData.duration != '' && viewData.duration != historyData.duration">{{fieldsData.videotype[historyData.duration]}}</div>
         </td>
         <td class="title">视频比例<span v-if="allowEdit">*</span></td>
@@ -76,7 +76,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <div v-else>{{fieldsData.ratio[viewData.ratio]}}</div>
+          <div class="txt-css" v-else>{{fieldsData.ratio[viewData.ratio]}}</div>
           <div class="diff-css" v-if="historyData.ratio && historyData.ratio != '' && viewData.ratio != historyData.ratio">{{fieldsData.videotype[historyData.ratio]}}</div>
         </td>
      </tr>
@@ -84,7 +84,7 @@
        <td class="title">视频数量</td>
        <td>
          <el-input v-if="allowEdit" v-model="viewData.videocount" placeholder="请输入视频数量"></el-input>
-         <div v-else>{{viewData.videocount}}</div>
+         <div class="txt-css" v-else>{{viewData.videocount}}</div>
          <div class="diff-css" v-if="historyData.videocount && historyData.videocount != '' && viewData.videocount != historyData.videocount">{{historyData.videocount}}</div>
        </td>
        <td class="title">视频分类<span v-if="allowEdit">*</span></td>
@@ -97,7 +97,7 @@
               :value="item.value">
            </el-option>
          </el-select>
-         <div v-else>{{fieldsData.videoclass[viewData.videoclass]}}</div>
+         <div class="txt-css" v-else>{{fieldsData.videoclass[viewData.videoclass]}}</div>
          <div class="diff-css" v-if="historyData.videoclass && historyData.videoclass != '' && viewData.videoclass != historyData.videoclass">{{fieldsData.videotype[historyData.videoclass]}}</div>
         </td>
       </tr>
@@ -111,7 +111,7 @@
             value-format="yyyy-MM-dd"
             placeholder="选择立项日期">
           </el-date-picker>
-         <div v-else>{{viewData.starttime_str}}</div>
+         <div class="txt-css" v-else>{{viewData.starttime_str}}</div>
          <div class="diff-css" v-if="historyData.starttime && historyData.starttime != '' && viewData.starttime != historyData.starttime">{{historyData.starttime_str}}</div>
         </td>
         <td class="title">交付日期<span v-if="allowEdit">*</span></td>
@@ -123,7 +123,7 @@
              value-format="yyyy-MM-dd"
              placeholder="选择交付日期">
            </el-date-picker>
-          <div v-else>{{viewData.endtime_str}}</div>
+          <div class="txt-css" v-else>{{viewData.endtime_str}}</div>
           <div class="diff-css" v-if="historyData.endtime && historyData.endtime != '' && viewData.endtime != historyData.endtime">{{historyData.endtime_str}}</div>
         </td>
       </tr>
@@ -138,7 +138,7 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <div v-else>{{fieldsData.logo_all[viewData.logo_all]}}</div>
+        <div class="txt-css" v-else>{{fieldsData.logo_all[viewData.logo_all]}}</div>
         <div class="diff-css" v-if="historyData.logo_all && historyData.logo_all != '' && viewData.logo_all != historyData.logo_all">{{fieldsData.videotype[historyData.logo_all]}}</div>
       </td>
       <td class="title">片尾LOGO<span v-if="allowEdit">*</span></td>
@@ -151,7 +151,7 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <div v-else>{{fieldsData.logo_end[viewData.logo_end]}}</div>
+        <div class="txt-css" v-else>{{fieldsData.logo_end[viewData.logo_end]}}</div>
         <div class="diff-css" v-if="historyData.logo_end && historyData.logo_end != '' && viewData.logo_end != historyData.logo_end">{{fieldsData.videotype[historyData.logo_end]}}</div>
       </td>
      </tr>
@@ -187,7 +187,7 @@
        <td class="title">相关链接</td>
        <td colspan="3">
          <el-input v-if="allowEdit" v-model="viewData.linkurl" placeholder="请输入相关链接"></el-input>
-         <div v-else>{{viewData.linkurl}}</div>
+         <div class="txt-css" v-else>{{viewData.linkurl}}</div>
          <div class="diff-css" v-if="historyData.linkurl && historyData.linkurl != '' && viewData.linkurl != historyData.linkurl">{{historyData.linkurl}}</div>
        </td>
      </tr>
@@ -195,7 +195,7 @@
        <td class="title">客户诉求</td>
        <td colspan="3">
          <el-input v-if="allowEdit" v-model="viewData.customerdemand" placeholder="请输入投诉内容"></el-input>
-         <div v-else>{{viewData.customerdemand}}</div>
+         <div class="txt-css" v-else>{{viewData.customerdemand}}</div>
          <div class="diff-css" v-if="historyData.customerdemand && historyData.customerdemand != '' && viewData.customerdemand != historyData.customerdemand">{{historyData.customerdemand}}</div>
        </td>
      </tr>
@@ -203,7 +203,7 @@
        <td class="title">客户信息</td>
        <td colspan="3">
          <el-input v-if="allowEdit" v-model="viewData.customerinfo" placeholder="请输入客户信息"></el-input>
-         <div v-else>{{viewData.customerinfo}}</div>
+         <div class="txt-css" v-else>{{viewData.customerinfo}}</div>
          <div class="diff-css" v-if="historyData.customerinfo && historyData.customerinfo != '' && viewData.customerinfo != historyData.customerinfo">{{historyData.customerinfo}}</div>
        </td>
      </tr>
@@ -211,7 +211,7 @@
        <td class="title">产品定位</td>
        <td colspan="3">
          <el-input v-if="allowEdit" v-model="viewData.productorientation" placeholder="请输入产品定位"></el-input>
-         <div v-else>{{viewData.productorientation}}</div>
+         <div class="txt-css" v-else>{{viewData.productorientation}}</div>
          <div class="diff-css" v-if="historyData.productorientation && historyData.productorientation != '' && viewData.productorientation != historyData.productorientation">{{historyData.productorientation}}</div>
        </td>
      </tr>
@@ -219,7 +219,7 @@
        <td class="title">产品卖点<span class="font12 color-gray5">（核心卖点需标注）</span></td>
        <td colspan="3">
          <el-input v-if="allowEdit" type="textarea" v-model="viewData.sellerpoint" placeholder="请输入产品卖点"></el-input>
-         <div v-else>{{viewData.sellerpoint}}</div>
+         <div class="txt-css" v-else>{{viewData.sellerpoint}}</div>
          <div class="diff-css" v-if="historyData.sellerpoint && historyData.sellerpoint != '' && viewData.sellerpoint != historyData.sellerpoint">{{historyData.sellerpoint}}</div>
        </td>
      </tr>
@@ -227,37 +227,37 @@
        <td class="title">视频内必须展示的关键信息</td>
        <td colspan="3">
          <el-input v-if="allowEdit" type="textarea" v-model="viewData.keyinfo" placeholder="请输入关键信息"></el-input>
-         <div v-else>{{viewData.keyinfo}}</div>
+         <div class="txt-css" v-else>{{viewData.keyinfo}}</div>
          <div class="diff-css" v-if="historyData.keyinfo && historyData.keyinfo != '' && viewData.keyinfo != historyData.keyinfo">{{historyData.keyinfo}}</div>
        </td>
      </tr>
      <tr v-if="viewData.status >= 2 && !isCustomer">
        <td class="title">拍摄价格</td>
-       <td colspan="3">{{viewData.price_out}}</td>
+       <td colspan="3" class="txt-css">{{viewData.price_out}}</td>
      </tr>
      <tr>
        <td class="title">创意思路</td>
        <td colspan="3">
          <el-input v-if="allowEdit" type="textarea" v-model="viewData.customeridea" placeholder="请输入创意思路"></el-input>
-         <div v-else>{{viewData.customeridea}}</div>
+         <div class="txt-css" v-else>{{viewData.customeridea}}</div>
          <div class="diff-css" v-if="historyData.customeridea && historyData.customeridea != '' && viewData.customeridea != historyData.customeridea">{{historyData.customeridea}}</div>
        </td>
      </tr>
      <tr v-if="isManager || isSale">
        <td class="title">客户资料</td>
-       <td colspan="3">{{viewData.customerdata}}</td>
+       <td colspan="3" class="txt-css">{{viewData.customerdata}}</td>
      </tr>
      <tr>
        <td class="title">特殊备注</td>
        <td :colspan="query.type ? 3 : ''">
          <el-input v-if="allowEdit" v-model="viewData.otherdemand" placeholder="请输入特殊备注"></el-input>
-         <div v-else>{{viewData.otherdemand}}</div>
+         <div class="txt-css" v-else>{{viewData.otherdemand}}</div>
          <div class="diff-css" v-if="historyData.otherdemand && historyData.otherdemand != '' && viewData.otherdemand != historyData.otherdemand">{{historyData.otherdemand}}</div>
        </td>
        <td class="title" v-if="!query.type">制作价格</td>
        <td v-if="!query.type">
          <el-input v-if="allowEdit" v-model="viewData.price" placeholder="请输入制作价格"></el-input>
-         <div v-else>{{viewData.price}}</div>
+         <div class="txt-css" v-else>{{viewData.price}}</div>
          <div class="diff-css" v-if="historyData.price && historyData.price != '' && viewData.price != historyData.price">{{historyData.price}}</div>
        </td>
      </tr>
@@ -270,7 +270,7 @@
      </tr>
      <tr v-if="viewData.status >= 4">
        <td class="title">创意梗概</td>
-       <td colspan="3">{{viewData.confirmedidea}}</td>
+       <td colspan="3" class="txt-css">{{viewData.confirmedidea}}</td>
      </tr>
      <tr v-if="viewData.status === 5 && query.type">
        <td class="title">上传演员身份证及肖像权协议扫描件<span>（只能上传图片）</span></td>
@@ -1706,6 +1706,7 @@ export default {
   .sos-area{
     width:100%;display:flex;justify-content: center;align-items: center;color:#ff0000;
   }
+  .txt-css{text-align:left;padding:0 15px;box-sizing: border-box;}
   .diff-css{color:#ff0000;text-decoration:line-through;text-align:left;padding:0 15px 5px;}
   .add-make-list{
     width: 99.9%;
