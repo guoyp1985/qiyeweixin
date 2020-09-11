@@ -709,6 +709,28 @@
          <el-button type="primary" @click="submitAddCustomer">确 定</el-button>
        </span>
      </el-dialog>
+     <el-dialog
+       class="inviteDialog"
+       :title="dialogTitle"
+       :visible.sync="showUserDialog"
+       width="30%"
+       :before-close="closeUserDialog">
+       <div>
+         <el-input placeholder="手机号" v-model="uPhone" type="tel">
+           <template slot="prepend">手机号</template>
+           <el-button slot="append" icon="el-icon-search" @click="searchUser"></el-button>
+         </el-input>
+       </div>
+       <div class="mt10">
+         <el-input v-model="uName" :disabled="true">
+           <template slot="prepend">姓名</template>
+         </el-input>
+       </div>
+       <span slot="footer" class="dialog-footer">
+         <el-button @click="showUserDialog = false">取 消</el-button>
+         <el-button type="primary" @click="submitUser">确 定</el-button>
+       </span>
+     </el-dialog>
   </div>
 </template>
 <script>
@@ -778,12 +800,70 @@ export default {
       sosTxt: '',
       showAddCustomer: false,
       postCName: '',
-      postCPhone: ''
+      postCPhone: '',
+      showUserDialog: false,
+      uName: '',
+      uPhone: '',
+      submitUser: null,
+      dialogTitle: ''
     }
   },
   methods: {
-    toLink (link) {
-      this.$router.push({path: link})
+    closeUserDialog () {
+      this.showUserDialog = false
+      this.uName = ''
+      this.uPhone = ''
+    },
+    searchUser () {
+      if (this.issubmit) return false
+      this.uName = ''
+      this.submitUser = null
+      if (this.uPhone === '') {
+        this.$vux.toast.text('请输入手机号', 'middle')
+        return false
+      }
+      if (!Reg.rPhone.test(this.uPhone)) {
+        this.$vux.toast.text('请输入正确的手机号', 'middle')
+        return false
+      }
+      this.$http.post(`${ENV.BokaApi}/api/user/getList`, {
+        keyword: this.uPhone
+      }).then(res => {
+        this.$vux.loading.hide()
+        this.issubmit = false
+        const data = res.data
+        if (data.flag) {
+          const retdata = data.data
+          if (!retdata.length) {
+            this.$vux.toast.text('暂无搜索结果', 'middle')
+            return false
+          }
+          this.uName = retdata[0].linkman
+          this.submitUser = retdata[0]
+        } else {
+          this.$vux.toast.text(data.error, 'middle')
+        }
+      })
+    },
+    submitUser () {
+      if (this.issubmit) return false
+      if (!this.submitUser || !this.submitUser.uid) {
+        this.$vux.toast.text('请先搜索用户', 'middle')
+        return false
+      }
+      this.issubmit = true
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/addCustomer`, {
+        demandid: this.query.id, name: this.submitUser.linkman, mobile: this.submitUser.mobile
+      }).then(res => {
+        this.$vux.loading.hide()
+        this.issubmit = false
+        const data = res.data
+        this.$vux.toast.text(data.error, 'middle')
+        if (data.flag) {
+          this.showUserDialog = false
+        }
+      })
     },
     toFenjing () {
       let params = {id: parseInt(this.query.id)}
@@ -807,7 +887,7 @@ export default {
       }
       this.issubmit = true
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}//api/demands/addCustomer`, {
+      this.$http.post(`${ENV.BokaApi}/api/demands/addCustomer`, {
         demandid: this.query.id, name: this.postName, mobile: this.postPhone
       }).then(res => {
         this.$vux.loading.hide()
@@ -836,7 +916,7 @@ export default {
       }
       this.issubmit = true
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}//api/demands/addCustomer`, {
+      this.$http.post(`${ENV.BokaApi}/api/demands/addCustomer`, {
         demandid: this.query.id, name: this.postCName, mobile: this.postCPhone
       }).then(res => {
         this.$vux.loading.hide()
@@ -943,11 +1023,14 @@ export default {
           break
         case 12:
           // 邀请共审 viewData.status > 0 && isCustomer
-          this.showInvite = true
+          // this.showInvite = true
+          this.dialogTitle = '邀请共审'
+          this.showUserDialog = true
           break
         case 13:
           // 添加客户 this.viewData.canedit && (this.isManager || this.isSale)
-          this.showAddCustomer = true
+          this.dialogTitle = '添加客户'
+          this.showUserDialog = true
           break
       }
     },
