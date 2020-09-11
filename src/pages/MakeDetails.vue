@@ -400,6 +400,7 @@
                <template slot-scope="scope" v-if="scope.row.ideaid">
                  <el-button size="mini" type="primary" @click="changeIdea(scope.row)">修改</el-button>
                  <el-button size="mini" type="primary" @click="clickIdeaCustomer(scope.row)">提交客户</el-button>
+                 <el-button class="mt10" size="mini" type="primary" @click="clickBack(scope.row)">驳回</el-button>
                </template>
            </el-table-column>
        </el-table>
@@ -779,16 +780,15 @@
    </el-dialog>
    <el-dialog
      class="inviteDialog"
-     title="修改创意"
-     :visible.sync="showIdeaDialog"
-     width="30%"
-     :before-close="closeIdeaDialog">
+     title="驳回"
+     :visible.sync="showBackDialog"
+     width="30%">
      <div>
-       <el-input v-model="newIdea" type="textarea" :rows="10" placeholder="请输入修改的创意"></el-input>
+       <el-input placeholder="请输入驳回原因" v-model="backReason" type="textarea" :rows="10"></el-input>
      </div>
      <span slot="footer" class="dialog-footer">
-       <el-button @click="showIdeaDialog = false">取 消</el-button>
-       <el-button type="primary" @click="submitIdeaEvent">确 定</el-button>
+       <el-button @click="showBackDialog = false">取 消</el-button>
+       <el-button type="primary" @click="submitBack">确 定</el-button>
      </span>
    </el-dialog>
   </div>
@@ -860,45 +860,71 @@ export default {
       uPhone: '',
       submitUser: null,
       dialogTitle: '',
-      showIdeaDialog: false,
       selectedIdeaData: null,
       newIdea: '',
-      ideaObject: {}
+      ideaObject: {},
+      backReason: '',
+      showBackDialog: false
     }
   },
   methods: {
-    changeIdea (data) {
-      this.selectedIdeaData = data
-      this.newIdea = data.idea
-      this.ideaObject = data.ideaObject
-      // this.showIdeaDialog = true
+    changeIdea (itemdata) {
+      this.selectedIdeaData = itemdata
+      this.newIdea = itemdata.idea
+      this.ideaObject = itemdata.ideaObject
     },
-    clickIdeaCustomer (data) {
-      this.selectedIdeaData = data
+    clickIdeaCustomer (itemdata) {
+      this.selectedIdeaData = itemdata
+      this.$vux.confirm.show({
+        content: `确定要提交客户吗？`,
+        onConfirm: () => {
+          this.issubmit = true
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/demands/censor`, {
+            module: 'ideas', id: this.selectedIdeaData.ideaid, agree: 1
+          }).then(res => {
+            this.$vux.loading.hide()
+            this.issubmit = false
+            let data = res.data
+            this.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: this.$util.delay(data.error),
+              onHide: () => {
+                if (data.flag === 1) {
+                  this.refresh()
+                }
+              }
+            })
+          })
+        }
+      })
     },
-    closeIdeaDialog () {
-      this.showIdeaDialog = false
-      this.newIdea = ''
+    clickBack (itemdata) {
+      this.selectedIdeaData = itemdata
+      this.backReason = ''
+      this.showBackDialog = true
     },
-    _submitIdeaEvent () {
+    submitBack () {
       if (this.issubmit) return false
-      if (this.newIdea === '') {
-        this.$vux.toast.text('请输入创意', 'middle')
+      if (this.backReason === '') {
+        this.$vux.toast.text('请输入驳回原因', 'middle')
         return false
       }
-      this.$http.post(`${ENV.BokaApi}/api/demands/addIdea`, {
-        id: this.query.id, idea: this.newIdea, ideaid: this.selectedIdeaData.ideaid
+      this.issubmit = true
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/censor`, {
+        module: 'ideas', id: this.selectedIdeaData.ideaid, agree: 0, reason: this.backReason
       }).then(res => {
-        this.$vux.loading.hide()
         this.issubmit = false
-        const data = res.data
+        this.$vux.loading.hide()
+        let data = res.data
         this.$vux.toast.show({
           text: data.error,
           type: 'text',
           time: this.$util.delay(data.error),
           onHide: () => {
             if (data.flag) {
-              this.showIdeaDialog = false
               this.refresh()
             }
           }
@@ -908,9 +934,8 @@ export default {
     submitIdeaEvent () {
       if (this.issubmit) return false
       let ideaParams = {...this.ideaObject}
-      // if (ideaParams.changjing === '' && ideaParams.rwgx === '' && ideaParams.juqing === '' && ideaParams.zhongdian === '' && ideaParams.fengge === '') {
-      if (ideaParams.juqing === '') {
-        this.$vux.toast.text('请填写剧情', 'middle')
+      if (ideaParams.changjing === '' || ideaParams.rwgx === '' || ideaParams.juqing === '' || ideaParams.zhongdian === '' || ideaParams.fengge === '') {
+        this.$vux.toast.text('请补全创意信息', 'middle')
         return false
       }
       this.issubmit = true
@@ -1452,7 +1477,6 @@ export default {
           this.issubmit = true
           this.$http.post(`${ENV.BokaApi}/api/demands/selectIdea`, params).then(res => {
             let data = res.data
-            this.$vux.toast.text(data.error, 'middle')
             this.$vux.toast.show({
               text: data.error,
               type: (data.flag !== 1 ? 'warn' : 'success'),
