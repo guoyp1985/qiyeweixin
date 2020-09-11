@@ -861,7 +861,6 @@ export default {
       submitUser: null,
       dialogTitle: '',
       selectedIdeaData: null,
-      newIdea: '',
       ideaObject: {},
       backReason: '',
       showBackDialog: false
@@ -870,7 +869,6 @@ export default {
   methods: {
     changeIdea (itemdata) {
       this.selectedIdeaData = itemdata
-      this.newIdea = itemdata.idea
       this.ideaObject = itemdata.ideaObject
     },
     clickIdeaCustomer (itemdata) {
@@ -1796,6 +1794,12 @@ export default {
         this.disTabData4 = false
         this.allowEdit = true
         this.showChooseUser = false
+        this.submitUser = null
+        this.dialogTitle = ''
+        this.selectedIdeaData = null
+        this.ideaObject = {}
+        this.backReason = ''
+        this.showBackDialog = false
         this.$vux.loading.show()
         this.getData()
       }
