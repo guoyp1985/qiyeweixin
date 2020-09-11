@@ -367,7 +367,30 @@
              min-width="500">
              <template slot-scope="scope">
                <template v-if="!scope.row.idea || scope.row.idea == ''">无</template>
-               <template v-else>{{scope.row.ideaObject.juqing}}</template>
+               <template v-else>
+                 <div class="w_100" style="border:#ccc 1px solid;">
+                   <div class="flex_left w_100 b_bottom_after pt5 pb5">
+                     <div style="width:100px;text-align:center;">场景</div>
+                     <div class="flex_cell flex_left">{{scope.row.ideaObject.changjing}}</div>
+                   </div>
+                   <div class="flex_left w_100 b_bottom_after pt5 pb5">
+                     <div style="width:100px;text-align:center;">人物和关系</div>
+                     <div class="flex_cell flex_left">{{scope.row.ideaObject.rwgx}}</div>
+                   </div>
+                   <div class="flex_left w_100 b_bottom_after pt5 pb5">
+                     <div style="width:100px;text-align:center;">剧情概括</div>
+                     <div class="flex_cell flex_left">{{scope.row.ideaObject.juqing}}</div>
+                   </div>
+                   <div class="flex_left w_100 b_bottom_after pt5 pb5">
+                     <div style="width:100px;text-align:center;">重点部分</div>
+                     <div class="flex_cell flex_left">{{scope.row.ideaObject.zhongdian}}</div>
+                   </div>
+                   <div class="flex_left w_100 pt5 pb5">
+                     <div style="width:100px;text-align:center;">视频风格</div>
+                     <div class="flex_cell flex_left">{{scope.row.ideaObject.fengge}}</div>
+                   </div>
+                 </div>
+               </template>
              </template>
            </el-table-column>
            <el-table-column
