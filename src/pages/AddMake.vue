@@ -122,7 +122,7 @@
         </el-select>
       </td>
      </tr>
-     <tr v-if="isManager">
+     <!-- <tr v-if="isManager">
        <td class="title">选择客户</td>
        <td colspan="3" class="align_left">
          <div class="padding10">
@@ -130,7 +130,7 @@
            <el-button v-else type="primary" size="small" @click="clickCustomer">选择客户</el-button>
          </div>
        </td>
-     </tr>
+     </tr> -->
      <tr v-if="isManager && !isSale">
        <td class="title">选择业务员</td>
        <td colspan="3" class="align_left">
@@ -382,13 +382,13 @@ export default {
       if (this.issubmit) return false
       let iscontinue = true
       let params = {...this.submitData}
-      if (this.isManager || this.isSale) {
-        if (!this.selectedCustomerUid) {
-          this.$vux.toast.text('请选择客户', 'middle')
-          return false
-        }
-        params.customer = this.selectedCustomerUid
-      }
+      // if (this.isManager || this.isSale) {
+      //   if (!this.selectedCustomerUid) {
+      //     this.$vux.toast.text('请选择客户', 'middle')
+      //     return false
+      //   }
+      //   params.customer = this.selectedCustomerUid
+      // }
       if (this.selectedSaleUid) params.pm = this.selectedSaleUid
       let attachment = []
       for (let i = 0; i < this.fileList.length; i++) {
