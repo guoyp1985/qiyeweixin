@@ -385,7 +385,9 @@ export default {
           this.$vux.toast.text('请选择客户', 'middle')
           return false
         }
+        params.customer = this.selectedCustomerUid
       }
+      if (this.selectedSaleUid) params.pm = this.selectedSaleUid
       let attachment = []
       for (let i = 0; i < this.fileList.length; i++) {
         let cur = this.fileList[i]
