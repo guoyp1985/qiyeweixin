@@ -419,7 +419,7 @@
       <el-button style="float: right; padding: 3px 0" type="text" @click="submitIdeaEvent">提交</el-button>
     </div>
     <div class="text item">
-      <table class="idea-table">
+      <table :class="`idea-table ${(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier) ? 'three-col' : ''}`">
         <tr>
           <td>项目</td>
           <td>请按照如下格式编写创意梗概，注意控制字数</td>
@@ -1834,8 +1834,10 @@ export default {
     }
     tr:nth-child(1){font-weight:bold;text-align:center;}
     tr td:nth-child(1){width:100px;text-align:center;}
-    tr td:nth-child(2){width:50%;}
     tr td:nth-child(3){background-color:#797373;color:#fff;}
+  }
+  .idea-table.three-col{
+    tr td:nth-child(2){width:50%;}
   }
 }
 .users-box{
