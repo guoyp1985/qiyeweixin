@@ -366,6 +366,7 @@ export default {
         return false
       }
       this.selectedCustomer = this.customerObject[this.selectedCustomerUid]
+      console.log(this.selectedCustomer.uid)
       this.showCustomerDialog = false
     },
     submitSale () {
@@ -374,6 +375,7 @@ export default {
         return false
       }
       this.selectedSale = this.saleObject[this.selectedSaleUid]
+      console.log(this.selectedSale.uid)
       this.showSaleDialog = false
     },
     onSubmit () {
