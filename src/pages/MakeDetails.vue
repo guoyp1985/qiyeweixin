@@ -412,7 +412,7 @@
                </template>
            </el-table-column>
        </el-table>
-        <div class="align_center mt20" v-if="viewData.status === 2">
+        <div class="align_center mt20" v-if="!isCustomer">
           <!-- <el-button
             type="primary"
             @click="onSubmit2">提交选择</el-button> -->
