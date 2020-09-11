@@ -397,10 +397,10 @@
              label="操作"
              class="align_center"
              min-width="150">
-               <template slot-scope="scope" v-if="scope.row.ideaid">
-                 <el-button size="mini" type="primary" @click="changeIdea(scope.row)">修改</el-button>
-                 <el-button size="mini" type="primary" @click="clickIdeaCustomer(scope.row)">提交客户</el-button>
-                 <el-button class="mt10" size="mini" type="primary" @click="clickBack(scope.row)">驳回</el-button>
+               <template slot-scope="scope">
+                 <el-button v-if="scope.row.canedit" size="mini" type="primary" @click="changeIdea(scope.row)">修改</el-button>
+                 <el-button v-if="scope.row.cancheck" size="mini" type="primary" @click="clickIdeaCustomer(scope.row)">提交客户</el-button>
+                 <el-button v-if="scope.row.cancheck" :class="`${scope.row.canedit ? 'mt10' : ''}`" size="mini" type="primary" @click="clickBack(scope.row)">驳回</el-button>
                </template>
            </el-table-column>
        </el-table>
