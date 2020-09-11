@@ -1720,7 +1720,7 @@ export default {
         // if (retdata.confirmedidea) {
         //   this.idea = retdata.confirmedidea
         // }
-        if (retdata.status === 2 && (this.isManager || this.isSale)) {
+        if (retdata.status === 2 && retdata.caninviteinfo) {
           this.getData3()
         }
         if (retdata.attachment && retdata.attachment !== '') {
