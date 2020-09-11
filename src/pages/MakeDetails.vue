@@ -332,7 +332,7 @@
        </td>
      </tr>
    </table>
-   <div v-if="viewData.status == 2 && (isManager || isSale)" class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
+   <div v-if="viewData.status == 2 && viewData.caninviteinfo" class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
      <template v-if="disTabData2">
        <el-table
          :data="tableData2"
@@ -350,11 +350,13 @@
                </template>
            </el-table-column>
            <el-table-column
+            v-if="!isCustomer"
              prop="linkman"
              label="供应商"
              min-width="100">
            </el-table-column>
            <el-table-column
+            v-if="!isCustomer"
              label="手机号码"
              min-width="120">
                <template slot-scope="scope">
