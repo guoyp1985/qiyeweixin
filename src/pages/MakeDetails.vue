@@ -728,7 +728,7 @@
        </div>
        <span slot="footer" class="dialog-footer">
          <el-button @click="showUserDialog = false">取 消</el-button>
-         <el-button type="primary" @click="submitUser">确 定</el-button>
+         <el-button type="primary" @click="submitUserEvent">确 定</el-button>
        </span>
      </el-dialog>
   </div>
@@ -845,7 +845,7 @@ export default {
         }
       })
     },
-    submitUser () {
+    submitUserEvent () {
       if (this.issubmit) return false
       if (!this.submitUser || !this.submitUser.uid) {
         this.$vux.toast.text('请先搜索用户', 'middle')
