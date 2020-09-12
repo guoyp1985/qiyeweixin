@@ -368,31 +368,37 @@
              label="创意梗概"
              min-width="500">
              <template slot-scope="scope">
-               <template v-if="!scope.row.idea || scope.row.idea == ''">无</template>
-               <template v-else>
-                 <div class="w_100" style="border:#ccc 1px solid;">
-                   <div class="flex_left w_100 b_bottom_after pt5 pb5">
-                     <div style="width:100px;text-align:center;">场景</div>
-                     <div class="flex_cell align_left">{{scope.row.ideaObject.changjing}}</div>
-                   </div>
-                   <div class="flex_left w_100 b_bottom_after pt5 pb5">
-                     <div style="width:100px;text-align:center;">人物和关系</div>
-                     <div class="flex_cell align_left">{{scope.row.ideaObject.rwgx}}</div>
-                   </div>
-                   <div class="flex_left w_100 b_bottom_after pt5 pb5">
-                     <div style="width:100px;text-align:center;">剧情概括</div>
-                     <div class="flex_cell align_left">{{scope.row.ideaObject.juqing}}</div>
-                   </div>
-                   <div class="flex_left w_100 b_bottom_after pt5 pb5">
-                     <div style="width:100px;text-align:center;">重点部分</div>
-                     <div class="flex_cell align_left">{{scope.row.ideaObject.zhongdian}}</div>
-                   </div>
-                   <div class="flex_left w_100 pt5 pb5">
-                     <div style="width:100px;text-align:center;">视频风格</div>
-                     <div class="flex_cell align_left">{{scope.row.ideaObject.fengge}}</div>
-                   </div>
-                 </div>
+               <!-- <template v-if="viewData.status == 3">
+                 <template v-if="!scope.row.confirmedidea || scope.row.confirmedidea == ''">无</template>
+                 <template v-else>{{scope.row.confirmedidea}}</template>
                </template>
+               <template v-else> -->
+                 <template v-if="!scope.row.idea || scope.row.idea == ''">无</template>
+                 <template v-else>
+                   <div class="w_100" style="border:#ccc 1px solid;">
+                     <div class="flex_left w_100 b_bottom_after pt5 pb5">
+                       <div style="width:100px;text-align:center;">场景</div>
+                       <div class="flex_cell align_left">{{scope.row.ideaObject.changjing}}</div>
+                     </div>
+                     <div class="flex_left w_100 b_bottom_after pt5 pb5">
+                       <div style="width:100px;text-align:center;">人物和关系</div>
+                       <div class="flex_cell align_left">{{scope.row.ideaObject.rwgx}}</div>
+                     </div>
+                     <div class="flex_left w_100 b_bottom_after pt5 pb5">
+                       <div style="width:100px;text-align:center;">剧情概括</div>
+                       <div class="flex_cell align_left">{{scope.row.ideaObject.juqing}}</div>
+                     </div>
+                     <div class="flex_left w_100 b_bottom_after pt5 pb5">
+                       <div style="width:100px;text-align:center;">重点部分</div>
+                       <div class="flex_cell align_left">{{scope.row.ideaObject.zhongdian}}</div>
+                     </div>
+                     <div class="flex_left w_100 pt5 pb5">
+                       <div style="width:100px;text-align:center;">视频风格</div>
+                       <div class="flex_cell align_left">{{scope.row.ideaObject.fengge}}</div>
+                     </div>
+                   </div>
+                 </template>
+               <!-- </template> -->
              </template>
            </el-table-column>
            <el-table-column
@@ -968,11 +974,9 @@ export default {
         return false
       }
       this.issubmit = true
-      let selectedIndex = 0
       let postData = {id: this.query.id, idea: JSON.stringify(ideaParams)}
       if (this.selectedIdeaData && this.selectedIdeaData.ideaid) {
         postData.ideaid = this.selectedIdeaData.ideaid
-        selectedIndex = 3
       }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/demands/addIdea`, postData).then(res => {
@@ -985,7 +989,7 @@ export default {
           time: this.$util.delay(data.error),
           onHide: () => {
             if (data.flag) {
-              this.$router.push({path: '/myOrder', query: {type: this.query.type, selectedIndex: selectedIndex}})
+              this.refresh()
             }
           }
         })
@@ -1073,12 +1077,12 @@ export default {
         this.controlBtn.push({id: 5, title: '分镜脚本', type: 'primary'})
       }
       if (this.viewData.status === 2 && this.isSupplier) {
-        this.controlBtn.push({id: 6, title: '提交创意', type: 'danger'})
+        this.controlBtn.push({id: 6, title: '提交创意', type: 'success'})
       }
-      // 个性创意梗概
-      // if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
-      //   this.controlBtn.push({id: 7, title: '提交', type: 'success'})
-      // }
+      // 修改创意梗概
+      if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
+        this.controlBtn.push({id: 7, title: '修改创意', type: 'success'})
+      }
       if (this.query.type) {
         if (this.query.type === 'ongoing') {
           if (this.viewData.status === 5) {
@@ -1123,11 +1127,11 @@ export default {
           break
         case 6:
           // 提交创意 viewData.status==2 && groupid==3(isSupplier)
-          this.onInvite3(0)
+          this.showIdeaDialog = true
           break
         case 7:
           // 修改创意梗概 (this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)
-          this.onInvite3(1)
+          this.showIdeaDialog = true
           break
         case 8:
           // 上传样片 query.type === 'ongoing' && viewData.status === 5
@@ -1415,75 +1419,6 @@ export default {
           this.tableData4 = retdata
           this.disTabData4 = true
         }
-      })
-    },
-    onInvite () {
-      if (this.issubmit) return false
-      let params = {
-        comefrom: this.viewData.comefrom,
-        pricetype: this.viewData.pricetype,
-        price_out: this.viewData.price_out,
-        uids: this.checkList,
-        id: parseInt(this.query.id)
-      }
-      if (params.pricetype === '' || params.comefrom === '' || params.price_out === '') {
-        this.$vux.toast.text('必填项不能为空', 'middle')
-        return false
-      }
-      if (params.price_out !== '' && (isNaN(params.price_out) || parseFloat(params.price_out) < 0 || parseFloat(params.price_out).length > 7)) {
-        this.$vux.toast.text('请输入正确的拍摄价格', 'middle')
-        return false
-      }
-      if (!this.checkList.length) {
-        this.$vux.toast.text('请选择用户', 'middle')
-        return false
-      }
-      this.issubmit = true
-      this.$http.post(`${ENV.BokaApi}/api/demands/invite`, params).then(res => {
-        let data = res.data
-        this.$vux.toast.text(data.error, 'middle')
-        if (this.isManager || this.isSale) {
-          this.$router.push({path: '/makeList', query: {status: 2}})
-        } else {
-          this.$router.push({path: '/makeUserList', query: {status: 2}})
-        }
-        this.issubmit = false
-      })
-    },
-    onInvite2 () {
-      let params = {
-        uids: this.checkList,
-        id: parseInt(this.query.id)
-      }
-      if (!this.issubmit) {
-        this.issubmit = true
-        this.$http.post(`${ENV.BokaApi}/api/demands/invite`, params).then(res => {
-          let data = res.data
-          this.$vux.toast.text(data.error, 'middle')
-          this.pagestart2 = 0
-          this.disTabData2 = false
-          this.tableData2 = []
-          this.getData3()
-          this.issubmit = false
-        })
-      }
-    },
-    onInvite3 (selectedIndex) {
-      if (this.issubmit) return false
-      let params = {
-        idea: this.viewData.myidea,
-        id: parseInt(this.query.id)
-      }
-      if (params.idea === '' || !params.idea) {
-        this.$vux.toast.text('请填写创意梗概', 'middle')
-        return false
-      }
-      this.issubmit = true
-      this.$http.post(`${ENV.BokaApi}/api/demands/addIdea`, params).then(res => {
-        let data = res.data
-        this.$vux.toast.text(data.error, 'middle')
-        this.$router.push({path: '/myOrder', query: {type: this.query.type, selectedIndex: selectedIndex}})
-        this.issubmit = false
       })
     },
     handleCurrentChange (val) {
