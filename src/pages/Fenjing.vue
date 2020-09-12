@@ -34,17 +34,6 @@
            </video-player>
           </div>
         </div>
-        <table class="page-table">
-          <tr>
-            <th colspan="5">《制作需求单》附件：</th>
-            <th colspan="2">{{tableData.title}}</th>
-            <th>分镜脚本</th>
-            <th colspan="2">{{ratioOptions[viewData.ratio]}}</th>
-            <th>项目编号</th>
-            <th>{{tableData.demandno}}</th>
-            <th rowspan="2"></th>
-          </tr>
-        </table>
         <el-table
           :data="tableData"
           stripe
