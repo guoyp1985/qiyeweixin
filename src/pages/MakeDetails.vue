@@ -267,11 +267,11 @@
          <el-input type="textarea" v-model="viewData.myidea" placeholder="请输入创意梗概"></el-input>
          <div class="diff-css" v-if="historyData && historyData.myidea && historyData.myidea != '' && viewData.myidea != historyData.myidea">{{historyData.myidea}}</div>
        </td>
-     </tr>
-     <tr v-if="viewData.status >= 4">
+     </tr> -->
+     <tr v-if="viewData.status >= 3">
        <td class="title">创意梗概</td>
        <td colspan="3" class="txt-css">{{viewData.confirmedidea}}</td>
-     </tr> -->
+     </tr>
      <tr v-if="viewData.status === 5 && query.type">
        <td class="title">上传演员身份证及肖像权协议扫描件<span>（只能上传图片）</span></td>
        <td colspan="3" class="align_left">
