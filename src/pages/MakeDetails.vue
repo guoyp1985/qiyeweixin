@@ -271,7 +271,7 @@
      <tr v-if="viewData.status >= 3">
        <td class="title">创意梗概</td>
        <td colspan="3" class="txt-css">
-         <div class="pt10" v-if="viewData.confirmedideaObject">
+         <div class="pt10 pb10" v-if="viewData.confirmedideaObject">
            <div class="w_100" style="border:#ccc 1px solid;">
              <div class="flex_left w_100 b_bottom_after pt5 pb5">
                <div style="width:100px;text-align:center;">场景</div>
