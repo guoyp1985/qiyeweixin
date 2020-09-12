@@ -728,7 +728,7 @@
      class="inviteDialog"
      :title="dialogTitle"
      :visible.sync="showUserDialog"
-     width="30%"
+     width="60%"
      :before-close="closeUserDialog">
      <div>
        <el-input placeholder="手机号" v-model="uPhone" type="tel">
@@ -750,7 +750,7 @@
      class="inviteDialog"
      title="驳回"
      :visible.sync="showBackDialog"
-     width="30%">
+     width="60%">
      <div>
        <el-input placeholder="请输入驳回原因" v-model="backReason" type="textarea" :rows="10"></el-input>
      </div>
