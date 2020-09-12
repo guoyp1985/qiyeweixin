@@ -963,7 +963,8 @@ export default {
       showIdeaDialog: false,
       supplyData: [],
       disSupplyList: false,
-      selectedSuid: 0
+      selectedSuid: 0,
+      showSupplyDialog: false
     }
   },
   methods: {
@@ -1876,6 +1877,7 @@ export default {
         this.showBackDialog = false
         this.showIdeaDialog = false
         this.selectedSuid = 0
+        this.showSupplyDialog = false
         this.$vux.loading.show()
         this.getData()
       }
