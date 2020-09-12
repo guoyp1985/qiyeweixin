@@ -270,7 +270,30 @@
      </tr> -->
      <tr v-if="viewData.status >= 3">
        <td class="title">创意梗概</td>
-       <td colspan="3" class="txt-css">{{viewData.confirmedidea}}</td>
+       <td colspan="3" class="txt-css">
+         <div class="w_100" style="border:#ccc 1px solid;" v-if="viewData.confirmedideaObject">
+           <div class="flex_left w_100 b_bottom_after pt5 pb5">
+             <div style="width:100px;text-align:center;">场景</div>
+             <div class="flex_cell align_left pl5 pr5">{{viewData.confirmedideaObject.changjing}}</div>
+           </div>
+           <div class="flex_left w_100 b_bottom_after pt5 pb5">
+             <div style="width:100px;text-align:center;">人物和关系</div>
+             <div class="flex_cell align_left pl5 pr5">{{viewData.confirmedideaObject.rwgx}}</div>
+           </div>
+           <div class="flex_left w_100 b_bottom_after pt5 pb5">
+             <div style="width:100px;text-align:center;">剧情概括</div>
+             <div class="flex_cell align_left pl5 pr5">{{viewData.confirmedideaObject.juqing}}</div>
+           </div>
+           <div class="flex_left w_100 b_bottom_after pt5 pb5">
+             <div style="width:100px;text-align:center;">重点部分</div>
+             <div class="flex_cell align_left pl5 pr5">{{viewData.confirmedideaObject.zhongdian}}</div>
+           </div>
+           <div class="flex_left w_100 pt5 pb5">
+             <div style="width:100px;text-align:center;">视频风格</div>
+             <div class="flex_cell align_left pl5 pr5">{{viewData.confirmedideaObject.fengge}}</div>
+           </div>
+         </div>
+       </td>
      </tr>
      <tr v-if="viewData.status === 5 && query.type">
        <td class="title">上传演员身份证及肖像权协议扫描件<span>（只能上传图片）</span></td>
@@ -1715,6 +1738,9 @@ export default {
           this.allowEdit = true
         } else {
           this.allowEdit = false
+        }
+        if (retdata.confirmedidea && retdata.confirmedidea !== '') {
+          retdata.confirmedideaObject = JSON.parse(retdata.confirmedidea)
         }
         this.viewData = retdata
         if (retdata.invitors) {
