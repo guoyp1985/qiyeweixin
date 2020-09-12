@@ -1,3 +1,9 @@
+<style>
+.page-table{
+  width:100%;
+  th{background: #F5F7FA;}
+}
+</style>
 <template lang="html">
   <div class="bg-white font14 fenjing-list-page">
     <div class="vux-tab-wrap">分镜脚本</div>
@@ -28,6 +34,17 @@
            </video-player>
           </div>
         </div>
+        <table class="page-table">
+          <tr>
+            <th colspan="5">《制作需求单》附件：</th>
+            <th colspan="2">{{tableData.title}}</th>
+            <th>分镜脚本</th>
+            <th colspan="2">{{ratioOptions[viewData.ratio]}}</th>
+            <th>项目编号</th>
+            <th>{{tableData.demandno}}</th>
+            <th rowspan="2"></th>
+          </tr>
+        </table>
         <el-table
           :data="tableData"
           stripe
@@ -43,41 +60,76 @@
               min-width="100">
             </el-table-column>
             <el-table-column
-              prop="daynight"
               label="日外/夜内"
               min-width="100">
+              <template slot-scope="scope">
+                <!-- <template v-if="scope.row.dataType == 'add'">
+                  <el-input v-model="submitData.daynight" placeholder="必填,日外/夜内"></el-input>
+                </template>
+                <template v-else>{{scope.row.daynight}}</template> -->
+                <el-input v-model="scope.row.daynight" placeholder="必填,日外/夜内"></el-input>
+              </template>
             </el-table-column>
             <el-table-column
-              prop="scene"
               label="场景"
               min-width="100">
+              <template slot-scope="scope">
+                <!-- <template v-if="scope.row.dataType == 'add'">
+                  <el-input v-model="submitData.scene" placeholder="必填,场景"></el-input>
+                </template>
+                <template v-else>{{scope.row.scene}}</template> -->
+                <el-input v-model="scope.row.scene" placeholder="必填,场景"></el-input>
+              </template>
             </el-table-column>
             <el-table-column
-              prop="photography"
               label="拍摄手法"
               min-width="100">
+              <template slot-scope="scope">
+                <!-- <template v-if="scope.row.dataType == 'add'">
+                  <el-input v-model="submitData.photography" placeholder="必填,拍摄手法"></el-input>
+                </template>
+                <template v-else>{{scope.row.photography}}</template> -->
+                <el-input v-model="scope.row.photography" placeholder="必填,拍摄手法"></el-input>
+              </template>
             </el-table-column>
             <el-table-column
-              prop="fieldofview"
               label="景别"
               min-width="100">
+              <template slot-scope="scope">
+                <!-- <template v-if="scope.row.dataType == 'add'">
+                  <el-input v-model="submitData.fieldofview" placeholder="必填,景别"></el-input>
+                </template>
+                <template v-else>{{scope.row.fieldofview}}</template> -->
+                <el-input v-model="scope.row.fieldofview" placeholder="必填,景别"></el-input>
+              </template>
             </el-table-column>
           </el-table-column>
           <el-table-column
             :label="viewData.title"
             min-width="100">
             <el-table-column
-              prop="seconds"
               label="时长"
               min-width="100">
+              <template slot-scope="scope">
+                <!-- <template v-if="scope.row.dataType == 'add'">
+                  <el-input v-model="submitData.seconds" placeholder="必填,时长"></el-input>
+                </template>
+                <template v-else>{{scope.row.seconds}}</template> -->
+                <el-input v-model="scope.row.seconds" placeholder="必填,时长"></el-input>
+              </template>
             </el-table-column>
             <el-table-column
-              prop="pictures"
               label="画面描述"
               min-width="200">
               <template slot-scope="scope">
-                <div v-if="!scope.row.pictures || scope.row.pictures == ''">无</div>
-                <div class="align_left pre-wrap" v-else>{{scope.row.pictures}}</div>
+                <!-- <template v-if="scope.row.dataType == 'add'">
+                  <el-input type="textarea" v-model="submitData.pictures" placeholder="必填,画面描述"></el-input>
+                </template>
+                <template v-else>
+                  <div v-if="!scope.row.pictures || scope.row.pictures == ''">无</div>
+                  <div class="align_left pre-wrap" v-else>{{scope.row.pictures}}</div>
+                </template> -->
+                <el-input type="textarea" v-model="scope.row.pictures" placeholder="必填,画面描述"></el-input>
               </template>
             </el-table-column>
           </el-table-column>
@@ -88,8 +140,14 @@
               label="台词/解说词"
               min-width="200">
               <template slot-scope="scope">
-                <div v-if="!scope.row.actorsline || scope.row.actorsline == ''">无</div>
-                <div class="align_left pre-wrap" v-else>{{scope.row.actorsline}}</div>
+                <!-- <template v-if="scope.row.dataType == 'add'">
+                  <el-input type="textarea" v-model="submitData.actorsline" placeholder="必填,台词/解说词"></el-input>
+                </template>
+                <template v-else>
+                  <div v-if="!scope.row.actorsline || scope.row.actorsline == ''">无</div>
+                  <div class="align_left pre-wrap" v-else>{{scope.row.actorsline}}</div>
+                </template> -->
+                <el-input type="textarea" v-model="scope.row.actorsline" placeholder="必填,台词/解说词"></el-input>
               </template>
             </el-table-column>
           </el-table-column>
@@ -100,16 +158,28 @@
               label="服装道具"
               min-width="120">
                 <template slot-scope="scope">
-                  <template v-if="!scope.row.costumes || scope.row.costumes == ''">无</template>
-                  <template v-else>{{scope.row.costumes}}</template>
+                  <!-- <template v-if="scope.row.dataType == 'add'">
+                    <el-input v-model="submitData.costumes" placeholder="请输入服装道具"></el-input>
+                  </template>
+                  <template v-else>
+                    <template v-if="!scope.row.costumes || scope.row.costumes == ''">无</template>
+                    <template v-else>{{scope.row.costumes}}</template>
+                  </template> -->
+                  <el-input v-model="scope.row.costumes" placeholder="请输入服装道具"></el-input>
                 </template>
             </el-table-column>
             <el-table-column
               label="后期制作"
               min-width="120">
                 <template slot-scope="scope">
-                  <template v-if="!scope.row.postproduction || scope.row.postproduction == ''">无</template>
-                  <template v-else>{{scope.row.postproduction}}</template>
+                  <!-- <template v-if="scope.row.dataType == 'add'">
+                    <el-input v-model="submitData.postproduction" placeholder="请输入后期制作"></el-input>
+                  </template>
+                  <template v-else>
+                    <template v-if="!scope.row.postproduction || scope.row.postproduction == ''">无</template>
+                    <template v-else>{{scope.row.postproduction}}</template>
+                  </template> -->
+                  <el-input v-model="scope.row.postproduction" placeholder="请输入后期制作"></el-input>
                 </template>
             </el-table-column>
           </el-table-column>
@@ -120,8 +190,14 @@
               label="备注"
               min-width="120">
                 <template slot-scope="scope">
-                  <template v-if="!scope.row.memo || scope.row.memo == ''">无</template>
-                  <template v-else>{{scope.row.memo}}</template>
+                  <!-- <template v-if="scope.row.dataType == 'add'">
+                    <el-input v-model="submitData.memo" placeholder="请输入备注"></el-input>
+                  </template>
+                  <template v-else>
+                    <template v-if="!scope.row.memo || scope.row.memo == ''">无</template>
+                    <template v-else>{{scope.row.memo}}</template>
+                  </template> -->
+                  <el-input v-model="scope.row.memo" placeholder="请输入备注"></el-input>
                 </template>
             </el-table-column>
           </el-table-column>
@@ -141,7 +217,7 @@
               v-if="isManager || isSale || isSupplier"
               label="审核意见"
               min-width="200">
-                <template slot-scope="scope">
+                <template slot-scope="scope" v-if="scope.row.dataType != 'add'">
                   <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
                   <template v-else>{{scope.row.checkresult}}</template>
                 </template>
@@ -149,13 +225,18 @@
           </el-table-column>
             <el-table-column
               label="操作"
-              v-if="!storyData.canback"
               min-width="120">
               <template slot-scope="scope">
-                <el-button v-if="storyData.canedit" type="primary" size="mini" @click="addFenJing(scope.row)">修改</el-button>
-                <el-button v-if="storyData.canzhuan" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
-                <el-button v-if="storyData.canzhuanvideo" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转发客户意见</el-button>
-                <el-button v-if="storyData.cancheckvideo" type="primary" size="mini" @click="handleExamine(scope.row.id)">修改建议</el-button>
+                <template v-if="scope.row.dataType == 'add'">
+                  <el-button type="primary" size="mini" @click="addEvent(scope.row)">新增</el-button>
+                </template>
+                <template v-else-if="!storyData.canback">
+                  <el-button v-if="storyData.canedit" type="primary" size="mini" @click="addEvent(scope.row)">修改</el-button>
+                  <!-- <el-button v-if="storyData.canedit" type="primary" size="mini" @click="addFenJing(scope.row)">修改</el-button> -->
+                  <el-button v-if="storyData.canzhuan" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
+                  <el-button v-if="storyData.canzhuanvideo" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转发客户意见</el-button>
+                  <el-button v-if="storyData.cancheckvideo" type="primary" size="mini" @click="handleExamine(scope.row.id)">修改建议</el-button>
+                </template>
               </template>
             </el-table-column>
         </el-table>
@@ -291,7 +372,9 @@ export default {
       controlBtn: [],
       viewData: {},
       disCensorBtn: true,
-      showPhotoSwiper: false
+      showPhotoSwiper: false,
+      listData: [],
+      submitData: {}
     }
   },
   methods: {
@@ -302,7 +385,7 @@ export default {
       // 4. canzhuan==1,行里”转交供应商”，下面，返回修改。
       this.controlBtn = []
       if (this.storyData.canedit) {
-        this.controlBtn.push({id: 1, title: '新增', type: 'success'})
+        // this.controlBtn.push({id: 1, title: '新增', type: 'success'})
         this.controlBtn.push({id: 2, title: '提交审核', type: 'primary'})
       }
       if (this.storyData.canback) {
@@ -474,6 +557,21 @@ export default {
           const retdata = data.data ? data.data : data
           this.storyData = data
           this.tableData = retdata
+          if (this.storyData.canedit) {
+            this.tableData.push({
+              dataType: 'add',
+              daynight: '',
+              scene: '',
+              photography: '',
+              fieldofview: '',
+              seconds: '',
+              pictures: '',
+              actorsline: '',
+              costumes: '',
+              postproduction: '',
+              memo: ''
+            })
+          }
           this.curVersion = data.version
           this.versionData = this.$util.transSelectOption(data.allversions)
           this.disTabData = true
@@ -520,6 +618,53 @@ export default {
             this.refresh()
           } else {
             this.$vux.toast.text(data.error, 'middle')
+          }
+        })
+      })
+    },
+    addEvent (itemdata) {
+      if (this.issubmit) return false
+      let iscontinue = true
+      let requiredData = ['daynight', 'scene', 'photography', 'fieldofview', 'seconds', 'pictures', 'actorsline']
+      for (let i = 0; i < requiredData.length; i++) {
+        let curName = requiredData[i]
+        if (this.$util.trim(itemdata[curName]) === '') {
+          this.$vux.toast.text('必填项不能为空', 'middle')
+          iscontinue = false
+          break
+        }
+      }
+      if (!iscontinue) return false
+      let postData = {
+        demandid: this.query.id,
+        daynight: itemdata.daynight,
+        scene: itemdata.scene,
+        photography: itemdata.photography,
+        fieldofview: itemdata.fieldofview,
+        seconds: itemdata.seconds,
+        pictures: itemdata.pictures,
+        actorsline: itemdata.actorsline,
+        costumes: itemdata.costumes,
+        postproduction: itemdata.postproduction,
+        memo: itemdata.memo
+      }
+      if (itemdata && itemdata.id) {
+        postData.id = itemdata.id
+      }
+      this.$vux.loading.show()
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/addStoryBoard`, postData).then(res => {
+        this.$vux.loading.hide()
+        let data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            this.issubmit = false
+            if (data.flag === 1) {
+              this.refresh()
+            }
           }
         })
       })
