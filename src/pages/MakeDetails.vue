@@ -458,7 +458,7 @@
                </template>
            </el-table-column>
        </el-table>
-      <div class="align_center mt20" v-if="!isCustomer">
+      <div class="align_center mt20" v-if="viewData.status == 2 && (isManager || isSale)">
         <el-button
           type="primary"
           @click="chooseUser">新增邀请</el-button>
