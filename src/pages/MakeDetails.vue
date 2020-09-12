@@ -350,6 +350,12 @@
                </template>
            </el-table-column> -->
            <el-table-column
+             prop="version"
+             v-if="isInvitor"
+             label="版本号"
+             min-width="80">
+           </el-table-column>
+           <el-table-column
             v-if="isManager || isSale"
              prop="linkman"
              label="供应商"
@@ -399,6 +405,15 @@
                    </div>
                  </template>
                <!-- </template> -->
+             </template>
+           </el-table-column>
+           <el-table-column
+             v-if="!isCustomer"
+             label="审核意见"
+             min-width="120">
+             <template slot-scope="scope">
+               <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
+               <template v-else>{{scope.row.checkresult}}</template>
              </template>
            </el-table-column>
            <el-table-column
