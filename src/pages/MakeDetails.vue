@@ -350,13 +350,13 @@
                </template>
            </el-table-column> -->
            <el-table-column
-            v-if="!isCustomer"
+            v-if="isManager || isSale"
              prop="linkman"
              label="供应商"
              min-width="100">
            </el-table-column>
            <el-table-column
-            v-if="!isCustomer"
+            v-if="isManager || isSale"
              label="手机号码"
              min-width="120">
                <template slot-scope="scope">
@@ -378,23 +378,23 @@
                    <div class="w_100" style="border:#ccc 1px solid;">
                      <div class="flex_left w_100 b_bottom_after pt5 pb5">
                        <div style="width:100px;text-align:center;">场景</div>
-                       <div class="flex_cell align_left">{{scope.row.ideaObject.changjing}}</div>
+                       <div class="flex_cell align_left pl5 pr5">{{scope.row.ideaObject.changjing}}</div>
                      </div>
                      <div class="flex_left w_100 b_bottom_after pt5 pb5">
                        <div style="width:100px;text-align:center;">人物和关系</div>
-                       <div class="flex_cell align_left">{{scope.row.ideaObject.rwgx}}</div>
+                       <div class="flex_cell align_left pl5 pr5">{{scope.row.ideaObject.rwgx}}</div>
                      </div>
                      <div class="flex_left w_100 b_bottom_after pt5 pb5">
                        <div style="width:100px;text-align:center;">剧情概括</div>
-                       <div class="flex_cell align_left">{{scope.row.ideaObject.juqing}}</div>
+                       <div class="flex_cell align_left pl5 pr5">{{scope.row.ideaObject.juqing}}</div>
                      </div>
                      <div class="flex_left w_100 b_bottom_after pt5 pb5">
                        <div style="width:100px;text-align:center;">重点部分</div>
-                       <div class="flex_cell align_left">{{scope.row.ideaObject.zhongdian}}</div>
+                       <div class="flex_cell align_left pl5 pr5">{{scope.row.ideaObject.zhongdian}}</div>
                      </div>
                      <div class="flex_left w_100 pt5 pb5">
                        <div style="width:100px;text-align:center;">视频风格</div>
-                       <div class="flex_cell align_left">{{scope.row.ideaObject.fengge}}</div>
+                       <div class="flex_cell align_left pl5 pr5">{{scope.row.ideaObject.fengge}}</div>
                      </div>
                    </div>
                  </template>
