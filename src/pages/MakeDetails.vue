@@ -417,6 +417,12 @@
              </template>
            </el-table-column>
            <el-table-column
+             v-if="!isCustomer"
+             label="审核状态"
+             min-width="120">
+             <template slot-scope="scope">{{scope.row.statusdesc}}</template>
+           </el-table-column>
+           <el-table-column
              v-if="isManager || isSale"
              label="客户意见"
              min-width="120">
