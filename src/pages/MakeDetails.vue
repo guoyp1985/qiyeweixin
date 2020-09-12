@@ -824,6 +824,23 @@
        <el-button type="primary" @click="submitIdeaEvent">确 定</el-button>
      </span>
    </el-dialog>
+   <el-dialog
+     title="选择供应商"
+     :visible.sync="showSupplyDialog"
+     width="80%">
+     <div v-if="disSupplyList">
+       <div v-if="!supplyData.length">暂无可选供应商</div>
+       <template v-else>
+         <el-radio-group v-model="selectedSuid">
+          <el-radio v-for="(item,index) in supplyData" :key="index" :label="item.uid">{{item.linkman}}</el-radio>
+        </el-radio-group>
+      </template>
+     </div>
+     <span slot="footer" class="dialog-footer">
+       <el-button @click="showBackDialog = false">取 消</el-button>
+       <el-button type="primary" @click="submitSupply">确 定</el-button>
+     </span>
+   </el-dialog>
   </div>
 </template>
 <script>
@@ -897,10 +914,39 @@ export default {
       ideaObject: {},
       backReason: '',
       showBackDialog: false,
-      showIdeaDialog: false
+      showIdeaDialog: false,
+      supplyData: [],
+      disSupplyList: false,
+      selectedSuid: 0
     }
   },
   methods: {
+    submitSupply () {
+      if (this.issubmit) return false
+      if (!this.selectedSuid) {
+        this.$vux.toast.text('请选择供应商', 'middle')
+        return false
+      }
+      this.$vux.loading.show()
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/selectIdea?id=$demandid&suid=`, {
+        id: this.query.id, suid: this.selectedSuid
+      }).then(res => {
+        this.$vux.loading.hide()
+        this.issubmit = false
+        let data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              this.refresh()
+            }
+          }
+        })
+      })
+    },
     changeIdea (itemdata) {
       this.selectedIdeaData = itemdata
       this.ideaObject = itemdata.ideaObject
@@ -1102,6 +1148,9 @@ export default {
       if (this.viewData.canaddcustomer && this.viewData.status === 0) {
         this.controlBtn.push({id: 13, title: '添加客户', type: 'primary'})
       }
+      if (this.viewData.status === 3 && (this.isManager || this.isSale)) {
+        this.controlBtn.push({id: 14, title: '选择供应商', type: 'warning'})
+      }
     },
     buttonEvent (id) {
       switch (id) {
@@ -1158,6 +1207,10 @@ export default {
           // 添加客户 this.viewData.canedit && (this.isManager || this.isSale)
           this.dialogTitle = '添加客户'
           this.showUserDialog = true
+          break
+        case 14:
+          // 选择供应商 this.viewData.status === 3 && (this.isManager || this.isSale)
+          this.showSupplyDialog = true
           break
       }
     },
@@ -1643,6 +1696,10 @@ export default {
           this.allowEdit = false
         }
         this.viewData = retdata
+        if (retdata.invitors) {
+          this.supplyData = retdata.invitors
+          this.disSupplyList = true
+        }
         if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
           if (retdata.myidea && retdata.myidea !== '') {
             this.ideaObject = JSON.parse(retdata.myidea)
@@ -1768,6 +1825,8 @@ export default {
         this.ideaObject = {}
         this.backReason = ''
         this.showBackDialog = false
+        this.showIdeaDialog = false
+        this.selectedSuid = 0
         this.$vux.loading.show()
         this.getData()
       }
