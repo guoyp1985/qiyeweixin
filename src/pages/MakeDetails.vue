@@ -1126,9 +1126,9 @@ export default {
         this.controlBtn.push({id: 6, title: '提交创意', type: 'success'})
       }
       // 修改创意梗概
-      if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
-        this.controlBtn.push({id: 7, title: '修改创意', type: 'success'})
-      }
+      // if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
+      //   this.controlBtn.push({id: 7, title: '修改创意', type: 'success'})
+      // }
       if (this.query.type) {
         if (this.query.type === 'ongoing') {
           if (this.viewData.status === 5) {
