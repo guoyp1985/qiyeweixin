@@ -79,7 +79,7 @@
 </template>
 <script>
 import ENV from 'env'
-import {User} from '#/storage'
+import {User, Token} from '#/storage'
 export default {
   components: {
   },
@@ -102,6 +102,7 @@ export default {
     },
     quitEvent () {
       User.remove()
+      Token.remove()
       this.$router.push('/login')
     },
     toLink (link) {
