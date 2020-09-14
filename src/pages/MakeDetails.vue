@@ -1166,7 +1166,7 @@ export default {
       if (this.viewData.status === 1 && (this.isManager || this.isSale)) {
         this.controlBtn.push({id: 4, title: '分发', type: 'primary'})
       }
-      if (this.viewData.status === 4) {
+      if (this.viewData.status === 4 || !this.isInvitor) {
         this.controlBtn.push({id: 5, title: '分镜脚本', type: 'primary'})
       }
       if (this.viewData.status === 2 && this.isSupplier) {
