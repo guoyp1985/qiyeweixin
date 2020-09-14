@@ -1,9 +1,3 @@
-<style>
-.page-table{
-  width:100%;
-  th{background: #F5F7FA;}
-}
-</style>
 <template lang="html">
   <div class="bg-white font14 fenjing-list-page">
     <div class="vux-tab-wrap">分镜脚本</div>
@@ -52,10 +46,6 @@
               label="日外/夜内"
               min-width="100">
               <template slot-scope="scope">
-                <!-- <template v-if="scope.row.dataType == 'add'">
-                  <el-input v-model="submitData.daynight" placeholder="必填,日外/夜内"></el-input>
-                </template>
-                <template v-else>{{scope.row.daynight}}</template> -->
                 <el-input v-model="scope.row.daynight" placeholder="必填,日外/夜内"></el-input>
               </template>
             </el-table-column>
@@ -63,10 +53,6 @@
               label="场景"
               min-width="100">
               <template slot-scope="scope">
-                <!-- <template v-if="scope.row.dataType == 'add'">
-                  <el-input v-model="submitData.scene" placeholder="必填,场景"></el-input>
-                </template>
-                <template v-else>{{scope.row.scene}}</template> -->
                 <el-input v-model="scope.row.scene" placeholder="必填,场景"></el-input>
               </template>
             </el-table-column>
@@ -74,10 +60,6 @@
               label="拍摄手法"
               min-width="100">
               <template slot-scope="scope">
-                <!-- <template v-if="scope.row.dataType == 'add'">
-                  <el-input v-model="submitData.photography" placeholder="必填,拍摄手法"></el-input>
-                </template>
-                <template v-else>{{scope.row.photography}}</template> -->
                 <el-input v-model="scope.row.photography" placeholder="必填,拍摄手法"></el-input>
               </template>
             </el-table-column>
@@ -85,10 +67,6 @@
               label="景别"
               min-width="100">
               <template slot-scope="scope">
-                <!-- <template v-if="scope.row.dataType == 'add'">
-                  <el-input v-model="submitData.fieldofview" placeholder="必填,景别"></el-input>
-                </template>
-                <template v-else>{{scope.row.fieldofview}}</template> -->
                 <el-input v-model="scope.row.fieldofview" placeholder="必填,景别"></el-input>
               </template>
             </el-table-column>
@@ -100,10 +78,6 @@
               label="时长"
               min-width="100">
               <template slot-scope="scope">
-                <!-- <template v-if="scope.row.dataType == 'add'">
-                  <el-input v-model="submitData.seconds" placeholder="必填,时长"></el-input>
-                </template>
-                <template v-else>{{scope.row.seconds}}</template> -->
                 <el-input v-model="scope.row.seconds" placeholder="必填,时长"></el-input>
               </template>
             </el-table-column>
@@ -111,14 +85,26 @@
               label="画面描述"
               min-width="200">
               <template slot-scope="scope">
-                <!-- <template v-if="scope.row.dataType == 'add'">
-                  <el-input type="textarea" v-model="submitData.pictures" placeholder="必填,画面描述"></el-input>
-                </template>
-                <template v-else>
-                  <div v-if="!scope.row.pictures || scope.row.pictures == ''">无</div>
-                  <div class="align_left pre-wrap" v-else>{{scope.row.pictures}}</div>
-                </template> -->
-                <el-input type="textarea" v-model="scope.row.pictures" placeholder="必填,画面描述"></el-input>
+                <div class="page-table">
+                  <div class="tr">
+                    <div class="td">人物</div>
+                    <div class="td">
+                      <el-input type="textarea" v-model="scope.row.renwu" placeholder="必填,人物描述"></el-input>
+                    </div>
+                  </div>
+                  <div class="tr">
+                    <div class="td">情节</div>
+                    <div class="td">
+                      <el-input type="textarea" v-model="scope.row.qingjie" placeholder="必填,情节描述"></el-input>
+                    </div>
+                  </div>
+                  <div class="tr">
+                    <div class="td">动作</div>
+                    <div class="td">
+                      <el-input type="textarea" v-model="scope.row.dongzuo" placeholder="必填,动作描述"></el-input>
+                    </div>
+                  </div>
+                </div>
               </template>
             </el-table-column>
           </el-table-column>
@@ -129,14 +115,26 @@
               label="台词/解说词"
               min-width="200">
               <template slot-scope="scope">
-                <!-- <template v-if="scope.row.dataType == 'add'">
-                  <el-input type="textarea" v-model="submitData.actorsline" placeholder="必填,台词/解说词"></el-input>
-                </template>
-                <template v-else>
-                  <div v-if="!scope.row.actorsline || scope.row.actorsline == ''">无</div>
-                  <div class="align_left pre-wrap" v-else>{{scope.row.actorsline}}</div>
-                </template> -->
-                <el-input type="textarea" v-model="scope.row.actorsline" placeholder="必填,台词/解说词"></el-input>
+                <div class="page-table">
+                  <div class="tr">
+                    <div class="td">情绪</div>
+                    <div class="td">
+                      <el-input type="textarea" v-model="scope.row.qingxu" placeholder="必填,情绪"></el-input>
+                    </div>
+                  </div>
+                  <div class="tr">
+                    <div class="td">语速</div>
+                    <div class="td">
+                      <el-input type="textarea" v-model="scope.row.yusu" placeholder="必填,语速"></el-input>
+                    </div>
+                  </div>
+                  <div class="tr">
+                    <div class="td">台词</div>
+                    <div class="td">
+                      <el-input type="textarea" v-model="scope.row.taici" placeholder="必填,台词"></el-input>
+                    </div>
+                  </div>
+                </div>
               </template>
             </el-table-column>
           </el-table-column>
@@ -147,13 +145,6 @@
               label="服装道具"
               min-width="120">
                 <template slot-scope="scope">
-                  <!-- <template v-if="scope.row.dataType == 'add'">
-                    <el-input v-model="submitData.costumes" placeholder="请输入服装道具"></el-input>
-                  </template>
-                  <template v-else>
-                    <template v-if="!scope.row.costumes || scope.row.costumes == ''">无</template>
-                    <template v-else>{{scope.row.costumes}}</template>
-                  </template> -->
                   <el-input v-model="scope.row.costumes" placeholder="请输入服装道具"></el-input>
                 </template>
             </el-table-column>
@@ -161,13 +152,6 @@
               label="后期制作"
               min-width="120">
                 <template slot-scope="scope">
-                  <!-- <template v-if="scope.row.dataType == 'add'">
-                    <el-input v-model="submitData.postproduction" placeholder="请输入后期制作"></el-input>
-                  </template>
-                  <template v-else>
-                    <template v-if="!scope.row.postproduction || scope.row.postproduction == ''">无</template>
-                    <template v-else>{{scope.row.postproduction}}</template>
-                  </template> -->
                   <el-input v-model="scope.row.postproduction" placeholder="请输入后期制作"></el-input>
                 </template>
             </el-table-column>
@@ -179,13 +163,6 @@
               label="备注"
               min-width="120">
                 <template slot-scope="scope">
-                  <!-- <template v-if="scope.row.dataType == 'add'">
-                    <el-input v-model="submitData.memo" placeholder="请输入备注"></el-input>
-                  </template>
-                  <template v-else>
-                    <template v-if="!scope.row.memo || scope.row.memo == ''">无</template>
-                    <template v-else>{{scope.row.memo}}</template>
-                  </template> -->
                   <el-input v-model="scope.row.memo" placeholder="请输入备注"></el-input>
                 </template>
             </el-table-column>
@@ -538,14 +515,32 @@ export default {
     getData () {
       let params = {demandid: parseInt(this.query.id)}
       if (this.curVersion && this.curVersion !== '') params.version = this.curVersion
+      this.tableData = []
       this.$http.post(`${ENV.BokaApi}/api/demands/getStoryBoard`, params).then(res => {
         const data = res.data
         if (data.flag) {
           this.$vux.loading.hide()
           const data = res.data
-          const retdata = data.data ? data.data : data
+          let retdata = data.data ? data.data : data
           this.storyData = data
-          this.tableData = retdata
+          for (let i = 0; i < retdata.length; i++) {
+            let d = {...retdata[i]}
+            if (retdata[i].pictures && retdata[i].pictures !== '') {
+              let picturesObject = JSON.parse(retdata[i].pictures)
+              d.picturesObject = picturesObject
+              d.renwu = picturesObject.renwu
+              d.qingjie = picturesObject.qingjie
+              d.dongzuo = picturesObject.dongzuo
+            }
+            if (retdata[i].actorsline && retdata[i].actorsline !== '') {
+              let actorslineObject = JSON.parse(retdata[i].actorsline)
+              d.actorslineObject = actorslineObject
+              d.qingxu = actorslineObject.qingxu
+              d.yusu = actorslineObject.yusu
+              d.taici = actorslineObject.taici
+            }
+            this.tableData.push(d)
+          }
           if (this.storyData.canedit) {
             this.tableData.push({
               dataType: 'add',
@@ -558,7 +553,15 @@ export default {
               actorsline: '',
               costumes: '',
               postproduction: '',
-              memo: ''
+              memo: '',
+              picturesObject: {},
+              actorslineObject: {},
+              renwu: '',
+              qingjie: '',
+              dongzuo: '',
+              qingxu: '',
+              yuse: '',
+              taici: ''
             })
           }
           this.curVersion = data.version
@@ -614,7 +617,8 @@ export default {
     addEvent (itemdata) {
       if (this.issubmit) return false
       let iscontinue = true
-      let requiredData = ['daynight', 'scene', 'photography', 'fieldofview', 'seconds', 'pictures', 'actorsline']
+      // let requiredData = ['daynight', 'scene', 'photography', 'fieldofview', 'seconds', 'pictures', 'actorsline']
+      let requiredData = ['daynight', 'scene', 'photography', 'fieldofview', 'seconds']
       for (let i = 0; i < requiredData.length; i++) {
         let curName = requiredData[i]
         if (this.$util.trim(itemdata[curName]) === '') {
@@ -624,6 +628,22 @@ export default {
         }
       }
       if (!iscontinue) return false
+      let renwu = itemdata.renwu
+      let qingjie = itemdata.qingjie
+      let dongzuo = itemdata.dongzuo
+      let qingxu = itemdata.qingxu
+      let yusu = itemdata.yusu
+      let taici = itemdata.taici
+      if (this.$util.trim(renwu) === '' || this.$util.trim(qingjie) === '' || this.$util.trim(dongzuo) === '') {
+        this.$vux.toast.text('请完善画面描述', 'middle')
+        return false
+      }
+      if (this.$util.trim(qingxu) === '' || this.$util.trim(yusu) === '' || this.$util.trim(taici) === '') {
+        this.$vux.toast.text('请完善台词/解说词', 'middle')
+        return false
+      }
+      let picturesObject = {renwu: itemdata.renwu, qingjie: itemdata.qingjie, dongzuo: itemdata.dongzuo}
+      let actorslineObject = {qingxu: itemdata.qingxu, yusu: itemdata.yusu, taici: itemdata.taici}
       let postData = {
         demandid: this.query.id,
         daynight: itemdata.daynight,
@@ -631,8 +651,8 @@ export default {
         photography: itemdata.photography,
         fieldofview: itemdata.fieldofview,
         seconds: itemdata.seconds,
-        pictures: itemdata.pictures,
-        actorsline: itemdata.actorsline,
+        pictures: JSON.stringify(picturesObject),
+        actorsline: JSON.stringify(actorslineObject),
         costumes: itemdata.costumes,
         postproduction: itemdata.postproduction,
         memo: itemdata.memo
@@ -853,6 +873,17 @@ export default {
   .pic-swiper:after{content:"";padding-top:80%;display:block;}
   .pic-swiper .vux-swiper{
     position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
+  }
+
+  .page-table{
+    width:100%;
+    .tr{
+      display:flex;
+      .td{display:flex;justify-content:center;align-items:center;text-align:left;}
+      .td:nth-child(1){padding-right:10px;}
+      .td:nth-child(2){flex:1;}
+    }
+    .tr:not(:first-child){margin-top:10px;}
   }
 }
 </style>
