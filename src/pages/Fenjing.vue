@@ -32,6 +32,7 @@
           :data="tableData"
           stripe
           style="width: 100%"
+          :row-class-name="tableRowClassName"
           :header-cell-style="{'text-align':'center'}"
           :cell-style="{'text-align':'center'}">
           <el-table-column
@@ -191,13 +192,22 @@
           </el-table-column>
             <el-table-column
               label="操作"
-              min-width="120">
+              min-width="160">
               <template slot-scope="scope">
                 <template v-if="scope.row.dataType == 'add'">
                   <el-button type="primary" size="mini" @click="addEvent(scope.row)">新增</el-button>
                 </template>
                 <template v-else-if="!storyData.canback">
-                  <el-button v-if="storyData.canedit" type="primary" size="mini" @click="addEvent(scope.row)">修改</el-button>
+                  <template v-if="storyData.canedit">
+                    <div>
+                      <el-button type="primary" size="mini" @click="addEvent(scope.row)">修改</el-button>
+                      <el-button type="danger" size="mini" @click="deleteEvent(scope.row)">删除</el-button>
+                    </div>
+                    <div class="mt5">
+                      <el-button type="warning" size="mini" @click="moveEvent(scope.row, 'up')" v-if="scope.row.rowIndex > 0">上移</el-button>
+                      <el-button type="warning" size="mini" @click="moveEvent(scope.row, 'down')" v-if="scope.row.rowIndex < tableData.length - 2">下移</el-button>
+                    </div>
+                  </template>
                   <!-- <el-button v-if="storyData.canedit" type="primary" size="mini" @click="addFenJing(scope.row)">修改</el-button> -->
                   <el-button v-if="storyData.canzhuan" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
                   <el-button v-if="storyData.canzhuanvideo" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转发客户意见</el-button>
@@ -587,30 +597,98 @@ export default {
       })
     },
     agreeStoryBoard () {
+      if (this.issubmit) return false
       this.$confirm('确定要审核通过吗？').then(() => {
         this.$vux.loading.show()
+        this.issubmit = true
         this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.curVersion}).then(res => {
+          this.$vux.loading.hide()
           const data = res.data
-          if (data.flag) {
-            this.$vux.loading.hide()
-            this.refresh()
-          } else {
-            this.$vux.toast.text(data.error, 'middle')
-          }
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'text',
+            time: this.$util.delay(data.error),
+            onHide: () => {
+              this.issubmit = false
+              if (data.flag === 1) {
+                this.refresh()
+              }
+            }
+          })
         })
       })
     },
     agreeRushVideo () {
+      if (this.issubmit) return false
       this.$confirm('确定要审核通过吗？').then(() => {
         this.$vux.loading.show()
+        this.issubmit = true
         this.$http.post(`${ENV.BokaApi}/api/demands/agreeRushVideo`, {demandid: this.query.id, videoid: this.viewData.videoid}).then(res => {
+          this.$vux.loading.hide()
           const data = res.data
-          if (data.flag) {
-            this.$vux.loading.hide()
-            this.refresh()
-          } else {
-            this.$vux.toast.text(data.error, 'middle')
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'text',
+            time: this.$util.delay(data.error),
+            onHide: () => {
+              this.issubmit = false
+              if (data.flag === 1) {
+                this.refresh()
+              }
+            }
+          })
+        })
+      })
+    },
+    tableRowClassName (row) {
+      row.row.rowIndex = row.rowIndex
+    },
+    moveEvent (itemdata, moveType) {
+      console.log('in move')
+      if (this.issubmit) return false
+      let curIndex = itemdata.rowIndex
+      let moveIndex = curIndex - 1
+      if (moveType === 'down') {
+        moveIndex = curIndex + 1
+      }
+      let moveData = this.tableData[moveIndex]
+      this.$vux.loading.show()
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/changeOrder`, {id1: itemdata.id, id2: moveData.id}).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            this.issubmit = false
+            if (data.flag === 1) {
+              this.refresh()
+            }
           }
+        })
+      })
+    },
+    deleteEvent (itemdata) {
+      if (this.issubmit) return false
+      this.$confirm('确定要删除该数据吗？').then(() => {
+        this.$vux.loading.show()
+        this.issubmit = true
+        this.$http.post(`${ENV.BokaApi}/api/demands/deleteStory`, {id: itemdata.id}).then(res => {
+          this.$vux.loading.hide()
+          const data = res.data
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'text',
+            time: this.$util.delay(data.error),
+            onHide: () => {
+              this.issubmit = false
+              if (data.flag === 1) {
+                this.refresh()
+              }
+            }
+          })
         })
       })
     },
@@ -781,6 +859,7 @@ export default {
       this.$util.setUserRole(this)
       if (this.loginUser) {
         this.query = this.$route.query
+        this.disTabData = false
         this.tableData = []
         this.fileList = []
         this.playerOptions = []
