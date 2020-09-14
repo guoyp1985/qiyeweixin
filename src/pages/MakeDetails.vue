@@ -1166,7 +1166,7 @@ export default {
       if (this.viewData.status === 1 && (this.isManager || this.isSale)) {
         this.controlBtn.push({id: 4, title: '分发', type: 'primary'})
       }
-      if (this.viewData.status === 4 || !this.isInvitor) {
+      if (this.viewData.status === 4 && !this.isInvitor) {
         this.controlBtn.push({id: 5, title: '分镜脚本', type: 'primary'})
       }
       if (this.viewData.status === 2 && this.isSupplier) {
@@ -1218,7 +1218,7 @@ export default {
           this.chooseUser()
           break
         case 5:
-          // 分镜脚本 viewData.status === 4
+          // 分镜脚本 viewData.status === 4 && !isInvitor
           this.toFenjing()
           break
         case 6:
@@ -1737,6 +1737,7 @@ export default {
         }
         const retdata = data.data ? data.data : data
         this.$util.infoSetRole(data.identity, this)
+        this.handleBtn()
         if (retdata.canedit) {
           this.allowEdit = true
         } else {
