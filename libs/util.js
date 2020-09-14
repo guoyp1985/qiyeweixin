@@ -800,9 +800,6 @@ Util.install = function (Vue, options) {
         case 'pm':
           curpage.isSale = true
           break
-        case 'pms':
-          curpage.isSale = true
-          break
         case 'customer':
           curpage.isCustomer = true
           break
