@@ -1952,12 +1952,9 @@ export default {
       border: 1px solid #333;
     }
     .title{
-      width: 10%;text-align: center;
-      min-width: 80px;
+      width:115px;text-align: center;
       padding: 9px;
-      span{
-        color: red;
-      }
+      span{color: red;}
     }
     .el-select,.el-input{
       width: 100%;
