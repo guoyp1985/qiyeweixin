@@ -166,7 +166,7 @@
       </td>
      </tr>
      <tr>
-       <td class="title">上传附件</td>
+       <td class="title"><template v-if="allowEdit">上传附件</template><template v-else>附件</template></td>
        <td colspan="3" class="align_left">
          <div v-if="allowEdit" class="align_left padding10" style="display:inline-block;">
             <el-upload
