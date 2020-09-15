@@ -1180,7 +1180,8 @@ export default {
         this.controlBtn.push({id: 12, title: '邀请共审', type: 'warning'})
       }
       if (this.viewData.canedit) {
-        this.controlBtn.push({id: 2, title: '修改', type: 'success'})
+        this.controlBtn.push({id: 2, title: '保存修改', type: 'success'})
+        this.controlBtn.push({id: 15, title: '确认修改并退出', type: 'success'})
       }
       if (this.viewData.cancensor) {
         this.controlBtn.push({id: 3, title: '需求确认', type: 'danger'})
@@ -1228,8 +1229,12 @@ export default {
           this.$router.push({path: '/assignSale', query: {id: this.query.id}})
           break
         case 2:
-          // 修改 viewData.canedit === 1
+          // 保存修改 viewData.canedit === 1
           this.onSubmit()
+          break
+        case 15:
+          // 确认修改并退出 viewData.canedit === 1
+          this.onSubmit(true)
           break
         case 3:
           // 需求确认 viewData.cancensor === 1
@@ -1283,7 +1288,7 @@ export default {
           break
       }
     },
-    onSubmit () {
+    onSubmit (isExit) {
       if (this.issubmit) return false
       let params = {
         title: this.viewData.title,
@@ -1354,9 +1359,9 @@ export default {
           time: this.$util.delay(data.error),
           onHide: () => {
             if (data.flag) {
-              if (this.isManager || this.isSale) {
-                this.$router.push({path: '/makeList'})
-              } else if (this.isCustomer) {
+              if (isExit) {
+                window.history.go(-1)
+              } else {
                 this.issubmit = false
                 this.refresh()
               }
