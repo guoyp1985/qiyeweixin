@@ -1,6 +1,11 @@
 <template>
   <div class="bg-white font14 make-detail-page">
-    <div v-if="showSos" class="sos-area">{{sosTxt}}</div>
+    <div v-if="showSos" class="sos-area">
+      <div class="flex_left">
+        <el-button @click="toBack" type="info" size="small" icon="el-icon-arrow-left">返回</el-button>
+      </div>
+      <div>{{sosTxt}}</div>
+    </div>
    <table class="add-make-list bg-white" v-if="!query.id || viewData.id">
      <tr>
        <th colspan="4" class="align_center font20 padding15" style="position:relative;">
