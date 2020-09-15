@@ -213,11 +213,11 @@
      </tr>
      <tr>
        <td class="title">特殊备注</td>
-       <td :colspan="`${!isCustomer ? 1 : 3}`">
+       <td :colspan="`${(isManager || isSale) ? 1 : 3}`">
          <el-input v-model="submitData.otherdemand" placeholder="请输入特殊备注"></el-input>
        </td>
-       <td v-if="!isCustomer">制作价格</td>
-       <td v-if="!isCustomer">
+       <td v-if="isManager || isSale">制作价格</td>
+       <td v-if="isManager || isSale">
          <el-input v-model="submitData.price" placeholder="请输入制作价格"></el-input>
        </td>
      </tr>
