@@ -259,6 +259,7 @@
 </template>
 <script>
 import ENV from 'env'
+import Time from '#/time'
 import {User, Token} from '#/storage'
 export default {
   components: {
@@ -509,6 +510,10 @@ export default {
         for (let key in this.submitData) {
           this.submitData[key] = ''
         }
+        let nowTime = new Date().getTime()
+        let endTime = nowTime + 24 * 60 * 60 * 1000 * 7
+        this.submitData.starttime = new Time(nowTime).dateFormat('yyyy-MM-dd')
+        this.submitData.endtime = new Time(endTime).dateFormat('yyyy-MM-dd')
         this.issubmit = false
         this.$vux.loading.show()
         this.getData()
