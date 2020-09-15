@@ -189,7 +189,7 @@
         </div>
         <div v-else class="file-list">
           <div class="file-item" v-for="(item,index) in fileList" :key="index" :item="item">
-            <a type="primary" :href="item.url" style="color: #409EFF;" target="_blank">{{item.name}}</a>
+            <a type="primary" :href="item.url" style="color: #409EFF;" :download="item.url" target="_blank">{{item.name}}</a>
            </div>
         </div>
        </td>
@@ -1173,7 +1173,7 @@ export default {
     },
     handleBtn () {
       this.controlBtn = []
-      if (this.viewData.status < 100 && this.isManager) {
+      if (this.viewData.status > 0 && this.viewData.status < 100 && this.isManager) {
         this.controlBtn.push({id: 1, title: '指派业务员', type: 'warning'})
       }
       if (this.viewData.status > 0 && (this.isCustomer)) {
