@@ -213,11 +213,11 @@
      </tr>
      <tr>
        <td class="title">特殊备注</td>
-       <td>
+       <td :colspan="`${!isCustomer ? 1 : 3}`">
          <el-input v-model="submitData.otherdemand" placeholder="请输入特殊备注"></el-input>
        </td>
-       <td>制作价格</td>
-       <td>
+       <td v-if="!isCustomer">制作价格</td>
+       <td v-if="!isCustomer">
          <el-input v-model="submitData.price" placeholder="请输入制作价格"></el-input>
        </td>
      </tr>
@@ -422,8 +422,10 @@ export default {
         this.$vux.toast.text('请输入正确的视频数量', 'middle')
         return false
       }
+      this.$vux.loading.show()
       this.issubmit = true
       this.$http.post(`${ENV.BokaApi}/api/demands/add`, params).then(res => {
+        this.$vux.loading.hide()
         let data = res.data
         this.$vux.toast.show({
           text: data.error,

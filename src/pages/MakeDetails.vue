@@ -216,7 +216,10 @@
        </td>
      </tr>
      <tr>
-       <td class="title">产品卖点<span class="font12 color-gray5">（核心卖点需标注）</span></td>
+       <td class="title">
+         <div>产品卖点</div>
+         <div class="font12 color-gray5">（核心卖点需标注）</div>
+       </td>
        <td colspan="3">
          <el-input v-if="allowEdit" type="textarea" v-model="viewData.sellerpoint" placeholder="请输入产品卖点"></el-input>
          <div class="txt-css" v-else>{{viewData.sellerpoint}}</div>
@@ -224,7 +227,10 @@
        </td>
      </tr>
      <tr>
-       <td class="title">视频内必须展示的关键信息</td>
+       <td class="title">
+         <div>视频内必须展示的</div>
+         <div>关键信息<span v-if="allowEdit">*</span></div>
+       </td>
        <td colspan="3">
          <el-input v-if="allowEdit" type="textarea" v-model="viewData.keyinfo" placeholder="请输入关键信息"></el-input>
          <div class="txt-css" v-else>{{viewData.keyinfo}}</div>
@@ -249,13 +255,13 @@
      </tr>
      <tr>
        <td class="title">特殊备注</td>
-       <td :colspan="query.type ? 3 : ''">
+       <td :colspan="`${!isCustomer ? 1 : 3}`">
          <el-input v-if="allowEdit" v-model="viewData.otherdemand" placeholder="请输入特殊备注"></el-input>
          <div class="txt-css" v-else>{{viewData.otherdemand}}</div>
          <div class="diff-css" v-if="historyData && historyData.otherdemand && historyData.otherdemand != '' && viewData.otherdemand != historyData.otherdemand">{{historyData.otherdemand}}</div>
        </td>
-       <td class="title" v-if="!query.type">制作价格</td>
-       <td v-if="!query.type">
+       <td class="title" v-if="!isCustomer">制作价格</td>
+       <td v-if="!isCustomer">
          <el-input v-if="allowEdit" v-model="viewData.price" placeholder="请输入制作价格"></el-input>
          <div class="txt-css" v-else>{{viewData.price}}</div>
          <div class="diff-css" v-if="historyData && historyData.price && historyData.price != '' && viewData.price != historyData.price">{{historyData.price}}</div>
@@ -1275,19 +1281,19 @@ export default {
         price: this.viewData.price,
         videocount: this.viewData.videocount,
         videotype: this.viewData.videotype,
-        attachment: ''
+        attachment: '',
+        brand: this.viewData.brand,
+        product: this.viewData.product,
+        target: this.viewData.target,
+        linkurl: this.viewData.linkurl,
+        customerdemand: this.viewData.customerdemand,
+        customerinfo: this.viewData.customerinfo,
+        productorientation: this.viewData.productorientation,
+        sellerpoint: this.viewData.sellerpoint,
+        keyinfo: this.viewData.keyinfo,
+        otherdemand: this.viewData.otherdemand,
+        customeridea: this.viewData.customeridea
       }
-      if (this.viewData.brand !== '') params.brand = this.viewData.brand
-      if (this.viewData.product !== '') params.product = this.viewData.product
-      if (this.viewData.target !== '') params.target = this.viewData.target
-      if (this.viewData.linkurl !== '') params.linkurl = this.viewData.linkurl
-      if (this.viewData.customerdemand !== '') params.customerdemand = this.viewData.customerdemand
-      if (this.viewData.customerinfo !== '') params.customerinfo = this.viewData.customerinfo
-      if (this.viewData.productorientation !== '') params.productorientation = this.viewData.productorientation
-      if (this.viewData.sellerpoint !== '') params.sellerpoint = this.viewData.sellerpoint
-      if (this.viewData.keyinfo !== '') params.keyinfo = this.viewData.keyinfo
-      if (this.viewData.otherdemand !== '') params.otherdemand = this.viewData.otherdemand
-      if (this.viewData.customeridea !== '') params.customeridea = this.viewData.customeridea
       if (this.query.id) params.id = parseInt(this.query.id)
       let attachment = []
       for (let i = 0; i < this.fileList.length; i++) {
@@ -1297,33 +1303,52 @@ export default {
         }
       }
       if (attachment.length) params.attachment = attachment.join(',')
-      var rule1 = /^(0|[1-9][0-9]*)$/
-      if (this.viewData.title === '' || this.viewData.v_starttime === '' || this.viewData.v_endtime === '' || this.viewData.duration === '' || this.viewData.ratio === '' || this.viewData.videoclass === '' ||
-          this.viewData.logo_all === '' || this.viewData.logo_end === '' || this.viewData.videotype === '') {
-        this.$vux.toast.text('必填项不能为空', 'middle')
-        return false
+      let iscontinue = true
+      let requiredData = ['title', 'starttime', 'endtime', 'duration', 'ratio', 'videoclass', 'logo_all', 'logo_end', 'videotype', 'keyinfo']
+      for (let i = 0; i < requiredData.length; i++) {
+        let curName = requiredData[i]
+        if (this.$util.trim(params[curName]) === '') {
+          this.$vux.toast.text('必填项不能为空', 'middle')
+          iscontinue = false
+          break
+        }
       }
-      if (this.viewData.v_endtime <= this.viewData.v_starttime) {
+      if (!iscontinue) return false
+      if (params.endtime <= params.starttime) {
         this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
         return false
       }
-      if (this.viewData.price !== '' && (isNaN(this.viewData.price) || parseFloat(this.viewData.price) < 0 || parseFloat(this.viewData.price).length > 7)) {
+      if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) <= 0 || parseFloat(params.price).length > 7)) {
         this.$vux.toast.text('请输入正确的制作价格', 'middle')
         return false
       }
-      if (this.viewData.videocount !== '' && (isNaN(this.viewData.videocount) || parseFloat(this.viewData.videocount) < 0 || !rule1.test(this.viewData.videocount))) {
+      var rule1 = /^(0|[1-9][0-9]*)$/
+      if (params.videocount !== '' && (isNaN(params.videocount) || parseFloat(params.videocount) <= 0 || !rule1.test(params.videocount))) {
         this.$vux.toast.text('请输入正确的视频数量', 'middle')
         return false
       }
+      this.$vux.loading.show()
       this.issubmit = true
       this.$http.post(`${ENV.BokaApi}/api/demands/add`, params).then(res => {
+        this.$vux.loading.hide()
         let data = res.data
-        this.$vux.toast.text(data.error, 'middle')
-        if (this.isManager || this.isSale) {
-          this.$router.push({path: '/makeList'})
-        } else if (this.isCustomer) {
-          this.issubmit = false
-        }
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              if (this.isManager || this.isSale) {
+                this.$router.push({path: '/makeList'})
+              } else if (this.isCustomer) {
+                this.issubmit = false
+                this.refresh()
+              }
+            } else {
+              this.issubmit = false
+            }
+          }
+        })
       })
     },
     handleExamine (id, type, item) {
