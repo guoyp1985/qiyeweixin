@@ -165,7 +165,7 @@
        <td colspan="3" class="align_left">
          <div v-if="allowEdit" class="align_left padding10" style="display:inline-block;">
             <el-upload
-            class="upload-demo"
+            class="upload-demo upload-new"
             ref="upload1"
             :action="uploadApi"
             :headers="uploadHeaders"
@@ -177,8 +177,8 @@
             :file-list="fileList"
             :auto-upload="false"
             >
-              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload1')" v-if="disUploadBtn">上传文件</el-button>
+              <el-button slot="trigger" size="small" type="success">上传文件</el-button>
+              <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload1')" v-if="disUploadBtn">上传文件</el-button> -->
             </el-upload>
         </div>
         <div v-else class="file-list">
@@ -313,7 +313,7 @@
        <td colspan="3" class="align_left">
          <div class="align_left padding10" style="display:inline-block;">
             <el-upload
-            class="upload-demo"
+            class="upload-demo upload-new"
             ref="upload2"
             :action="uploadApi"
             :headers="uploadHeaders"
@@ -326,8 +326,8 @@
             :auto-upload="false"
             accept=".jpg,.jpeg,.png,.JPG,.JPEG"
             >
-              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload2')" v-if="disUploadBtn1">上传文件</el-button>
+              <el-button slot="trigger" size="small" type="success">上传文件</el-button>
+              <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload2')" v-if="disUploadBtn1">上传文件</el-button> -->
             </el-upload>
         </div>
        </td>
@@ -337,7 +337,7 @@
        <td colspan="3" class="align_left">
          <div class="align_left padding10" style="display:inline-block;">
             <el-upload
-            class="upload-demo"
+            class="upload-demo upload-new"
             ref="upload3"
             :action="uploadApi"
             :headers="uploadHeaders"
@@ -350,8 +350,8 @@
             :auto-upload="false"
             :limit="1"
             >
-              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload3')" v-if="disUploadBtn2">上传文件</el-button>
+              <el-button slot="trigger" size="small" type="success">上传文件</el-button>
+              <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload3')" v-if="disUploadBtn2">上传文件</el-button> -->
             </el-upload>
         </div>
        </td>
@@ -1613,15 +1613,12 @@ export default {
       this.disUploadBtn = isDis
     },
     handleRemove (file, fileList) {
-      console.log('in handleRemove')
-      console.log(fileList)
       this.fileList = fileList
       this.handleUploadBtn(fileList)
     },
     handleChange (file, fileList) {
-      console.log('in handleChange')
-      console.log(fileList)
       this.handleUploadBtn(fileList)
+      this.$refs.upload1.submit()
     },
     afterUpload (res, file, fileList) {
       for (let i = 0; i < fileList.length; i++) {
@@ -1649,9 +1646,11 @@ export default {
     handleRemove1 (file, fileList) {
       this.photos = fileList
       this.handleUploadBtn1(fileList)
+      this.$refs.upload2.submit()
     },
     handleChange1 (file, fileList) {
       this.handleUploadBtn1(fileList)
+      this.$refs.upload.submit()
     },
     afterUpload1 (res, file, fileList) {
       for (let i = 0; i < fileList.length; i++) {
@@ -1682,6 +1681,7 @@ export default {
     },
     handleChange2 (file, fileList) {
       this.handleUploadBtn2(fileList)
+      this.$refs.upload3.submit()
     },
     afterUpload2 (res, file, fileList) {
       for (let i = 0; i < fileList.length; i++) {

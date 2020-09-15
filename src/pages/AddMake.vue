@@ -150,7 +150,7 @@
        <td colspan="3" class="align_left">
          <div class="align_left padding10" style="display:inline-block;">
             <el-upload
-            class="upload-demo"
+            class="upload-demo upload-new"
             ref="upload"
             :action="uploadApi"
             :headers="uploadHeaders"
@@ -162,8 +162,8 @@
             :file-list="fileList"
             :auto-upload="false"
             >
-              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button>
+              <el-button slot="trigger" size="small" type="success">上传文件</el-button>
+              <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button> -->
             </el-upload>
         </div>
        </td>
@@ -474,6 +474,7 @@ export default {
     },
     handleChange (file, fileList) {
       this.handleUploadBtn(fileList)
+      this.$refs.upload.submit()
     },
     afterUpload (res, file, fileList) {
       for (let i = 0; i < fileList.length; i++) {

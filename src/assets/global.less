@@ -1237,3 +1237,16 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .app-tab .tab-item{display:flex !important;justify-content: center; align-items: center;flex:1;height:100%;}
 .app-tab .tab-item.active{position: relative;}
 .app-tab .tab-item.active .line{ content: "";display: block;height:2px;width: 100%;position: absolute; bottom: 0;left: 0;}
+
+.upload-new{
+	position:relative;padding-bottom:32px;
+	.el-upload{position:absolute;left:0;bottom:0;}
+	.el-upload-list{
+		.el-upload-list__item {
+			margin-top:0;margin-bottom:0;padding:10px 0;
+		}
+		.el-upload-list__item-status-label{display:none !important;}
+		.el-icon-close{display:flex;right:-20px;top:0;bottom:0;justify-content:center;align-items: center;}
+		.el-icon-close:before{content:'删除';display:block;background-color:#f56c6c;color:#fff;padding:5px 10px;border-radius:5px;}
+	}
+}
