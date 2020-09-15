@@ -1,6 +1,6 @@
 <template>
   <div class="bg-page font14 assign-sale-page">
-    <div class="vux-tab-wrap">分配业务员</div>
+    <div class="vux-tab-wrap">指派业务员</div>
     <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <!-- <template v-if="disList1">
         <el-card class="box-card" v-if="!listData1.length">
@@ -21,7 +21,7 @@
           <el-card class="box-card">
             <div slot="header" class="clearfix">
               <span>业务员</span>
-              <el-button style="float: right; padding: 3px 0" type="text" @click="saveEvent">保存</el-button>
+              <el-button style="float: right; padding: 3px 0" type="text" @click="saveEvent">指派</el-button>
             </div>
             <el-checkbox-group v-model="salearr">
               <el-checkbox v-for="(item,index) in listData1" :key="index" :label="item.uid">{{item.linkman}}</el-checkbox>
@@ -52,6 +52,7 @@ export default {
       listData2: [],
       disList2: false,
       salearr: [],
+      issubmit: false,
       isManager: false, // 1:管理员
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
@@ -60,13 +61,26 @@ export default {
   },
   methods: {
     saveEvent () {
-      console.log(this.salearr)
-      this.$http.post(`${ENV.BokaApi}/api/demands/addDemandUser?type=pm`, {
+      if (this.issubmit) return false
+      this.$vux.loading.show()
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/addDemandUser`, {
         type: 'pm', demandid: this.query.id, uids: this.salearr
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
-        this.$vux.toast.text(data.error, 'middle')
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              window.history.go(-1)
+            } else {
+              this.issubmit = false
+            }
+          }
+        })
       })
     },
     toLink (link) {
