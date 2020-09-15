@@ -166,24 +166,25 @@
      <tr>
        <td class="title">相关链接</td>
        <td colspan="3">
-         <el-input v-model="submitData.linkurl" placeholder="请输入相关链接"></el-input>
+         <el-input type="textarea" v-model="submitData.linkurl" placeholder="请输入相关链接"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户诉求</td>
        <td colspan="3">
-         <el-input v-model="submitData.customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input type="textarea" v-model="submitData.customerdemand" placeholder="请输入投诉内容"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">客户信息</td>
        <td colspan="3">
-         <el-input v-model="submitData.customerinfo" placeholder="请输入客户信息"></el-input>
+         <el-input type="textarea" v-model="submitData.customerinfo" placeholder="请输入客户信息"></el-input>
        </td>
      </tr>
      <tr>
        <td class="title">产品定位</td>
-       <td colspan="3"><el-input v-model="submitData.productorientation" placeholder="请输入产品定位"></el-input>
+       <td colspan="3">
+         <el-input type="textarea" v-model="submitData.productorientation" placeholder="请输入产品定位"></el-input>
        </td>
      </tr>
      <tr>

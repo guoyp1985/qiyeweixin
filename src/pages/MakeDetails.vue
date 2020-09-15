@@ -186,7 +186,7 @@
      <tr>
        <td class="title">相关链接</td>
        <td colspan="3">
-         <el-input v-if="allowEdit" v-model="viewData.linkurl" placeholder="请输入相关链接"></el-input>
+         <el-input v-if="allowEdit" type="textarea" v-model="viewData.linkurl" placeholder="请输入相关链接"></el-input>
          <div class="txt-css" v-else>{{viewData.linkurl}}</div>
          <div class="diff-css" v-if="historyData && historyData.linkurl && historyData.linkurl != '' && viewData.linkurl != historyData.linkurl">{{historyData.linkurl}}</div>
        </td>
@@ -194,7 +194,7 @@
      <tr>
        <td class="title">客户诉求</td>
        <td colspan="3">
-         <el-input v-if="allowEdit" v-model="viewData.customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input v-if="allowEdit" type="textarea" v-model="viewData.customerdemand" placeholder="请输入投诉内容"></el-input>
          <div class="txt-css" v-else>{{viewData.customerdemand}}</div>
          <div class="diff-css" v-if="historyData && historyData.customerdemand && historyData.customerdemand != '' && viewData.customerdemand != historyData.customerdemand">{{historyData.customerdemand}}</div>
        </td>
@@ -202,7 +202,7 @@
      <tr>
        <td class="title">客户信息</td>
        <td colspan="3">
-         <el-input v-if="allowEdit" v-model="viewData.customerinfo" placeholder="请输入客户信息"></el-input>
+         <el-input v-if="allowEdit" type="textarea" v-model="viewData.customerinfo" placeholder="请输入客户信息"></el-input>
          <div class="txt-css" v-else>{{viewData.customerinfo}}</div>
          <div class="diff-css" v-if="historyData && historyData.customerinfo && historyData.customerinfo != '' && viewData.customerinfo != historyData.customerinfo">{{historyData.customerinfo}}</div>
        </td>
@@ -210,7 +210,7 @@
      <tr>
        <td class="title">产品定位</td>
        <td colspan="3">
-         <el-input v-if="allowEdit" v-model="viewData.productorientation" placeholder="请输入产品定位"></el-input>
+         <el-input v-if="allowEdit" type="textarea" v-model="viewData.productorientation" placeholder="请输入产品定位"></el-input>
          <div class="txt-css" v-else>{{viewData.productorientation}}</div>
          <div class="diff-css" v-if="historyData && historyData.productorientation && historyData.productorientation != '' && viewData.productorientation != historyData.productorientation">{{historyData.productorientation}}</div>
        </td>
