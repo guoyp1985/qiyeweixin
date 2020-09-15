@@ -1,5 +1,8 @@
 <template>
   <div class="bg-white">
+    <div class="padding10">
+      <el-button @click="toBack" type="info" size="small" icon="el-icon-arrow-left">返回</el-button>
+    </div>
     <div class="from bg-white">
       <div class="from-items">
         <div class="item-title">姓名<span>*</span></div>
@@ -63,6 +66,9 @@ export default {
     }
   },
   methods: {
+    toBack () {
+      window.history.go(-1)
+    },
     submitEvent () {
       if (!this.issubmit) {
         if (this.linkman === '' || this.telephone === '' || this.groupid === '') {

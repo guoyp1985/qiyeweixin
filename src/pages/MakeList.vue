@@ -10,12 +10,15 @@
     </tab>
     <div class="s-container scroll-container makeList-page" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <el-row class="padding10">
+        <el-col :span="3" class="flex_left">
+          <el-button @click="toBack" type="info" icon="el-icon-arrow-left">返回</el-button>
+        </el-col>
         <el-col :span="18">
           <el-input placeholder="请输入项目名称搜索" v-model="keyword" @keyup.enter.native="kwChange">
             <el-button slot="append" icon="el-icon-search" @click="searchEvent"></el-button>
           </el-input>
         </el-col>
-        <el-col :span="6" class="flex_right">
+        <el-col :span="3" class="flex_right">
           <el-button type="primary" @click.native="toLink('/addMake')">新增</el-button>
         </el-col>
       </el-row>
@@ -92,6 +95,9 @@ export default {
     }
   },
   methods: {
+    toBack () {
+      window.history.go(-1)
+    },
     toLink (link) {
       this.$router.push({path: link})
     },

@@ -1,6 +1,11 @@
 <template>
   <div class="bg-page font14 assign-sale-page">
-    <div class="vux-tab-wrap">指派业务员</div>
+    <div class="vux-tab-wrap">
+      <span>指派业务员</span>
+      <div style="position:absolute;left:10px;top:0;bottom:0;" class="flex_left">
+        <el-button @click="toBack" type="info" size="small" icon="el-icon-arrow-left">返回</el-button>
+      </div>
+    </div>
     <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <!-- <template v-if="disList1">
         <el-card class="box-card" v-if="!listData1.length">
@@ -60,6 +65,9 @@ export default {
     }
   },
   methods: {
+    toBack () {
+      window.history.go(-1)
+    },
     saveEvent () {
       if (this.issubmit) return false
       this.$vux.loading.show()

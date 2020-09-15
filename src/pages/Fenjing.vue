@@ -1,6 +1,11 @@
 <template lang="html">
   <div class="bg-white font14 fenjing-list-page">
-    <div class="vux-tab-wrap">分镜脚本</div>
+    <div class="vux-tab-wrap">
+      <span>分镜脚本</span>
+      <div style="position:absolute;left:10px;top:0;bottom:0;" class="flex_left">
+        <el-button @click="toBack" type="info" size="small" icon="el-icon-arrow-left">返回</el-button>
+      </div>
+    </div>
     <div class="s-container scroll-container mb20" style="top:44px;">
       <template v-if="disTabData">
         <div class="flex_left padding10" v-if="versionData.length">
@@ -354,6 +359,9 @@ export default {
     }
   },
   methods: {
+    toBack () {
+      window.history.go(-1)
+    },
     handleBtn () {
       // 1. canedit=1，行里的修改，下面的新增，提交审核
       // 2. canback==1，行里没有，下面的撤回审核

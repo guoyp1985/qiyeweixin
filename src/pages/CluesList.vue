@@ -1,6 +1,11 @@
 <template>
   <div class="bg-page font14 clues-list-page">
-    <div class="vux-tab-wrap">线索列表</div>
+    <div class="vux-tab-wrap">
+      <span>线索列表</span>
+      <div style="position:absolute;left:10px;top:0;bottom:0;" class="flex_left">
+        <el-button @click="toBack" type="info" size="small" icon="el-icon-arrow-left">返回</el-button>
+      </div>
+    </div>
     <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer',0)">
       <template v-if="disTabData">
         <template v-if="!tableData.length">
@@ -72,6 +77,9 @@ export default {
     }
   },
   methods: {
+    toBack () {
+      window.history.go(-1)
+    },
     toLink (link) {
       this.$router.push({path: link})
     },
