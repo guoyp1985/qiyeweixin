@@ -161,6 +161,8 @@
             :on-success="afterUpload"
             :file-list="fileList"
             :auto-upload="false"
+            list-type="picture"
+            :on-error="uploadError"
             >
               <el-button slot="trigger" size="small" type="success">上传文件</el-button>
               <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button> -->
@@ -475,6 +477,9 @@ export default {
     handleChange (file, fileList) {
       this.handleUploadBtn(fileList)
       this.$refs.upload.submit()
+    },
+    uploadError () {
+      this.$vux.toast.text('上传失败，请检查上传文件的格式是否正确', 'middle')
     },
     afterUpload (res, file, fileList) {
       for (let i = 0; i < fileList.length; i++) {

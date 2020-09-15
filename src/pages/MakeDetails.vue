@@ -174,6 +174,7 @@
             :on-change="handleChange"
             :on-remove="handleRemove"
             :on-success="afterUpload"
+            :on-error="uploadError"
             :file-list="fileList"
             :auto-upload="false"
             >
@@ -322,6 +323,7 @@
             :on-change="handleChange1"
             :on-remove="handleRemove1"
             :on-success="afterUpload1"
+            :on-error="uploadError"
             :file-list="photos"
             :auto-upload="false"
             accept=".jpg,.jpeg,.png,.JPG,.JPEG"
@@ -346,6 +348,7 @@
             :on-change="handleChange2"
             :on-remove="handleRemove2"
             :on-success="afterUpload2"
+            :on-error="uploadError"
             :file-list="samplePiece"
             :auto-upload="false"
             :limit="1"
@@ -1619,6 +1622,9 @@ export default {
     handleChange (file, fileList) {
       this.handleUploadBtn(fileList)
       this.$refs.upload1.submit()
+    },
+    uploadError () {
+      this.$vux.toast.text('上传失败，请检查上传文件的格式是否正确', 'middle')
     },
     afterUpload (res, file, fileList) {
       for (let i = 0; i < fileList.length; i++) {
