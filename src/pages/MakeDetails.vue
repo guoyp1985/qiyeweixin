@@ -4,7 +4,7 @@
       <div class="flex_left">
         <el-button @click="toBack" type="info" size="small" icon="el-icon-arrow-left">返回</el-button>
       </div>
-      <div>{{sosTxt}}</div>
+      <div class="flex_center">{{sosTxt}}</div>
     </div>
    <table class="add-make-list bg-white" v-if="!query.id || viewData.id">
      <tr>
@@ -1938,7 +1938,8 @@ export default {
 .make-detail-page{
   padding:10px;box-sizing: border-box;
   .sos-area{
-    width:100%;display:flex;justify-content: center;align-items: center;color:#ff0000;
+    width:100%;
+    .sos-txt{width:100%;display:flex;justify-content: center;align-items: center;color:#ff0000;}
   }
   .txt-css{text-align:left;padding:0 15px;box-sizing: border-box;}
   .diff-css{color:#ff0000;text-decoration:line-through;text-align:left;padding:0 15px 5px;}
