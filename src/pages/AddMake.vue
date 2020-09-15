@@ -2,7 +2,12 @@
   <div class="bg-white font14 add-make-page">
    <table class="add-make-list bg-white">
      <tr>
-       <th colspan="4" class="align_center font20 padding15">制作需求单</th>
+       <th colspan="4" class="align_center font20 padding15" style="position:relative;">
+         <span>制作需求单</span>
+         <div style="position:absolute;left:0;top:0;bottom:0;" class="flex_left">
+           <el-button @click="toBack" type="info" size="small" icon="el-icon-arrow-left">返回</el-button>
+         </div>
+       </th>
      </tr>
      <tr>
        <td class="title">项目名称<span>*</span></td>
@@ -326,6 +331,9 @@ export default {
     }
   },
   methods: {
+    toBack () {
+      window.history.go(-1)
+    },
     clickCustomer () {
       this.showCustomerDialog = true
       if (!this.customerData.length) {
