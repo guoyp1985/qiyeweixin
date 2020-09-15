@@ -822,6 +822,7 @@
      title="驳回"
      :visible.sync="showBackDialog"
      width="60%">
+     <div class="pb10" style="color:#f56c6c;">此行为将导致本需求彻底失效，且不可撤销，若希望修改制作需求单，请取消驳回，并在制作需求单内进行修改。</div>
      <div>
        <el-input placeholder="请输入驳回原因" v-model="backReason" type="textarea" :rows="10"></el-input>
      </div>
