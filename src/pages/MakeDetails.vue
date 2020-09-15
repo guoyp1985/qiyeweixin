@@ -1158,7 +1158,7 @@ export default {
     handleBtn () {
       this.controlBtn = []
       if (this.viewData.status < 100 && this.isManager) {
-        this.controlBtn.push({id: 1, title: '分配业务员', type: 'warning'})
+        this.controlBtn.push({id: 1, title: '指派业务员', type: 'warning'})
       }
       if (this.viewData.status > 0 && (this.isCustomer)) {
         this.controlBtn.push({id: 12, title: '邀请共审', type: 'warning'})
@@ -1208,7 +1208,7 @@ export default {
     buttonEvent (id) {
       switch (id) {
         case 1:
-          // 分配业务员 viewData.status < 100 && (isManager || isSale)
+          // 指派业务员 viewData.status < 100 && (isManager || isSale)
           this.$router.push({path: '/assignSale', query: {id: this.query.id}})
           break
         case 2:
