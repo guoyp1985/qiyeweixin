@@ -1884,48 +1884,50 @@ export default {
         }
       })
     },
+    initData () {
+      this.showSos = false
+      this.viewData = {}
+      this.pageStart = 0
+      this.disTabData = false
+      this.tableData = []
+      this.pageStart2 = 0
+      this.disTabData2 = false
+      this.tableData2 = []
+      this.durationOptions = []
+      this.ratioOptions = []
+      this.videoclassOptions = []
+      this.logo_allOptions = []
+      this.logo_endOptions = []
+      this.videotypeOptions = []
+      this.comefromOptions = []
+      this.pricetypeOptions = []
+      this.fileList = []
+      this.samplePiece = []
+      this.ideaRadio = ''
+      this.issubmit = false
+      this.tableData4 = []
+      this.disTabData4 = false
+      this.allowEdit = true
+      this.showChooseUser = false
+      this.submitUser = null
+      this.dialogTitle = ''
+      this.selectedIdeaData = null
+      this.ideaObject = {}
+      this.backReason = ''
+      this.showBackDialog = false
+      this.showIdeaDialog = false
+      this.selectedSuid = 0
+      this.showSupplyDialog = false
+    },
     refresh () {
       this.query = this.$route.query
       this.loginUser = User.get()
       this.$util.setUserRole(this)
       let token = Token.get()
       this.uploadHeaders.Authorization = `Bearer ${token.token}`
-      if (this.loginUser) {
-        this.viewData = {}
-        this.pageStart = 0
-        this.disTabData = false
-        this.tableData = []
-        this.pageStart2 = 0
-        this.disTabData2 = false
-        this.tableData2 = []
-        this.durationOptions = []
-        this.ratioOptions = []
-        this.videoclassOptions = []
-        this.logo_allOptions = []
-        this.logo_endOptions = []
-        this.videotypeOptions = []
-        this.comefromOptions = []
-        this.pricetypeOptions = []
-        this.fileList = []
-        this.samplePiece = []
-        this.ideaRadio = ''
-        this.issubmit = false
-        this.tableData4 = []
-        this.disTabData4 = false
-        this.allowEdit = true
-        this.showChooseUser = false
-        this.submitUser = null
-        this.dialogTitle = ''
-        this.selectedIdeaData = null
-        this.ideaObject = {}
-        this.backReason = ''
-        this.showBackDialog = false
-        this.showIdeaDialog = false
-        this.selectedSuid = 0
-        this.showSupplyDialog = false
-        this.$vux.loading.show()
-        this.getData()
-      }
+      this.initData()
+      this.$vux.loading.show()
+      this.getData()
     }
   },
   activated () {
