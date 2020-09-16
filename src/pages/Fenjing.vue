@@ -853,14 +853,22 @@ export default {
         memo: this.memo
       }
       if (this.fenjingId !== 0) params.id = this.fenjingId
-      console.log(params);
+      this.$vux.loading.show()
       this.issubmit = true
       this.$http.post(`${ENV.BokaApi}/api/demands/addStoryBoard`, params).then(res => {
-        let data = res.data
-        this.$vux.toast.text(data.error, 'middle')
-        this.getData()
-        this.isAddFenJing = false
-        this.issubmit = false
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            this.issubmit = false
+            if (data.flag === 1) {
+              this.refresh()
+            }
+          }
+        })
       })
     },
     handleExamine (id, type, item) {
@@ -875,6 +883,7 @@ export default {
       this.reason = ''
     },
     submitModal () {
+      if (this.issubmit) return false
       if (this.reason === '') {
         this.$vux.toast.text('请填写审核意见', 'middle')
         return false
@@ -885,43 +894,81 @@ export default {
         params.videoid = this.viewData.videoid
       }
       this.$vux.loading.show()
+      this.issubmit = true
       this.$http.post(`${ENV.BokaApi}/api/demands/checkStoryBoard`, params).then(res => {
+        this.$vux.loading.hide()
         const data = res.data
-        if (data.flag) {
-          this.$vux.loading.hide()
-          this.closeModal()
-          this.disCensorBtn = false
-          if (this.status === 4) {
-            this.getData()
-          } else {
-            this.getData4()
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            this.issubmit = false
+            if (data.flag === 1) {
+              this.refresh()
+            }
           }
-        }
+        })
+        // if (data.flag) {
+        //   this.$vux.loading.hide()
+        //   this.closeModal()
+        //   this.disCensorBtn = false
+        //   if (this.status === 4) {
+        //     this.getData()
+        //   } else {
+        //     this.getData4()
+        //   }
+        // }
       })
     },
     submitExamine () {
+      if (this.issubmit) return false
       this.$confirm('您是否确认提交审核？提交审核以后将不能再修改。').then(() => {
         this.$vux.loading.show()
+        this.issubmit = true
         this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {demandid: this.query.id, version: this.curVersion}).then(res => {
+          this.$vux.loading.hide()
           const data = res.data
-          if (data.flag) {
-            this.$vux.loading.hide()
-            this.getData()
-          }
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'text',
+            time: this.$util.delay(data.error),
+            onHide: () => {
+              this.issubmit = false
+              if (data.flag === 1) {
+                this.refresh()
+              }
+            }
+          })
         })
       })
     },
     backModify () {
+      if (this.issubmit) return false
       this.$confirm('确定要返回修改吗？').then(() => {
+        let postData = []
+        for (let i = 0; i < this.tableData.length; i++) {
+          let curd = this.tableData[i]
+          postData.push({id: curd.id, checkresult: curd.checkresult})
+        }
         this.$vux.loading.show()
+        this.issubmit = true
         this.$http.post(`${ENV.BokaApi}/api/demands/reworkStoryBoard`, {
-          demandid: this.query.id, version: this.curVersion
+          demandid: this.query.id, result: postData
         }).then(res => {
+          this.$vux.loading.hide()
           const data = res.data
-          if (data.flag) {
-            this.$vux.loading.hide()
-            this.getData()
-          }
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'text',
+            time: this.$util.delay(data.error),
+            onHide: () => {
+              this.issubmit = false
+              if (data.flag === 1) {
+                this.refresh()
+              }
+            }
+          })
         })
       })
     },
