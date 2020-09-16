@@ -715,7 +715,7 @@ export default {
     },
     agreeStoryBoard () {
       if (this.issubmit) return false
-      this.$confirm('确定要审核通过吗？').then(() => {
+      this.$confirm('确定要提交到客户审核吗？').then(() => {
         this.$vux.loading.show()
         this.issubmit = true
         this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.curVersion}).then(res => {
