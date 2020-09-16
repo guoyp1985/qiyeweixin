@@ -147,6 +147,7 @@ export default {
       this.$util.setUserRole(this)
       this.query = this.$route.query
       if (this.loginUser) {
+        this.issubmit = false
         this.pageStart = 0
         this.disTabData = false
         this.tableData = []
