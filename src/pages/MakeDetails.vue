@@ -1193,7 +1193,7 @@ export default {
       if (this.viewData.status === 4 && !this.isInvitor) {
         this.controlBtn.push({id: 5, title: '分镜脚本', type: 'primary'})
       }
-      if (this.viewData.status === 2 && this.isSupplier) {
+      if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
         this.controlBtn.push({id: 6, title: '提交创意', type: 'success'})
       }
       // 修改创意梗概
