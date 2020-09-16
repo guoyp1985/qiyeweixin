@@ -368,7 +368,7 @@ export default {
       // 3. cancheck=1，行里的审核，下面的返回修改，审核通过。
       // 4. canzhuan==1,行里”转交供应商”，下面，返回修改。
       this.controlBtn = []
-      if (this.storyData.canedit) {
+      if (this.storyData.canedit && this.isSupplier) {
         // this.controlBtn.push({id: 1, title: '新增', type: 'success'})
         this.controlBtn.push({id: 2, title: '提交审核', type: 'primary'})
       }
@@ -395,7 +395,7 @@ export default {
           this.addFenJing()
           break
         case 2:
-          // 提交审核 storyData.canedit
+          // 提交审核 storyData.canedit && this.isSupplier
           this.submitExamine()
           break
         case 3:

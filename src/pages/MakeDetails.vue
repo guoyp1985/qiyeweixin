@@ -1250,7 +1250,7 @@ export default {
           this.toFenjing()
           break
         case 6:
-          // 提交创意 viewData.status==2 && groupid==3(isSupplier)
+          // 提交创意 (this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)
           this.showIdeaDialog = true
           break
         case 7:
