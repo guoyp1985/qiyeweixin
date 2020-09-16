@@ -646,7 +646,7 @@ export default {
             })
           }
           this.curVersion = data.version
-          this.versionData = this.$util.transSelectOption(data.allversions)
+          this.versionData = this.$util.transSelectOption(data.allversions, 'int')
           this.disTabData = true
           this.handleBtn()
         }
