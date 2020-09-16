@@ -194,9 +194,14 @@
               v-if="!isSupplier"
               label="客户意见"
               min-width="200">
-                <template slot-scope="scope">
-                  <template v-if="!scope.row.customeradvice || scope.row.customeradvice == ''">无</template>
-                  <template v-else>{{scope.row.customeradvice}}</template>
+                <template slot-scope="scope" v-if="scope.row.dataType != 'add'">
+                  <template v-if="storyData.cancheck && isCustomer">
+                    <el-input @input="adviceChangeEvent" type="textarea" v-model="scope.row.customeradvice" placeholder="请输入客户意见"></el-input>
+                  </template>
+                  <template v-else>
+                    <template v-if="!scope.row.customeradvice || scope.row.customeradvice == ''">无</template>
+                    <template v-else>{{scope.row.customeradvice}}</template>
+                  </template>
                 </template>
             </el-table-column>
             <el-table-column
@@ -379,7 +384,8 @@ export default {
       listData: [],
       submitData: {},
       issubmit: false,
-      haveResult: false
+      haveResult: false,
+      haveAdvice: false
     }
   },
   methods: {
@@ -405,13 +411,21 @@ export default {
       if (this.storyData.cantongguo && this.disCensorBtn) {
         this.controlBtn.push({id: 5, title: '审核通过', type: 'primary'})
       }
-      if (this.storyData.cansubmit && !this.haveResult) {
-        this.controlBtn.push({id: 6, title: '提交客户', type: 'primary'})
+      if (this.storyData.cansubmit) {
+        if (this.isManager || this.isSale) {
+          if (!this.haveResult) {
+            this.controlBtn.push({id: 6, title: '提交客户', type: 'primary'})
+          }
+        } else if (this.isCustomer) {
+          if (!this.haveAdvice) {
+            this.controlBtn.push({id: 9, title: '审核通过', type: 'primary'})
+          }
+        }
       }
       if (this.storyData.cancheckphoto) {
         this.controlBtn.push({id: 7, title: '审核照片', type: 'primary'})
       }
-      if (this.storyData.canapply && !this.haveResult) {
+      if (this.storyData.canapply && !this.haveResult && !this.haveAdvice) {
         this.controlBtn.push({id: 8, title: '申请修改', type: 'success'})
       }
     },
@@ -438,8 +452,12 @@ export default {
           this.agreeRushVideo()
           break
         case 6:
-          // 审核通过 storyData.cansubmit
-          this.agreeStoryBoard()
+          // 提交客户 storyData.cansubmit && (this.isManager || this.isSale)
+          this.submitToCustomer()
+          break
+        case 9:
+          // 审核通过 storyData.cansubmit && isCustomer
+          this.censorEvent()
           break
         case 7:
           // 审核通过 storyData.cancheckphoto
@@ -470,13 +488,33 @@ export default {
       }
       this.handleBtn()
     },
+    adviceChangeEvent () {
+      let isempty = true
+      for (let i = 0; i < this.tableData.length; i++) {
+        let curd = this.tableData[i]
+        if (this.$util.trim(curd.customeradvice) !== '') {
+          isempty = false
+          break
+        }
+      }
+      if (isempty) {
+        this.haveAdvice = false
+      } else {
+        this.haveAdvice = true
+      }
+      this.handleBtn()
+    },
     backModify () {
       if (this.issubmit) return false
       this.$confirm('确定要返回修改吗？').then(() => {
         let postData = []
         for (let i = 0; i < this.tableData.length; i++) {
           let curd = this.tableData[i]
-          postData.push({id: curd.id, checkresult: curd.checkresult})
+          if (this.isCustomer) {
+            postData.push({id: curd.id, customeradvice: curd.customeradvice})
+          } else {
+            postData.push({id: curd.id, checkresult: curd.checkresult})
+          }
         }
         this.$vux.loading.show()
         this.issubmit = true
@@ -713,26 +751,35 @@ export default {
         }
       })
     },
-    agreeStoryBoard () {
+    agreeCensor () {
+      this.$vux.loading.show()
+      this.issubmit = true
+      this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.curVersion}).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            this.issubmit = false
+            if (data.flag === 1) {
+              this.refresh()
+            }
+          }
+        })
+      })
+    },
+    submitToCustomer () {
       if (this.issubmit) return false
       this.$confirm('确定要提交到客户审核吗？').then(() => {
-        this.$vux.loading.show()
-        this.issubmit = true
-        this.$http.post(`${ENV.BokaApi}/api/demands/agreeStoryBoard`, {demandid: this.query.id, version: this.curVersion}).then(res => {
-          this.$vux.loading.hide()
-          const data = res.data
-          this.$vux.toast.show({
-            text: data.error,
-            type: 'text',
-            time: this.$util.delay(data.error),
-            onHide: () => {
-              this.issubmit = false
-              if (data.flag === 1) {
-                this.refresh()
-              }
-            }
-          })
-        })
+        this.agreeCensor()
+      })
+    },
+    censorEvent () {
+      if (this.issubmit) return false
+      this.$confirm('确定要审核通过吗？').then(() => {
+        this.agreeCensor()
       })
     },
     agreeRushVideo () {
