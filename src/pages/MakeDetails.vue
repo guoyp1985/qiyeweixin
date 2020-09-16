@@ -1179,7 +1179,7 @@ export default {
     },
     handleBtn () {
       this.controlBtn = []
-      if (this.viewData.status > 0 && this.viewData.status < 100 && this.isManager) {
+      if (this.viewData.status >= 0 && this.viewData.status < 100 && this.isManager) {
         this.controlBtn.push({id: 1, title: '指派业务员', type: 'warning'})
       }
       if (this.viewData.status > 0 && (this.isCustomer)) {
