@@ -49,10 +49,10 @@
               min-width="100">
             </el-table-column>
             <el-table-column
-              label="日外/夜内"
-              min-width="100">
+              label="日/夜/内/外"
+              min-width="95">
               <template slot-scope="scope">
-                <el-input v-if="storyData.canedit" v-model="scope.row.daynight" placeholder="必填,日外/夜内"></el-input>
+                <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.daynight" placeholder="必填,日/夜/内/外"></el-input>
                 <div v-else>{{scope.row.daynight}}</div>
               </template>
             </el-table-column>
@@ -60,7 +60,7 @@
               label="场景"
               min-width="100">
               <template slot-scope="scope">
-                <el-input v-if="storyData.canedit" v-model="scope.row.scene" placeholder="必填,场景"></el-input>
+                <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.scene" placeholder="必填,场景"></el-input>
                 <div v-else>{{scope.row.scene}}</div>
               </template>
             </el-table-column>
@@ -68,7 +68,7 @@
               label="拍摄手法"
               min-width="100">
               <template slot-scope="scope">
-                <el-input v-if="storyData.canedit" v-model="scope.row.photography" placeholder="必填,拍摄手法"></el-input>
+                <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.photography" placeholder="必填,拍摄手法"></el-input>
                 <div v-else>{{scope.row.photography}}</div>
               </template>
             </el-table-column>
@@ -76,7 +76,7 @@
               label="景别"
               min-width="100">
               <template slot-scope="scope">
-                <el-input v-if="storyData.canedit" v-model="scope.row.fieldofview" placeholder="必填,景别"></el-input>
+                <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.fieldofview" placeholder="必填,景别"></el-input>
                 <div v-else>{{scope.row.fieldofview}}</div>
               </template>
             </el-table-column>
@@ -86,7 +86,7 @@
             min-width="100">
             <el-table-column
               label="时长"
-              min-width="100">
+              min-width="60">
               <template slot-scope="scope">
                 <el-input v-if="storyData.canedit" v-model="scope.row.seconds" placeholder="必填,时长"></el-input>
                 <div v-else>{{scope.row.seconds}}</div>
@@ -162,7 +162,7 @@
               label="服装道具"
               min-width="120">
                 <template slot-scope="scope">
-                  <el-input v-if="storyData.canedit" v-model="scope.row.costumes" placeholder="请输入服装道具"></el-input>
+                  <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.costumes" placeholder="请输入服装道具"></el-input>
                   <div v-else>{{scope.row.costumes}}</div>
                 </template>
             </el-table-column>
@@ -170,7 +170,7 @@
               label="后期制作"
               min-width="120">
                 <template slot-scope="scope">
-                  <el-input v-if="storyData.canedit" v-model="scope.row.postproduction" placeholder="请输入后期制作"></el-input>
+                  <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.postproduction" placeholder="请输入后期制作"></el-input>
                   <div v-else>{{scope.row.postproduction}}</div>
                 </template>
             </el-table-column>
@@ -182,7 +182,7 @@
               label="备注"
               min-width="120">
                 <template slot-scope="scope">
-                  <el-input v-if="storyData.canedit" v-model="scope.row.memo" placeholder="请输入备注"></el-input>
+                  <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.memo" placeholder="请输入备注"></el-input>
                   <div v-else>{{scope.row.memo}}</div>
                 </template>
             </el-table-column>
@@ -254,8 +254,8 @@
       <div class="bg-white mt20" v-if="isAddFenJing">
         <div class="from bg-white from-list">
           <div class="from-item flex_left">
-            <div class="item-title">日外/夜内<span>*</span></div>
-            <div class="item-cell"><el-input v-model="daynight" placeholder="请输入日外/夜内"></el-input></div>
+            <div class="item-title">日/夜/内/外<span>*</span></div>
+            <div class="item-cell"><el-input v-model="daynight" placeholder="请输入日/夜/内/外"></el-input></div>
           </div>
           <div class="from-item flex_left">
             <div class="item-title">场景<span>*</span></div>
