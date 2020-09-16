@@ -845,14 +845,14 @@
         <tr>
           <td>场景</td>
           <td>
-            <el-input v-model="ideaObject.changjing" max="30" placeholder="交代场景(一两组词)【30字以内】"></el-input>
+            <el-input v-model="ideaObject.changjing" maxlength="30" placeholder="交代场景(一两组词)【30字以内】"></el-input>
           </td>
           <td v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">办公室内</td>
         </tr>
         <tr>
           <td>人物和关系</td>
           <td>
-            <el-input v-model="ideaObject.rwgx" max="30" placeholder="交代人物(含性别年龄)和关系【30字以内】"></el-input>
+            <el-input v-model="ideaObject.rwgx" maxlength="30" placeholder="交代人物(含性别年龄)和关系【30字以内】"></el-input>
           </td>
           <td v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">男女两位同事</td>
         </tr>
@@ -861,7 +861,7 @@
           <td>
             <el-input
               v-model="ideaObject.juqing"
-              max="150"
+              maxlength="150"
               type="textarea"
               :rows="10"
               placeholder="剧情的简单描述，不需要体现台词，不需要画面感，仅提供创意方向和剧情梗概【150字以内】">
@@ -872,14 +872,14 @@
         <tr>
           <td>重点部分</td>
           <td>
-            <el-input v-model="ideaObject.zhongdian" max="30" placeholder="例如如何引出广告产品（服务）【30字以内】"></el-input>
+            <el-input v-model="ideaObject.zhongdian" maxlength="30" placeholder="例如如何引出广告产品（服务）【30字以内】"></el-input>
           </td>
           <td v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">女同事拿出手机，录屏出产品介绍。</td>
         </tr>
         <tr>
           <td>视频风格</td>
           <td>
-            <el-input v-model="ideaObject.fengge" max="30" placeholder="描述视频风格【30字以内】"></el-input>
+            <el-input v-model="ideaObject.fengge" maxlength="30" placeholder="描述视频风格【30字以内】"></el-input>
           </td>
           <td v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">从凝重到轻松。</td>
         </tr>
@@ -887,7 +887,7 @@
      </div>
      <span slot="footer" class="dialog-footer">
        <el-button @click="showIdeaDialog = false">取 消</el-button>
-       <el-button type="primary" @click="submitIdeaEvent">确 定</el-button>
+       <el-button type="primary" @click="submitIdeaEvent">提交审核</el-button>
      </span>
    </el-dialog>
    <el-dialog
@@ -1085,7 +1085,12 @@ export default {
     submitIdeaEvent () {
       if (this.issubmit) return false
       let ideaParams = {...this.ideaObject}
-      if (ideaParams.changjing === '' || ideaParams.rwgx === '' || ideaParams.juqing === '' || ideaParams.zhongdian === '' || ideaParams.fengge === '') {
+      let changjing = this.$util.trim(ideaParams.changjing)
+      let rwgx = this.$util.trim(ideaParams.rwgx)
+      let juqing = this.$util.trim(ideaParams.juqing)
+      let zhongdian = this.$util.trim(ideaParams.zhongdian)
+      let fengge = this.$util.trim(ideaParams.fengge)
+      if (changjing === '' || rwgx === '' || juqing === '' || zhongdian === '' || fengge === '') {
         this.$vux.toast.text('请补全创意信息', 'middle')
         return false
       }
@@ -1194,7 +1199,7 @@ export default {
         this.controlBtn.push({id: 5, title: '分镜脚本', type: 'primary'})
       }
       if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
-        this.controlBtn.push({id: 6, title: '提交创意', type: 'success'})
+        this.controlBtn.push({id: 6, title: '编写创意梗概', type: 'success'})
       }
       // 修改创意梗概
       // if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
@@ -1250,7 +1255,7 @@ export default {
           this.toFenjing()
           break
         case 6:
-          // 提交创意 (this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)
+          // 提交创意 编写创意梗概 (this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)
           this.showIdeaDialog = true
           break
         case 7:
