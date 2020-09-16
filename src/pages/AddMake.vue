@@ -508,6 +508,23 @@ export default {
         }
       })
     },
+    initData () {
+      this.fileList = []
+      this.durationOptions = []
+      this.ratioOptions = []
+      this.videoclassOptions = []
+      this.logo_allOptions = []
+      this.logo_endOptions = []
+      this.videotypeOptions = []
+      for (let key in this.submitData) {
+        this.submitData[key] = ''
+      }
+      let nowTime = new Date().getTime()
+      let endTime = nowTime + 24 * 60 * 60 * 1000 * 7
+      this.submitData.starttime = new Time(nowTime).dateFormat('yyyy-MM-dd')
+      this.submitData.endtime = new Time(endTime).dateFormat('yyyy-MM-dd')
+      this.issubmit = false
+    },
     refresh () {
       this.query = this.$route.query
       this.loginUser = User.get()
@@ -515,20 +532,7 @@ export default {
       let token = Token.get()
       this.uploadHeaders.Authorization = `Bearer ${token.token}`
       if (this.loginUser) {
-        this.durationOptions = []
-        this.ratioOptions = []
-        this.videoclassOptions = []
-        this.logo_allOptions = []
-        this.logo_endOptions = []
-        this.videotypeOptions = []
-        for (let key in this.submitData) {
-          this.submitData[key] = ''
-        }
-        let nowTime = new Date().getTime()
-        let endTime = nowTime + 24 * 60 * 60 * 1000 * 7
-        this.submitData.starttime = new Time(nowTime).dateFormat('yyyy-MM-dd')
-        this.submitData.endtime = new Time(endTime).dateFormat('yyyy-MM-dd')
-        this.issubmit = false
+        this.initData()
         this.$vux.loading.show()
         this.getData()
       }
