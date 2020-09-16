@@ -240,7 +240,6 @@
                       <el-button type="warning" size="mini" @click="moveEvent(scope.row, 'down')" v-if="scope.row.rowIndex < tableData.length - 2">下移</el-button>
                     </div>
                   </template>
-                  <!-- <el-button v-if="storyData.canedit" type="primary" size="mini" @click="addFenJing(scope.row)">修改</el-button> -->
                   <el-button v-if="storyData.canzhuan" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转交供应商</el-button>
                   <el-button v-if="storyData.canzhuanvideo" type="primary" size="mini" @click="handleExamine(scope.row.id, 'trans', scope.row)">转发客户意见</el-button>
                   <el-button v-if="storyData.cancheckvideo" type="primary" size="mini" @click="handleExamine(scope.row.id)">修改建议</el-button>

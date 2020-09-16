@@ -206,7 +206,7 @@
      <tr>
        <td class="title">
          <div>视频内必须展示的</div>
-         <div>关键信息</div>
+         <div>关键信息<span>*</span></div>
        </td>
        <td colspan="3">
          <el-input type="textarea" v-model="submitData.keyinfo" placeholder="请输入关键信息"></el-input>
@@ -299,7 +299,6 @@ export default {
         otherdemand: '',
         price: ''
       },
-      requiredData: ['title', 'starttime', 'endtime', 'duration', 'ratio', 'videoclass', 'logo_all', 'logo_end', 'videotype'],
       durationOptions: [],
       ratioOptions: [],
       videoclassOptions: [],
@@ -410,8 +409,9 @@ export default {
         }
       }
       if (attachment.length) params.attachment = attachment.join(',')
-      for (let i = 0; i < this.requiredData.length; i++) {
-        let curName = this.requiredData[i]
+      let requiredData = ['title', 'starttime', 'endtime', 'duration', 'ratio', 'videoclass', 'logo_all', 'logo_end', 'videotype', 'keyinfo']
+      for (let i = 0; i < requiredData.length; i++) {
+        let curName = requiredData[i]
         let curVal = params[curName]
         if (!curVal || this.$util.trim(curVal) === '') {
           iscontinue = false
