@@ -204,8 +204,13 @@
               label="审核意见"
               min-width="200">
                 <template slot-scope="scope" v-if="scope.row.dataType != 'add'">
-                  <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
-                  <template v-else>{{scope.row.checkresult}}</template>
+                  <template v-if="storyData.cancheck">
+                    <el-input type="textarea" v-model="scope.row.checkresult" placeholder="请输入审核意见"></el-input>
+                  </template>
+                  <template v-else>
+                    <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
+                    <template v-else>{{scope.row.checkresult}}</template>
+                  </template>
                 </template>
             </el-table-column>
           </el-table-column>
@@ -221,6 +226,8 @@
                   <template v-if="storyData.canedit">
                     <div>
                       <el-button type="primary" size="mini" @click="addEvent(scope.row)">保存修改</el-button>
+                    </div>
+                    <div class="mt5">
                       <el-button type="danger" size="mini" @click="deleteEvent(scope.row)">删除</el-button>
                     </div>
                     <div class="mt5">
@@ -370,7 +377,8 @@ export default {
       disCensorBtn: true,
       showPhotoSwiper: false,
       listData: [],
-      submitData: {}
+      submitData: {},
+      issubmit: false
     }
   },
   methods: {
@@ -390,17 +398,20 @@ export default {
       if (this.storyData.canback) {
         this.controlBtn.push({id: 3, title: '撤回审核', type: 'primary'})
       }
-      if (this.storyData.cancheck || this.storyData.canzhuan) {
-        this.controlBtn.push({id: 4, title: '返回修改', type: 'success'})
+      if (this.storyData.canrework) {
+        this.controlBtn.push({id: 4, title: '返回修改', type: 'info'})
       }
       if (this.storyData.cantongguo && this.disCensorBtn) {
         this.controlBtn.push({id: 5, title: '审核通过', type: 'primary'})
       }
       if (this.storyData.cancheck) {
-        this.controlBtn.push({id: 6, title: '审核通过', type: 'primary'})
+        this.controlBtn.push({id: 6, title: '提交客户', type: 'primary'})
       }
       if (this.storyData.cancheckphoto) {
         this.controlBtn.push({id: 7, title: '审核照片', type: 'primary'})
+      }
+      if (this.storyData.canapply) {
+        this.controlBtn.push({id: 8, title: '申请修改', type: 'success'})
       }
     },
     buttonEvent (id) {
@@ -418,7 +429,7 @@ export default {
           this.backCensor()
           break
         case 4:
-          // 返回修改 this.storyData.cancheck || this.storyData.canzhuan
+          // 返回修改 storyData.canrework
           this.backModify()
           break
         case 5:
@@ -433,23 +444,60 @@ export default {
           // 审核通过 storyData.cancheckphoto
           this.showPhotoSwiper = true
           break
+        case 8:
+          // 申请修改 storyData.canapply
+          this.applyChange()
+          break
       }
     },
     versionChange () {
       this.getData()
     },
+    applyChange () {
+      if (this.issubmit) return false
+      this.$confirm('确定要修改吗？申请修改后将不能提交供应商返工').then(() => {
+        this.$vux.loading.show()
+        this.issubmit = true
+        this.$http.post(`${ENV.BokaApi}/api/demands/applyEdit`, {
+          demandid: this.query.id
+        }).then(res => {
+          this.$vux.loading.hide()
+          const data = res.data
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'text',
+            time: this.$util.delay(data.error),
+            onHide: () => {
+              this.issubmit = false
+              if (data.flag === 1) {
+                this.refresh()
+              }
+            }
+          })
+        })
+      })
+    },
     backCensor () {
+      if (this.issubmit) return false
       this.$confirm('您是否确认撤回提交的审核？').then(() => {
         this.$vux.loading.show()
+        this.issubmit = true
         this.$http.post(`${ENV.BokaApi}/api/demands/submitCensor`, {
           demandid: this.query.id, version: this.curVersion, isback: 1
         }).then(res => {
           this.$vux.loading.hide()
           const data = res.data
-          this.$vux.toast.text(data.error, 'middle')
-          if (data.flag) {
-            this.getData()
-          }
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'text',
+            time: this.$util.delay(data.error),
+            onHide: () => {
+              this.issubmit = false
+              if (data.flag === 1) {
+                this.refresh()
+              }
+            }
+          })
         })
       })
     },
