@@ -205,7 +205,7 @@
               min-width="200">
                 <template slot-scope="scope" v-if="scope.row.dataType != 'add'">
                   <template v-if="storyData.cancheck">
-                    <el-input type="textarea" v-model="scope.row.checkresult" placeholder="请输入审核意见"></el-input>
+                    <el-input @input="resultChangeEvent" type="textarea" v-model="scope.row.checkresult" placeholder="请输入审核意见"></el-input>
                   </template>
                   <template v-else>
                     <template v-if="!scope.row.checkresult || scope.row.checkresult == ''">无</template>
@@ -378,7 +378,8 @@ export default {
       showPhotoSwiper: false,
       listData: [],
       submitData: {},
-      issubmit: false
+      issubmit: false,
+      haveResult: false
     }
   },
   methods: {
@@ -404,13 +405,13 @@ export default {
       if (this.storyData.cantongguo && this.disCensorBtn) {
         this.controlBtn.push({id: 5, title: '审核通过', type: 'primary'})
       }
-      if (this.storyData.cancheck) {
+      if (this.storyData.cansubmit && !this.haveResult) {
         this.controlBtn.push({id: 6, title: '提交客户', type: 'primary'})
       }
       if (this.storyData.cancheckphoto) {
         this.controlBtn.push({id: 7, title: '审核照片', type: 'primary'})
       }
-      if (this.storyData.canapply) {
+      if (this.storyData.canapply && !this.haveResult) {
         this.controlBtn.push({id: 8, title: '申请修改', type: 'success'})
       }
     },
@@ -437,7 +438,7 @@ export default {
           this.agreeRushVideo()
           break
         case 6:
-          // 审核通过 storyData.cancheck
+          // 审核通过 storyData.cansubmit
           this.agreeStoryBoard()
           break
         case 7:
@@ -452,6 +453,51 @@ export default {
     },
     versionChange () {
       this.getData()
+    },
+    resultChangeEvent () {
+      let isempty = true
+      for (let i = 0; i < this.tableData.length; i++) {
+        let curd = this.tableData[i]
+        if (this.$util.trim(curd.checkresult) !== '') {
+          isempty = false
+          break
+        }
+      }
+      if (isempty) {
+        this.haveResult = false
+      } else {
+        this.haveResult = true
+      }
+      this.handleBtn()
+    },
+    backModify () {
+      if (this.issubmit) return false
+      this.$confirm('确定要返回修改吗？').then(() => {
+        let postData = []
+        for (let i = 0; i < this.tableData.length; i++) {
+          let curd = this.tableData[i]
+          postData.push({id: curd.id, checkresult: curd.checkresult})
+        }
+        this.$vux.loading.show()
+        this.issubmit = true
+        this.$http.post(`${ENV.BokaApi}/api/demands/reworkStoryBoard`, {
+          demandid: this.query.id, result: postData
+        }).then(res => {
+          this.$vux.loading.hide()
+          const data = res.data
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'text',
+            time: this.$util.delay(data.error),
+            onHide: () => {
+              this.issubmit = false
+              if (data.flag === 1) {
+                this.refresh()
+              }
+            }
+          })
+        })
+      })
     },
     applyChange () {
       if (this.issubmit) return false
@@ -943,46 +989,21 @@ export default {
         })
       })
     },
-    backModify () {
-      if (this.issubmit) return false
-      this.$confirm('确定要返回修改吗？').then(() => {
-        let postData = []
-        for (let i = 0; i < this.tableData.length; i++) {
-          let curd = this.tableData[i]
-          postData.push({id: curd.id, checkresult: curd.checkresult})
-        }
-        this.$vux.loading.show()
-        this.issubmit = true
-        this.$http.post(`${ENV.BokaApi}/api/demands/reworkStoryBoard`, {
-          demandid: this.query.id, result: postData
-        }).then(res => {
-          this.$vux.loading.hide()
-          const data = res.data
-          this.$vux.toast.show({
-            text: data.error,
-            type: 'text',
-            time: this.$util.delay(data.error),
-            onHide: () => {
-              this.issubmit = false
-              if (data.flag === 1) {
-                this.refresh()
-              }
-            }
-          })
-        })
-      })
+    initData () {
+      this.curVersion = ''
+      this.disTabData = false
+      this.tableData = []
+      this.fileList = []
+      this.playerOptions = []
+      this.isAddFenJing = false
+      this.issubmit = false
     },
     refresh () {
       this.loginUser = User.get()
       this.$util.setUserRole(this)
       if (this.loginUser) {
         this.query = this.$route.query
-        this.disTabData = false
-        this.tableData = []
-        this.fileList = []
-        this.playerOptions = []
-        this.isAddFenJing = false
-        this.issubmit = false
+        this.initData()
         this.$vux.loading.show()
         this.getData1()
         this.getInfo(parseInt(this.query.id))
