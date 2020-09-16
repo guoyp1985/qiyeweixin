@@ -52,28 +52,32 @@
               label="日外/夜内"
               min-width="100">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.daynight" placeholder="必填,日外/夜内"></el-input>
+                <el-input v-if="storyData.canedit" v-model="scope.row.daynight" placeholder="必填,日外/夜内"></el-input>
+                <div v-else>{{scope.row.daynight}}</div>
               </template>
             </el-table-column>
             <el-table-column
               label="场景"
               min-width="100">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.scene" placeholder="必填,场景"></el-input>
+                <el-input v-if="storyData.canedit" v-model="scope.row.scene" placeholder="必填,场景"></el-input>
+                <div v-else>{{scope.row.scene}}</div>
               </template>
             </el-table-column>
             <el-table-column
               label="拍摄手法"
               min-width="100">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.photography" placeholder="必填,拍摄手法"></el-input>
+                <el-input v-if="storyData.canedit" v-model="scope.row.photography" placeholder="必填,拍摄手法"></el-input>
+                <div v-else>{{scope.row.photography}}</div>
               </template>
             </el-table-column>
             <el-table-column
               label="景别"
               min-width="100">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.fieldofview" placeholder="必填,景别"></el-input>
+                <el-input v-if="storyData.canedit" v-model="scope.row.fieldofview" placeholder="必填,景别"></el-input>
+                <div v-else>{{scope.row.fieldofview}}</div>
               </template>
             </el-table-column>
           </el-table-column>
@@ -84,7 +88,8 @@
               label="时长"
               min-width="100">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.seconds" placeholder="必填,时长"></el-input>
+                <el-input v-if="storyData.canedit" v-model="scope.row.seconds" placeholder="必填,时长"></el-input>
+                <div v-else>{{scope.row.seconds}}</div>
               </template>
             </el-table-column>
             <el-table-column
@@ -95,19 +100,22 @@
                   <div class="tr">
                     <div class="td">人物</div>
                     <div class="td">
-                      <el-input type="textarea" v-model="scope.row.renwu" placeholder="必填,人物描述"></el-input>
+                      <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.renwu" placeholder="必填,人物描述"></el-input>
+                      <div v-else>{{scope.row.renwu}}</div>
                     </div>
                   </div>
                   <div class="tr">
                     <div class="td">情节</div>
                     <div class="td">
-                      <el-input type="textarea" v-model="scope.row.qingjie" placeholder="必填,情节描述"></el-input>
+                      <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.qingjie" placeholder="必填,情节描述"></el-input>
+                      <div v-else>{{scope.row.qingjie}}</div>
                     </div>
                   </div>
                   <div class="tr">
                     <div class="td">动作</div>
                     <div class="td">
-                      <el-input type="textarea" v-model="scope.row.dongzuo" placeholder="必填,动作描述"></el-input>
+                      <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.dongzuo" placeholder="必填,动作描述"></el-input>
+                      <div v-else>{{scope.row.dongzuo}}</div>
                     </div>
                   </div>
                 </div>
@@ -125,19 +133,22 @@
                   <div class="tr">
                     <div class="td">情绪</div>
                     <div class="td">
-                      <el-input type="textarea" v-model="scope.row.qingxu" placeholder="必填,情绪"></el-input>
+                      <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.qingxu" placeholder="必填,情绪"></el-input>
+                      <div v-else>{{scope.row.qingxu}}</div>
                     </div>
                   </div>
                   <div class="tr">
                     <div class="td">语速</div>
                     <div class="td">
-                      <el-input type="textarea" v-model="scope.row.yusu" placeholder="必填,语速"></el-input>
+                      <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.yusu" placeholder="必填,语速"></el-input>
+                      <div v-else>{{scope.row.yusu}}</div>
                     </div>
                   </div>
                   <div class="tr">
                     <div class="td">台词</div>
                     <div class="td">
-                      <el-input type="textarea" v-model="scope.row.taici" placeholder="必填,台词"></el-input>
+                      <el-input v-if="storyData.canedit" type="textarea" v-model="scope.row.taici" placeholder="必填,台词"></el-input>
+                      <div v-else>{{scope.row.taici}}</div>
                     </div>
                   </div>
                 </div>
@@ -151,14 +162,16 @@
               label="服装道具"
               min-width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.costumes" placeholder="请输入服装道具"></el-input>
+                  <el-input v-if="storyData.canedit" v-model="scope.row.costumes" placeholder="请输入服装道具"></el-input>
+                  <div v-else>{{scope.row.costumes}}</div>
                 </template>
             </el-table-column>
             <el-table-column
               label="后期制作"
               min-width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.postproduction" placeholder="请输入后期制作"></el-input>
+                  <el-input v-if="storyData.canedit" v-model="scope.row.postproduction" placeholder="请输入后期制作"></el-input>
+                  <div v-else>{{scope.row.postproduction}}</div>
                 </template>
             </el-table-column>
           </el-table-column>
@@ -169,7 +182,8 @@
               label="备注"
               min-width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.memo" placeholder="请输入备注"></el-input>
+                  <el-input v-if="storyData.canedit" v-model="scope.row.memo" placeholder="请输入备注"></el-input>
+                  <div v-else>{{scope.row.memo}}</div>
                 </template>
             </el-table-column>
           </el-table-column>
@@ -196,6 +210,7 @@
             </el-table-column>
           </el-table-column>
             <el-table-column
+              v-if="storyData.canedit || storyData.canzhuan || storyData.canzhuanvideo || storyData.cancheckvideo"
               label="操作"
               min-width="160">
               <template slot-scope="scope">
@@ -205,7 +220,7 @@
                 <template v-else-if="!storyData.canback">
                   <template v-if="storyData.canedit">
                     <div>
-                      <el-button type="primary" size="mini" @click="addEvent(scope.row)">修改</el-button>
+                      <el-button type="primary" size="mini" @click="addEvent(scope.row)">保存修改</el-button>
                       <el-button type="danger" size="mini" @click="deleteEvent(scope.row)">删除</el-button>
                     </div>
                     <div class="mt5">
