@@ -489,14 +489,17 @@
                    </div>
                  </template>
                  <template v-else>
-                   <div v-if="scope.row.canedit">
+                   <!-- <div v-if="scope.row.canedit">
                      <el-button size="mini" type="primary" @click="changeIdea(scope.row)">修改</el-button>
                    </div>
                    <div v-if="scope.row.cancheck" :class="`${scope.row.canedit ? 'mt10' : ''}`">
                      <el-button size="mini" type="primary" @click="clickIdeaCustomer(scope.row)">提交客户</el-button>
+                   </div> -->
+                   <div v-if="scope.row.canedit">
+                     <el-button size="mini" type="primary" @click="changeIdea(scope.row)">修改并送审</el-button>
                    </div>
                    <div v-if="scope.row.cancheck" :class="`${scope.row.canedit ? 'mt10' : ''}`">
-                     <el-button size="mini" type="primary" @click="clickBack(scope.row)">驳回</el-button>
+                     <el-button size="mini" type="primary" @click="clickBack(scope.row)">驳回重新创意</el-button>
                    </div>
                  </template>
                </template>
