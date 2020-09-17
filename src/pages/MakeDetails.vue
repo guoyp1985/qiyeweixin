@@ -185,7 +185,7 @@
                      <i class="el-icon-files"></i>
                    </div>
                  </template>
-                 <div class="close" v-if="!isSupplier" @click="removeFile1(item,index)"><i class="el-icon-close"></i></div>
+                 <div class="close" v-if="allowEdit" @click="removeFile1(item,index)"><i class="el-icon-close"></i></div>
                </div>
              </div>
            </div>
@@ -349,7 +349,7 @@
                      <i class="el-icon-files"></i>
                    </div>
                  </template>
-                 <div class="close" v-if="!isSupplier" @click="removeFile2(item,index)"><i class="el-icon-close"></i></div>
+                 <div class="close" @click="removeFile2(item,index)"><i class="el-icon-close"></i></div>
                </div>
              </div>
            </div>
@@ -392,7 +392,7 @@
                      <i class="el-icon-files"></i>
                    </div>
                  </template>
-                 <div class="close" v-if="!isSupplier" @click="removeFile3(item,index)"><i class="el-icon-close"></i></div>
+                 <div class="close" @click="removeFile3(item,index)"><i class="el-icon-close"></i></div>
                </div>
              </div>
            </div>
