@@ -1408,9 +1408,11 @@ export default {
         this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
         return false
       }
-      if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) <= 0 || parseFloat(params.price).length > 7)) {
-        this.$vux.toast.text('请输入正确的制作价格', 'middle')
-        return false
+      if (this.isManager || this.isSale) {
+        if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) <= 1 || parseFloat(params.price).length > 7)) {
+          this.$vux.toast.text('请输入正确的制作价格', 'middle')
+          return false
+        }
       }
       var rule1 = /^(0|[1-9][0-9]*)$/
       if (params.videocount !== '' && (isNaN(params.videocount) || parseFloat(params.videocount) <= 0 || !rule1.test(params.videocount))) {

@@ -300,7 +300,7 @@ export default {
         target: '',
         duration: '',
         ratio: '',
-        videocount: '',
+        videocount: 1,
         videoclass: '',
         starttime: '',
         endtime: '',
@@ -446,7 +446,7 @@ export default {
         this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
         return false
       }
-      if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) <= 0 || parseFloat(params.price).length > 7)) {
+      if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) <= 1 || parseFloat(params.price).length > 7)) {
         this.$vux.toast.text('请输入正确的制作价格', 'middle')
         return false
       }
@@ -517,6 +517,7 @@ export default {
       for (let key in this.submitData) {
         this.submitData[key] = ''
       }
+      this.submitData.videocount = 1
       let nowTime = new Date().getTime()
       let endTime = nowTime + 24 * 60 * 60 * 1000 * 7
       this.submitData.starttime = new Time(nowTime).dateFormat('yyyy-MM-dd')
