@@ -478,7 +478,7 @@
            <el-table-column
              label="操作"
              class="align_center"
-             min-width="100">
+             min-width="120">
                <template slot-scope="scope">
                  <template v-if="isCustomer">
                    <div>
