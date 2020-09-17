@@ -149,7 +149,7 @@
        <td class="title">上传附件</td>
        <td colspan="3" class="align_left">
          <div class="align_left padding10" style="display:inline-block;">
-           <div class="file-list" v-if="fileList.length">
+           <div class="upload-file-list" v-if="fileList.length">
              <div v-for="(item,index) in fileList" :key="index" class="file-item">
                <div class="item-inner">
                  <template v-if="item.type == 'image'">
@@ -166,7 +166,6 @@
                    </div>
                  </template>
                  <div class="close" @click="removeFile(item,index)"><i class="el-icon-close"></i></div>
-                 <!-- <div class="view"><i class="el-icon-download"></i></div> -->
                </div>
              </div>
            </div>
@@ -178,14 +177,12 @@
             :multiple="1 == 1"
             name="photo"
             :on-change="handleChange"
-            :on-remove="handleRemove"
             :on-success="afterUpload"
             :file-list="fileList"
             :auto-upload="false"
             :on-error="uploadError"
             >
               <el-button slot="trigger" size="small" type="success">上传文件</el-button>
-              <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-if="disUploadBtn">上传文件</el-button> -->
             </el-upload>
         </div>
        </td>
@@ -329,7 +326,6 @@ export default {
       uploadApi: ENV.BokaApi + '/api/upload/singleFile?field=photo',
       uploadHeaders: {},
       fileList: [],
-      disUploadBtn: false,
       isManager: false, // 1:管理员
       isSale: false, // 4:业务员
       isCustomer: false, // 2:客户
@@ -482,47 +478,18 @@ export default {
         })
       })
     },
-    handleUploadBtn (fileList) {
-      let isDis = false
-      for (let i = 0; i < fileList.length; i++) {
-        let cur = fileList[i]
-        if (!cur.issuccess) {
-          isDis = true
-          break
-        }
-      }
-      this.disUploadBtn = isDis
-    },
     submitUpload () {
       this.$refs.upload.submit()
     },
-    handleRemove (file, fileList) {
-      this.fileList = fileList
-      this.handleUploadBtn(fileList)
-    },
     handleChange (file, fileList) {
-      this.handleUploadBtn(fileList)
       this.$refs.upload.submit()
     },
     uploadError () {
       this.$vux.toast.text('上传失败，请检查上传文件的格式是否正确', 'middle')
     },
     afterUpload (res, file, fileList) {
-      for (let i = 0; i < fileList.length; i++) {
-        let cur = fileList[i]
-        if (cur.response && cur.response.flag) {
-          cur.name = cur.response.data
-          cur.issuccess = true
-          cur.url = cur.response.data
-          if (cur.raw.type.indexOf('image') > -1) {
-            cur.type = 'image'
-          } else if (cur.raw.type.indexOf('video') > -1) {
-            cur.type = 'video'
-          }
-        }
-      }
+      fileList = this.$util.afterUploadFile(fileList)
       this.fileList = fileList
-      this.handleUploadBtn(fileList)
     },
     getData () {
       this.$http.post(`${ENV.BokaApi}/api/demands/fieldsList`).then(res => {

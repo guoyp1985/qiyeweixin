@@ -819,6 +819,39 @@ Util.install = function (Vue, options) {
         arr.push(item)
       }
       return arr
+    },
+    strToFile: (str) => {
+      let retArr = []
+      let arr = str.split(',')
+      for (let i = 0; i < arr.length; i++) {
+        let curf = arr[i]
+        let fo = {name: curf, issuccess: true, url: curf}
+        let regImg = /(.*)\.(jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$/
+        let regVideo = /(.*)\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4)$/
+        if (regImg.test(curf)) {
+          fo.type = 'image'
+        } else if (regVideo.test(curf)) {
+          fo.type = 'video'
+        }
+        retArr.push(fo)
+      }
+      return retArr
+    },
+    afterUploadFile: (fileList) => {
+      for (let i = 0; i < fileList.length; i++) {
+        let cur = fileList[i]
+        if (cur.response && cur.response.flag) {
+          cur.name = cur.response.data
+          cur.issuccess = true
+          cur.url = cur.response.data
+          if (cur.raw.type.indexOf('image') > -1) {
+            cur.type = 'image'
+          } else if (cur.raw.type.indexOf('video') > -1) {
+            cur.type = 'video'
+          }
+        }
+      }
+      return fileList
     }
   }
 }

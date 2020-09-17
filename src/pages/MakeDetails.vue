@@ -168,6 +168,28 @@
      <tr>
        <td class="title"><template v-if="allowEdit">上传附件</template><template v-else>附件</template></td>
        <td colspan="3" class="align_left">
+         <div class="align_left pl10 pr10" v-if="fileList.length">
+           <div class="upload-file-list">
+             <div v-for="(item,index) in fileList" :key="index" class="file-item">
+               <div class="item-inner">
+                 <template v-if="item.type == 'image'">
+                   <img class="pic" :src="item.url" @click="viewFile(item)" />
+                 </template>
+                 <template v-else-if="item.type == 'video'">
+                   <div class="video" @click="viewFile(item)">
+                     <i class="el-icon-video-camera"></i>
+                   </div>
+                 </template>
+                 <template v-else>
+                   <div class="video" @click="viewFile(item)">
+                     <i class="el-icon-files"></i>
+                   </div>
+                 </template>
+                 <div class="close" @click="removeFile1(item,index)"><i class="el-icon-close"></i></div>
+               </div>
+             </div>
+           </div>
+         </div>
          <div v-if="allowEdit" class="align_left padding10" style="display:inline-block;">
             <el-upload
             class="upload-demo upload-new"
@@ -177,20 +199,13 @@
             :multiple="1 == 1"
             name="photo"
             :on-change="handleChange"
-            :on-remove="handleRemove"
             :on-success="afterUpload"
             :on-error="uploadError"
             :file-list="fileList"
             :auto-upload="false"
             >
               <el-button slot="trigger" size="small" type="success">上传文件</el-button>
-              <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload1')" v-if="disUploadBtn">上传文件</el-button> -->
             </el-upload>
-        </div>
-        <div v-else class="file-list">
-          <div class="file-item" v-for="(item,index) in fileList" :key="index" :item="item">
-            <a type="primary" :href="item.url" style="color: #409EFF;" :download="item.url" target="_blank">{{item.name}}</a>
-           </div>
         </div>
        </td>
      </tr>
@@ -318,6 +333,26 @@
        <td class="title">上传演员身份证及肖像权协议扫描件<span>（只能上传图片）</span></td>
        <td colspan="3" class="align_left">
          <div class="align_left padding10" style="display:inline-block;">
+           <div class="upload-file-list" v-if="photos.length">
+             <div v-for="(item,index) in photos" :key="index" class="file-item">
+               <div class="item-inner">
+                 <template v-if="item.type == 'image'">
+                   <img class="pic" :src="item.url" @click="viewFile(item)" />
+                 </template>
+                 <template v-else-if="item.type == 'video'">
+                   <div class="video" @click="viewFile(item)">
+                     <i class="el-icon-video-camera"></i>
+                   </div>
+                 </template>
+                 <template v-else>
+                   <div class="video" @click="viewFile(item)">
+                     <i class="el-icon-files"></i>
+                   </div>
+                 </template>
+                 <div class="close" @click="removeFile2(item,index)"><i class="el-icon-close"></i></div>
+               </div>
+             </div>
+           </div>
             <el-upload
             class="upload-demo upload-new"
             ref="upload2"
@@ -326,7 +361,6 @@
             :multiple="1 == 1"
             name="photo"
             :on-change="handleChange1"
-            :on-remove="handleRemove1"
             :on-success="afterUpload1"
             :on-error="uploadError"
             :file-list="photos"
@@ -334,7 +368,6 @@
             accept=".jpg,.jpeg,.png,.JPG,.JPEG"
             >
               <el-button slot="trigger" size="small" type="success">上传文件</el-button>
-              <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload2')" v-if="disUploadBtn1">上传文件</el-button> -->
             </el-upload>
         </div>
        </td>
@@ -343,6 +376,26 @@
        <td class="title">{{viewData.status === 5 ? '上传样片' : '上传成片'}}<span>（只能上传一项）</span></td>
        <td colspan="3" class="align_left">
          <div class="align_left padding10" style="display:inline-block;">
+           <div class="upload-file-list" v-if="samplePiece.length">
+             <div v-for="(item,index) in samplePiece" :key="index" class="file-item">
+               <div class="item-inner">
+                 <template v-if="item.type == 'image'">
+                   <img class="pic" :src="item.url" @click="viewFile(item)" />
+                 </template>
+                 <template v-else-if="item.type == 'video'">
+                   <div class="video" @click="viewFile(item)">
+                     <i class="el-icon-video-camera"></i>
+                   </div>
+                 </template>
+                 <template v-else>
+                   <div class="video" @click="viewFile(item)">
+                     <i class="el-icon-files"></i>
+                   </div>
+                 </template>
+                 <div class="close" @click="removeFile3(item,index)"><i class="el-icon-close"></i></div>
+               </div>
+             </div>
+           </div>
             <el-upload
             class="upload-demo upload-new"
             ref="upload3"
@@ -351,7 +404,6 @@
             :multiple="1 == 1"
             name="photo"
             :on-change="handleChange2"
-            :on-remove="handleRemove2"
             :on-success="afterUpload2"
             :on-error="uploadError"
             :file-list="samplePiece"
@@ -359,7 +411,6 @@
             :limit="1"
             >
               <el-button slot="trigger" size="small" type="success">上传文件</el-button>
-              <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('upload3')" v-if="disUploadBtn2">上传文件</el-button> -->
             </el-upload>
         </div>
        </td>
@@ -952,7 +1003,6 @@ export default {
       uploadApi: ENV.BokaApi + '/api/upload/singleFile?field=photo',
       uploadHeaders: {},
       fileList: [],
-      disUploadBtn: false,
       samplePiece: [],
       memo: '',
       disTabData4: false,
@@ -970,8 +1020,6 @@ export default {
       controlBtn: [],
       inviteObject: {},
       modalType: '',
-      disUploadBtn1: false,
-      disUploadBtn2: false,
       showSos: false,
       sosTxt: '',
       showUserDialog: false,
@@ -993,6 +1041,18 @@ export default {
   methods: {
     toBack () {
       window.history.go(-1)
+    },
+    viewFile (item) {
+      window.open(item.url)
+    },
+    removeFile1 (item, index) {
+      this.fileList.splice(index, 1)
+    },
+    removeFile2 (item, index) {
+      this.photos.splice(index, 1)
+    },
+    removeFile3 (item, index) {
+      this.samplePiece.splice(index, 1)
     },
     submitSupply () {
       if (this.issubmit) return false
@@ -1621,104 +1681,29 @@ export default {
       console.log('in upload')
       this.$refs[refname].submit()
     },
-    handleUploadBtn (fileList) {
-      console.log('in handleUploadBtn')
-      console.log(fileList)
-      let isDis = false
-      for (let i = 0; i < fileList.length; i++) {
-        let cur = fileList[i]
-        if (!cur.issuccess) {
-          isDis = true
-          break
-        }
-      }
-      this.disUploadBtn = isDis
-    },
-    handleRemove (file, fileList) {
-      this.fileList = fileList
-      this.handleUploadBtn(fileList)
-    },
     handleChange (file, fileList) {
-      this.handleUploadBtn(fileList)
       this.$refs.upload1.submit()
     },
     uploadError () {
       this.$vux.toast.text('上传失败，请检查上传文件的格式是否正确', 'middle')
     },
     afterUpload (res, file, fileList) {
-      for (let i = 0; i < fileList.length; i++) {
-        let cur = fileList[i]
-        if (cur.response && cur.response.flag) {
-          cur.name = cur.response.data
-          cur.issuccess = true
-          cur.url = cur.response.data
-        }
-      }
+      fileList = this.$util.afterUploadFile(fileList)
       this.fileList = fileList
-      this.handleUploadBtn(fileList)
-    },
-    handleUploadBtn1 (fileList) {
-      let isDis = false
-      for (let i = 0; i < fileList.length; i++) {
-        let cur = fileList[i]
-        if (!cur.issuccess) {
-          isDis = true
-          break
-        }
-      }
-      this.disUploadBtn1 = isDis
-    },
-    handleRemove1 (file, fileList) {
-      this.photos = fileList
-      this.handleUploadBtn1(fileList)
-      this.$refs.upload2.submit()
     },
     handleChange1 (file, fileList) {
-      this.handleUploadBtn1(fileList)
       this.$refs.upload.submit()
     },
     afterUpload1 (res, file, fileList) {
-      for (let i = 0; i < fileList.length; i++) {
-        let cur = fileList[i]
-        if (cur.response && cur.response.flag) {
-          cur.name = cur.response.data
-          cur.issuccess = true
-          cur.url = cur.response.data
-        }
-      }
+      fileList = this.$util.afterUploadFile(fileList)
       this.photos = fileList
-      this.handleUploadBtn1(fileList)
-    },
-    handleUploadBtn2 (fileList) {
-      let isDis = false
-      for (let i = 0; i < fileList.length; i++) {
-        let cur = fileList[i]
-        if (!cur.issuccess) {
-          isDis = true
-          break
-        }
-      }
-      this.disUploadBtn2 = isDis
-    },
-    handleRemove2 (file, fileList) {
-      this.samplePiece = fileList
-      this.handleUploadBtn2(fileList)
     },
     handleChange2 (file, fileList) {
-      this.handleUploadBtn2(fileList)
       this.$refs.upload3.submit()
     },
     afterUpload2 (res, file, fileList) {
-      for (let i = 0; i < fileList.length; i++) {
-        let cur = fileList[i]
-        if (cur.response && cur.response.flag) {
-          cur.name = cur.response.data
-          cur.issuccess = true
-          cur.url = cur.response.data
-        }
-      }
+      fileList = this.$util.afterUploadFile(fileList)
       this.samplePiece = fileList
-      this.handleUploadBtn2(fileList)
     },
     uploadSamplePiece () {
       if (!this.issubmit) {
@@ -1858,17 +1843,11 @@ export default {
           this.getData3()
         }
         if (retdata.attachment && retdata.attachment !== '') {
-          let arr = retdata.attachment.split(',')
-          for (let i = 0; i < arr.length; i++) {
-            this.fileList.push({name: arr[i], issuccess: true, url: arr[i]})
-          }
+          this.fileList = this.$util.strToFile(retdata.attachment)
         }
         this.samplePiece = []
         if (retdata.video && retdata.video !== '') {
-          let arr = retdata.video.split(',')
-          for (let i = 0; i < arr.length; i++) {
-            this.samplePiece.push({name: arr[i], issuccess: true, url: arr[i]})
-          }
+          this.samplePiece = this.$util.strToFile(retdata.video)
         }
         if (this.query.type) {
           if (retdata.status === 5 || retdata.status === 6) {
