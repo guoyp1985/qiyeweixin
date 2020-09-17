@@ -149,6 +149,27 @@
        <td class="title">上传附件</td>
        <td colspan="3" class="align_left">
          <div class="align_left padding10" style="display:inline-block;">
+           <div class="file-list" v-if="fileList.length">
+             <div v-for="(item,index) in fileList" :key="index" class="file-item">
+               <div class="item-inner">
+                 <template v-if="item.type == 'image'">
+                   <img class="pic" :src="item.url" @click="viewFile(item)" />
+                 </template>
+                 <template v-else-if="item.type == 'video'">
+                   <div class="video" @click="viewFile(item)">
+                     <i class="el-icon-video-camera"></i>
+                   </div>
+                 </template>
+                 <template v-else>
+                   <div class="video" @click="viewFile(item)">
+                     <i class="el-icon-files"></i>
+                   </div>
+                 </template>
+                 <div class="close" @click="removeFile(item,index)"><i class="el-icon-close"></i></div>
+                 <!-- <div class="view"><i class="el-icon-download"></i></div> -->
+               </div>
+             </div>
+           </div>
             <el-upload
             class="upload-demo upload-new"
             ref="upload"
@@ -161,7 +182,6 @@
             :on-success="afterUpload"
             :file-list="fileList"
             :auto-upload="false"
-            list-type="picture"
             :on-error="uploadError"
             >
               <el-button slot="trigger" size="small" type="success">上传文件</el-button>
@@ -335,6 +355,12 @@ export default {
     toBack () {
       window.history.go(-1)
     },
+    viewFile (item) {
+      window.open(item.url)
+    },
+    removeFile (item, index) {
+      this.fileList.splice(index, 1)
+    },
     clickCustomer () {
       this.showCustomerDialog = true
       if (!this.customerData.length) {
@@ -488,6 +514,11 @@ export default {
           cur.name = cur.response.data
           cur.issuccess = true
           cur.url = cur.response.data
+          if (cur.raw.type.indexOf('image') > -1) {
+            cur.type = 'image'
+          } else if (cur.raw.type.indexOf('video') > -1) {
+            cur.type = 'video'
+          }
         }
       }
       this.fileList = fileList

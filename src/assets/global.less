@@ -1244,8 +1244,10 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 	.el-upload-list{
 		.el-upload-list__item {margin-top:0;margin-bottom:0;padding:10px 0;}
 		.el-upload-list__item-status-label{display:none !important;}
+		/*
 		.el-icon-close{display:flex;right:-20px;top:0;bottom:0;justify-content:center;align-items: center;}
 		.el-icon-close:before{content:'删除';display:block;background-color:#f56c6c;color:#fff;padding:5px 10px;border-radius:5px;}
+		*/
 	}
 	.el-upload-list--picture {
 		.el-upload-list__item {padding:10px 60px 10px 10px;}
@@ -1254,5 +1256,24 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 		}
 		.el-icon-close{right:10px;}
 		.el-upload-list__item:last-child{margin-bottom:10px;}
+	}
+	.el-upload-list__item.is-success{display:none !important;}
+}
+
+.file-list{
+	display:flex;flex-wrap:wrap;
+	.file-item{
+		width:100px;height:100px;padding:10px 10px 10px 0;;box-sizing: border-box;position:relative;
+		.item-inner{width:100%;height:100%;position:relative;}
+		.pic{width:100%;height:100%;object-fit:cover;}
+		.video{
+			width:100%;height:100%;display:flex;justify-content:center;align-items:center;font-size:50px;background-color:#999;color:#fff;
+		}
+		.close{
+			position:absolute;right:-2px;top:-6px;font-size:14px;
+			background-color:#ff0000;border-radius:50%;color:#fff;
+			width:20px;height:20px;display:flex;justify-content:center;align-items:center;
+		}
+		.view{position:absolute;bottom:0;right:0;padding:5px;background-color:rgba(0,0,0,0.5);color:#fff;font-size:12px;}
 	}
 }
