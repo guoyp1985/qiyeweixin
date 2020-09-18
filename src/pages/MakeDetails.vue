@@ -22,7 +22,7 @@
      <tr>
        <td class="title">项目名称<span v-if="allowEdit">*</span></td>
        <td colspan="3">
-         <el-input v-if="allowEdit" v-model="viewData.title" placeholder="请输入项目名称"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" v-model="viewData.title" placeholder="请输入项目名称"></el-input>
          <div class="txt-css" v-else>{{viewData.title}}</div>
          <div class="diff-css" v-if="historyData && historyData.title && historyData.title != '' && viewData.title != historyData.title">{{historyData.title}}</div>
        </td>
@@ -30,13 +30,13 @@
      <tr>
        <td class="title">品牌名称</td>
        <td>
-         <el-input v-if="allowEdit" v-model="viewData.brand" placeholder="请输入品牌名称"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" v-model="viewData.brand" placeholder="请输入品牌名称"></el-input>
          <div class="txt-css" v-else>{{viewData.brand}}</div>
          <div class="diff-css" v-if="historyData && historyData.brand && historyData.brand != '' && viewData.brand != historyData.brand">{{historyData.brand}}</div>
        </td>
        <td class="title">视频类型<span v-if="allowEdit">*</span></td>
        <td>
-         <el-select v-if="allowEdit" v-model="viewData.videotype" placeholder="请选择视频类型">
+         <el-select v-if="allowEdit" @change="inputChange" v-model="viewData.videotype" placeholder="请选择视频类型">
            <el-option
               v-for="item in videotypeOptions"
               :key="item.value"
@@ -51,13 +51,13 @@
      <tr>
        <td class="title">产品名称</td>
        <td>
-         <el-input v-if="allowEdit" v-model="viewData.product" placeholder="请输入产品名称"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" v-model="viewData.product" placeholder="请输入产品名称"></el-input>
          <div class="txt-css" v-else>{{viewData.product}}</div>
          <div class="diff-css" v-if="historyData && historyData.product && historyData.product != '' && viewData.product != historyData.product">{{historyData.product}}</div>
        </td>
        <td class="title">效果目标</td>
        <td>
-         <el-input v-if="allowEdit" v-model="viewData.target" placeholder="请输入效果目标"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" v-model="viewData.target" placeholder="请输入效果目标"></el-input>
          <div class="txt-css" v-else>{{viewData.target}}</div>
          <div class="diff-css" v-if="historyData && historyData.target && historyData.target != '' && viewData.target != historyData.target">{{historyData.target}}</div>
        </td>
@@ -65,7 +65,7 @@
      <tr>
        <td class="title">视频时长<span v-if="allowEdit">*</span></td>
        <td>
-         <el-select v-if="allowEdit" v-model="viewData.duration" placeholder="请选择视频时长">
+         <el-select v-if="allowEdit" @change="inputChange" v-model="viewData.duration" placeholder="请选择视频时长">
            <el-option
               v-for="item in durationOptions"
               :key="item.value"
@@ -78,7 +78,7 @@
         </td>
         <td class="title">视频比例<span v-if="allowEdit">*</span></td>
         <td>
-          <el-select v-if="allowEdit" v-model="viewData.ratio" placeholder="请选择视频比例">
+          <el-select v-if="allowEdit" @change="inputChange" v-model="viewData.ratio" placeholder="请选择视频比例">
             <el-option
               v-for="item in ratioOptions"
               :key="item.value"
@@ -93,13 +93,13 @@
      <tr>
        <td class="title">视频数量</td>
        <td>
-         <el-input v-if="allowEdit" v-model="viewData.videocount" placeholder="请输入视频数量"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" v-model="viewData.videocount" placeholder="请输入视频数量"></el-input>
          <div class="txt-css" v-else>{{viewData.videocount}}</div>
          <div class="diff-css" v-if="historyData && historyData.videocount && historyData.videocount != '' && viewData.videocount != historyData.videocount">{{historyData.videocount}}</div>
        </td>
        <td class="title">视频分类<span v-if="allowEdit">*</span></td>
        <td>
-         <el-select v-if="allowEdit" v-model="viewData.videoclass" placeholder="请选择视频分类">
+         <el-select v-if="allowEdit" @change="inputChange" v-model="viewData.videoclass" placeholder="请选择视频分类">
            <el-option
               v-for="item in videoclassOptions"
               :key="item.value"
@@ -116,6 +116,7 @@
        <td>
          <el-date-picker
             v-if="allowEdit"
+             @change="inputChange"
             v-model="viewData.v_starttime"
             type="date"
             value-format="yyyy-MM-dd"
@@ -128,6 +129,7 @@
         <td>
           <el-date-picker
              v-if="allowEdit"
+              @change="inputChange"
              v-model="viewData.v_endtime"
              type="date"
              value-format="yyyy-MM-dd"
@@ -140,7 +142,7 @@
     <tr>
       <td class="title">全片LOGO<span v-if="allowEdit">*</span></td>
       <td>
-        <el-select v-if="allowEdit" v-model="viewData.logo_all" placeholder="请选择全片LOGO">
+        <el-select v-if="allowEdit" @change="inputChange" v-model="viewData.logo_all" placeholder="请选择全片LOGO">
           <el-option
             v-for="item in logo_allOptions"
             :key="item.value"
@@ -153,7 +155,7 @@
       </td>
       <td class="title">片尾LOGO<span v-if="allowEdit">*</span></td>
       <td>
-        <el-select v-if="allowEdit" v-model="viewData.logo_end" placeholder="请选择片尾LOGO">
+        <el-select v-if="allowEdit" @change="inputChange" v-model="viewData.logo_end" placeholder="请选择片尾LOGO">
           <el-option
             v-for="item in logo_endOptions"
             :key="item.value"
@@ -212,7 +214,7 @@
      <tr>
        <td class="title">相关链接</td>
        <td colspan="3">
-         <el-input v-if="allowEdit" type="textarea" v-model="viewData.linkurl" placeholder="请输入相关链接"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" type="textarea" v-model="viewData.linkurl" placeholder="请输入相关链接"></el-input>
          <div class="txt-css" v-else>{{viewData.linkurl}}</div>
          <div class="diff-css" v-if="historyData && historyData.linkurl && historyData.linkurl != '' && viewData.linkurl != historyData.linkurl">{{historyData.linkurl}}</div>
        </td>
@@ -220,7 +222,7 @@
      <tr>
        <td class="title">客户诉求</td>
        <td colspan="3">
-         <el-input v-if="allowEdit" type="textarea" v-model="viewData.customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" type="textarea" v-model="viewData.customerdemand" placeholder="请输入投诉内容"></el-input>
          <div class="txt-css" v-else>{{viewData.customerdemand}}</div>
          <div class="diff-css" v-if="historyData && historyData.customerdemand && historyData.customerdemand != '' && viewData.customerdemand != historyData.customerdemand">{{historyData.customerdemand}}</div>
        </td>
@@ -228,7 +230,7 @@
      <tr>
        <td class="title">客户信息</td>
        <td colspan="3">
-         <el-input v-if="allowEdit" type="textarea" v-model="viewData.customerinfo" placeholder="请输入客户信息"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" type="textarea" v-model="viewData.customerinfo" placeholder="请输入客户信息"></el-input>
          <div class="txt-css" v-else>{{viewData.customerinfo}}</div>
          <div class="diff-css" v-if="historyData && historyData.customerinfo && historyData.customerinfo != '' && viewData.customerinfo != historyData.customerinfo">{{historyData.customerinfo}}</div>
        </td>
@@ -236,7 +238,7 @@
      <tr>
        <td class="title">产品定位</td>
        <td colspan="3">
-         <el-input v-if="allowEdit" type="textarea" v-model="viewData.productorientation" placeholder="请输入产品定位"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" type="textarea" v-model="viewData.productorientation" placeholder="请输入产品定位"></el-input>
          <div class="txt-css" v-else>{{viewData.productorientation}}</div>
          <div class="diff-css" v-if="historyData && historyData.productorientation && historyData.productorientation != '' && viewData.productorientation != historyData.productorientation">{{historyData.productorientation}}</div>
        </td>
@@ -247,7 +249,7 @@
          <div class="font12 color-gray5">（核心卖点需标注）</div>
        </td>
        <td colspan="3">
-         <el-input v-if="allowEdit" type="textarea" v-model="viewData.sellerpoint" placeholder="请输入产品卖点"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" type="textarea" v-model="viewData.sellerpoint" placeholder="请输入产品卖点"></el-input>
          <div class="txt-css" v-else>{{viewData.sellerpoint}}</div>
          <div class="diff-css" v-if="historyData && historyData.sellerpoint && historyData.sellerpoint != '' && viewData.sellerpoint != historyData.sellerpoint">{{historyData.sellerpoint}}</div>
        </td>
@@ -258,7 +260,7 @@
          <div>关键信息<span v-if="allowEdit">*</span></div>
        </td>
        <td colspan="3">
-         <el-input v-if="allowEdit" type="textarea" v-model="viewData.keyinfo" placeholder="请输入关键信息"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" type="textarea" v-model="viewData.keyinfo" placeholder="请输入关键信息"></el-input>
          <div class="txt-css" v-else>{{viewData.keyinfo}}</div>
          <div class="diff-css" v-if="historyData && historyData.keyinfo && historyData.keyinfo != '' && viewData.keyinfo != historyData.keyinfo">{{historyData.keyinfo}}</div>
        </td>
@@ -270,7 +272,7 @@
      <tr>
        <td class="title">创意思路</td>
        <td colspan="3">
-         <el-input v-if="allowEdit" type="textarea" v-model="viewData.customeridea" placeholder="请输入创意思路"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" type="textarea" v-model="viewData.customeridea" placeholder="请输入创意思路"></el-input>
          <div class="txt-css" v-else>{{viewData.customeridea}}</div>
          <div class="diff-css" v-if="historyData && historyData.customeridea && historyData.customeridea != '' && viewData.customeridea != historyData.customeridea">{{historyData.customeridea}}</div>
        </td>
@@ -282,13 +284,13 @@
      <tr>
        <td class="title">特殊备注</td>
        <td :colspan="`${(isManager || isSale) ? 1 : 3}`">
-         <el-input v-if="allowEdit" v-model="viewData.otherdemand" placeholder="请输入特殊备注"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" v-model="viewData.otherdemand" placeholder="请输入特殊备注"></el-input>
          <div class="txt-css" v-else>{{viewData.otherdemand}}</div>
          <div class="diff-css" v-if="historyData && historyData.otherdemand && historyData.otherdemand != '' && viewData.otherdemand != historyData.otherdemand">{{historyData.otherdemand}}</div>
        </td>
        <td class="title" v-if="isManager || isSale">制作价格</td>
        <td v-if="isManager || isSale">
-         <el-input v-if="allowEdit" v-model="viewData.price" placeholder="请输入制作价格"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" v-model="viewData.price" placeholder="请输入制作价格"></el-input>
          <div class="txt-css" v-else>{{viewData.price}}</div>
          <div class="diff-css" v-if="historyData && historyData.price && historyData.price != '' && viewData.price != historyData.price">{{historyData.price}}</div>
        </td>
@@ -1035,12 +1037,17 @@ export default {
       supplyData: [],
       disSupplyList: false,
       selectedSuid: 0,
-      showSupplyDialog: false
+      showSupplyDialog: false,
+      isChanged: false
     }
   },
   methods: {
     toBack () {
       window.history.go(-1)
+    },
+    inputChange () {
+      this.isChanged = true
+      this.handleBtn()
     },
     viewFile (item) {
       window.open(item.url)
@@ -1248,12 +1255,13 @@ export default {
       if (this.viewData.status >= 0 && this.viewData.status < 100 && (this.isCustomer)) {
         this.controlBtn.push({id: 12, title: '邀请共审', type: 'warning'})
       }
-      if (this.viewData.canedit) {
-        this.controlBtn.push({id: 2, title: '保存修改', type: 'success'})
+      if (this.viewData.canedit && this.isChanged) {
+        this.controlBtn.push({id: 2, title: '确认修改并提交', type: 'success'})
         this.controlBtn.push({id: 15, title: '确认修改并退出', type: 'success'})
       }
-      if (this.viewData.cancensor) {
-        this.controlBtn.push({id: 3, title: '需求确认', type: 'danger'})
+      if (this.viewData.cancensor && !this.isChanged) {
+        // 需求确认 需求确认启动制作
+        this.controlBtn.push({id: 3, title: '需求确认启动制作', type: 'danger'})
       }
       if (this.viewData.status === 1 && (this.isManager || this.isSale)) {
         this.controlBtn.push({id: 4, title: '分发', type: 'primary'})
@@ -1298,7 +1306,7 @@ export default {
           this.$router.push({path: '/assignSale', query: {id: this.query.id}})
           break
         case 2:
-          // 保存修改 viewData.canedit === 1
+          // 保存修改 确认修改并提交 viewData.canedit === 1
           this.onSubmit()
           break
         case 15:
@@ -1306,7 +1314,7 @@ export default {
           this.onSubmit(true)
           break
         case 3:
-          // 需求确认 viewData.cancensor === 1
+          // 需求确认 需求确认启动制作 viewData.cancensor === 1
           this.handleExamine(parseInt(this.query.id))
           break
         case 4:
@@ -1685,6 +1693,8 @@ export default {
     },
     handleChange (file, fileList) {
       this.$refs.upload1.submit()
+      this.isChanged = true
+      this.handleBtn()
     },
     uploadError () {
       this.$vux.toast.text('上传失败，请检查上传文件的格式是否正确', 'middle')
