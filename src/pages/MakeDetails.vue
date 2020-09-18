@@ -1245,7 +1245,7 @@ export default {
       if (this.viewData.status >= 0 && this.viewData.status < 100 && this.isManager) {
         this.controlBtn.push({id: 1, title: '指派业务员', type: 'warning'})
       }
-      if (this.viewData.status > 0 && (this.isCustomer)) {
+      if (this.viewData.status >= 0 && this.viewData.status < 100 && (this.isCustomer)) {
         this.controlBtn.push({id: 12, title: '邀请共审', type: 'warning'})
       }
       if (this.viewData.canedit) {
