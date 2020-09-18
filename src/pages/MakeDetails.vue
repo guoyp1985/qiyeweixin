@@ -1258,7 +1258,7 @@ export default {
       if (this.viewData.canedit && this.isChanged) {
         this.controlBtn.push({id: 2, title: '确认修改并提交', type: 'success'})
       }
-      if (this.viewData.cancensor && !this.isChanged) {
+      if (this.viewData.cancensor && !this.isChanged && this.isCustomer) {
         // 需求确认 需求确认启动制作
         this.controlBtn.push({id: 3, title: '需求确认启动制作', type: 'danger'})
       }
