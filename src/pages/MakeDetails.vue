@@ -1298,14 +1298,14 @@ export default {
       if (this.viewData.status >= 0 && this.viewData.status < 100 && (this.isCustomer)) {
         this.controlBtn.push({id: 12, title: '邀请共审', type: 'warning'})
       }
-      if (this.viewData.canedit && this.isChanged) {
+      if (this.viewData.cancensor && this.isChanged) {
         this.controlBtn.push({id: 2, title: '确认修改并提交', type: 'success'})
       }
       if (this.viewData.cancensor && !this.isChanged && this.isCustomer) {
         // 需求确认 需求确认启动制作
         this.controlBtn.push({id: 3, title: '需求确认启动制作', type: 'danger'})
       }
-      if (this.viewData.cancheck && (this.isManager || this.isSale)) {
+      if (this.viewData.cancensor && (this.isManager || this.isSale)) {
         this.controlBtn.push({id: 15, title: '驳回需求', type: 'danger'})
       }
       if (this.viewData.status === 1 && (this.isManager || this.isSale)) {
