@@ -423,6 +423,10 @@
          <el-input v-model="memo" placeholder="请输入备注"></el-input>
        </td>
      </tr>
+     <tr>
+       <td class="title">当前状态</td>
+       <td colspan="3" class="color-red">{{viewData.statusdesc}}</td>
+     </tr>
      <!-- <tr v-if="controlBtn.length">
        <td class="padding10 align_center" colspan="4">
          <el-button v-for="(item,index) in controlBtn" :key="index" :type="item.type" @click="buttonEvent(item.id)">{{item.title}}</el-button>
