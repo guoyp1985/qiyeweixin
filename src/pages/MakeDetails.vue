@@ -1069,7 +1069,7 @@ export default {
       }
       this.$vux.loading.show()
       this.issubmit = true
-      this.$http.post(`${ENV.BokaApi}/api/demands/selectIdea?id=$demandid&suid=`, {
+      this.$http.post(`${ENV.BokaApi}/api/demands/selectIdea`, {
         id: this.query.id, suid: this.selectedSuid
       }).then(res => {
         this.$vux.loading.hide()
@@ -1257,7 +1257,6 @@ export default {
       }
       if (this.viewData.canedit && this.isChanged) {
         this.controlBtn.push({id: 2, title: '确认修改并提交', type: 'success'})
-        // this.controlBtn.push({id: 15, title: '确认修改并退出', type: 'success'})
       }
       if (this.viewData.cancensor && !this.isChanged) {
         // 需求确认 需求确认启动制作
@@ -1272,10 +1271,6 @@ export default {
       if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
         this.controlBtn.push({id: 6, title: '编写创意梗概', type: 'success'})
       }
-      // 修改创意梗概
-      // if ((this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)) {
-      //   this.controlBtn.push({id: 7, title: '修改创意', type: 'success'})
-      // }
       if (this.query.type) {
         if (this.query.type === 'ongoing') {
           if (this.viewData.status === 5) {
@@ -1309,10 +1304,6 @@ export default {
           // 保存修改 确认修改并提交 viewData.canedit === 1
           this.onSubmit()
           break
-        case 15:
-          // 确认修改并退出 viewData.canedit === 1
-          this.onSubmit(true)
-          break
         case 3:
           // 需求确认 需求确认启动制作 viewData.cancensor === 1
           this.handleExamine(parseInt(this.query.id))
@@ -1327,10 +1318,6 @@ export default {
           break
         case 6:
           // 提交创意 编写创意梗概 (this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)
-          this.showIdeaDialog = true
-          break
-        case 7:
-          // 修改创意梗概 (this.viewData.status === 2 && this.isInvitor) || (this.viewData.status === 3 && this.isSupplier)
           this.showIdeaDialog = true
           break
         case 8:
@@ -1365,7 +1352,7 @@ export default {
           break
       }
     },
-    onSubmit (isExit) {
+    onSubmit () {
       if (this.issubmit) return false
       let params = {
         title: this.viewData.title,
@@ -1437,15 +1424,9 @@ export default {
           type: 'text',
           time: this.$util.delay(data.error),
           onHide: () => {
+            this.issubmit = false
             if (data.flag) {
-              if (isExit) {
-                window.history.go(-1)
-              } else {
-                this.issubmit = false
-                this.refresh()
-              }
-            } else {
-              this.issubmit = false
+              this.refresh()
             }
           }
         })
