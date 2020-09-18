@@ -1956,6 +1956,7 @@ export default {
       this.showIdeaDialog = false
       this.selectedSuid = 0
       this.showSupplyDialog = false
+      this.isChanged = false
     },
     refresh () {
       this.query = this.$route.query
