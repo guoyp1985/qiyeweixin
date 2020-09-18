@@ -423,12 +423,15 @@
          <el-input v-model="memo" placeholder="请输入备注"></el-input>
        </td>
      </tr>
-     <tr v-if="controlBtn.length">
+     <!-- <tr v-if="controlBtn.length">
        <td class="padding10 align_center" colspan="4">
          <el-button v-for="(item,index) in controlBtn" :key="index" :type="item.type" @click="buttonEvent(item.id)">{{item.title}}</el-button>
        </td>
-     </tr>
+     </tr> -->
    </table>
+   <div class="padding10 align_center" v-if="controlBtn.length">
+     <el-button v-for="(item,index) in controlBtn" :key="index" :type="item.type" @click="buttonEvent(item.id)">{{item.title}}</el-button>
+   </div>
    <div v-if="viewData.status == 2 && viewData.caninviteinfo" class="scroll-container user-table" ref="scrollContainer2" @scroll="handleScroll2('scrollContainer2',0)">
      <template v-if="disTabData2">
        <el-table
@@ -875,9 +878,22 @@
    </el-dialog>
    <el-dialog
      class="inviteDialog"
+     title="驳回需求"
+     :visible.sync="showBackDialog1"
+     width="80%">
+     <div>
+       <el-input placeholder="请输入驳回原因" v-model="backReason" type="textarea" :rows="10"></el-input>
+     </div>
+     <span slot="footer" class="dialog-footer">
+       <el-button @click="showBackDialog1 = false">取 消</el-button>
+       <el-button type="primary" @click="submitBack1">确 定</el-button>
+     </span>
+   </el-dialog>
+   <el-dialog
+     class="inviteDialog"
      title="驳回"
      :visible.sync="showBackDialog"
-     width="60%">
+     width="80%">
      <div class="pb10" style="color:#f56c6c;">此行为将导致本创意梗概失效，请谨慎驳回。</div>
      <div>
        <el-input placeholder="请输入驳回原因" v-model="backReason" type="textarea" :rows="10"></el-input>
@@ -1033,6 +1049,7 @@ export default {
       ideaObject: {},
       backReason: '',
       showBackDialog: false,
+      showBackDialog1: false,
       showIdeaDialog: false,
       supplyData: [],
       disSupplyList: false,
@@ -1152,6 +1169,32 @@ export default {
         })
       })
     },
+    submitBack1 () {
+      if (this.issubmit) return false
+      if (this.backReason === '') {
+        this.$vux.toast.text('请输入驳回原因', 'middle')
+        return false
+      }
+      this.issubmit = true
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/censor`, {
+        module: 'demands', id: this.query.id, agree: 0, reason: this.backReason
+      }).then(res => {
+        this.issubmit = false
+        this.$vux.loading.hide()
+        let data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              this.refresh()
+            }
+          }
+        })
+      })
+    },
     submitIdeaEvent () {
       if (this.issubmit) return false
       let ideaParams = {...this.ideaObject}
@@ -1249,7 +1292,7 @@ export default {
     },
     handleBtn () {
       this.controlBtn = []
-      if (this.viewData.status >= 0 && this.viewData.status < 100 && this.isManager) {
+      if (this.viewData.status >= 0 && this.viewData.status < 100 && (this.isManager || this.isSale)) {
         this.controlBtn.push({id: 1, title: '指派业务员', type: 'warning'})
       }
       if (this.viewData.status >= 0 && this.viewData.status < 100 && (this.isCustomer)) {
@@ -1261,6 +1304,9 @@ export default {
       if (this.viewData.cancensor && !this.isChanged && this.isCustomer) {
         // 需求确认 需求确认启动制作
         this.controlBtn.push({id: 3, title: '需求确认启动制作', type: 'danger'})
+      }
+      if (this.viewData.cancheck && (this.isManager || this.isSale)) {
+        this.controlBtn.push({id: 15, title: '驳回需求', type: 'danger'})
       }
       if (this.viewData.status === 1 && (this.isManager || this.isSale)) {
         this.controlBtn.push({id: 4, title: '分发', type: 'primary'})
@@ -1349,6 +1395,11 @@ export default {
         case 14:
           // 选择供应商 this.viewData.status === 3 && (this.isManager || this.isSale)
           this.showSupplyDialog = true
+          break
+        case 15:
+          // 驳回需求 this.viewData.cancheck && (this.isManager || this.isSale)
+          this.backReason = ''
+          this.showBackDialog1 = true
           break
       }
     },
@@ -1901,6 +1952,7 @@ export default {
       this.ideaObject = {}
       this.backReason = ''
       this.showBackDialog = false
+      this.showBackDialog1 = false
       this.showIdeaDialog = false
       this.selectedSuid = 0
       this.showSupplyDialog = false
