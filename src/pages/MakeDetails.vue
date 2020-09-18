@@ -425,7 +425,7 @@
      </tr>
      <tr>
        <td class="title">当前状态</td>
-       <td colspan="3" class="color-red">{{viewData.statusdesc}}</td>
+       <td colspan="3" class="color-red txt-css bold">{{viewData.statusdesc}}</td>
      </tr>
      <!-- <tr v-if="controlBtn.length">
        <td class="padding10 align_center" colspan="4">
