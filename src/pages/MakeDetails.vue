@@ -1296,13 +1296,20 @@ export default {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/demands/addCustomer`, postData).then(res => {
         this.$vux.loading.hide()
-        this.issubmit = false
         const data = res.data
-        this.$vux.toast.text(data.error, 'middle')
-        if (data.flag) {
-          this.showUserDialog = false
-          this.isGongshen = false
-        }
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            this.issubmit = false
+            if (data.flag) {
+              this.showUserDialog = false
+              this.isGongshen = false
+              this.refresh()
+            }
+          }
+        })
       })
     },
     toFenjing () {
