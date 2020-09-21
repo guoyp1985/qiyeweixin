@@ -1453,7 +1453,12 @@ export default {
         this.$vux.toast.text('请输入正确的制作价格', 'middle')
         return false
       }
-      this.handleExamine(parseInt(this.query.id))
+      this.$vux.confirm.show({
+        content: `确定要确认需求启动制作吗？确认后制作需求单不可更改`,
+        onConfirm: () => {
+          this.ajaxCensor({id: this.query.id, agree: 1})
+        }
+      })
     },
     onSubmit () {
       if (this.issubmit) return false
@@ -1555,6 +1560,30 @@ export default {
       this.reason = ''
       this.radio = 1
     },
+    ajaxCensor (params) {
+      this.issubmit = true
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/demands/censor`, params).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: 'text',
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              if (this.isManager || this.isSale) {
+                this.$router.push({path: '/makeList', query: {status: data.status}})
+              } else {
+                this.$router.push({path: '/makeUserList', query: {status: data.status}})
+              }
+            } else {
+              this.issubmit = false
+            }
+          }
+        })
+      })
+    },
     submitModal () {
       if (this.radio === 2 && this.reason === '') {
         this.$vux.toast.text('请填写原因', 'middle')
@@ -1565,20 +1594,7 @@ export default {
       if (this.modalType && this.modalType !== '') {
         params.module = 'ideas'
       }
-      this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/censor`, params).then(res => {
-        const data = res.data
-        if (data.flag) {
-          this.$vux.loading.hide()
-          this.closeModal()
-          this.getInfo()
-          if (this.isManager || this.isSale) {
-            this.$router.push({path: '/makeList', query: {status: data.status}})
-          } else {
-            this.$router.push({path: '/makeUserList', query: {status: data.status}})
-          }
-        }
-      })
+      this.ajaxCensor(params)
     },
     chooseUser () {
       this.showChooseUser = true
