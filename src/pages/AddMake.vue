@@ -247,7 +247,7 @@
      </tr>
      <tr>
        <td class="padding10" colspan="4">
-         <el-button type="primary" @click="onSubmit">立即提交</el-button>
+         <el-button type="primary" @click="onSubmit">发起需求</el-button>
        </td>
      </tr>
    </table>
