@@ -1349,7 +1349,7 @@ export default {
         this.controlBtn.push({id: 14, title: '选择供应商', type: 'warning'})
       }
       if (this.isInvitor || this.isSupplier) {
-        this.controlBtn.push({id: 15, title: '共同制作', type: 'primary'})
+        this.controlBtn.push({id: 16, title: '共同制作', type: 'primary'})
       }
     },
     buttonEvent (id) {
