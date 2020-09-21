@@ -283,16 +283,19 @@
      </tr>
      <tr>
        <td class="title">特殊备注</td>
-       <td :colspan="`${(isManager || isSale) ? 1 : 3}`">
+       <td :colspan="`${(isManager || isSale || isCustomer) ? 1 : 3}`">
          <el-input v-if="allowEdit" @input="inputChange" v-model="viewData.otherdemand" placeholder="请输入特殊备注"></el-input>
          <div class="txt-css" v-else>{{viewData.otherdemand}}</div>
          <div class="diff-css" v-if="historyData && historyData.otherdemand && historyData.otherdemand != '' && viewData.otherdemand != historyData.otherdemand">{{historyData.otherdemand}}</div>
        </td>
-       <td class="title" v-if="isManager || isSale">制作价格</td>
-       <td v-if="isManager || isSale">
-         <el-input v-if="allowEdit" @input="inputChange" v-model="viewData.price" placeholder="请输入制作价格"></el-input>
-         <div class="txt-css" v-else>{{viewData.price}}</div>
-         <div class="diff-css" v-if="historyData && historyData.price && historyData.price != '' && viewData.price != historyData.price">{{historyData.price}}</div>
+       <td class="title" v-if="isManager || isSale || isCustomer">制作价格</td>
+       <td v-if="isManager || isSale || isCustomer">
+         <div class="txt-css" v-if="isCustomer">{{viewData.price}}</div>
+         <template v-else>
+           <el-input v-if="allowEdit" @input="inputChange" v-model="viewData.price" placeholder="请输入制作价格"></el-input>
+           <div class="txt-css" v-else>{{viewData.price}}</div>
+           <div class="diff-css" v-if="historyData && historyData.price && historyData.price != '' && viewData.price != historyData.price">{{historyData.price}}</div>
+         </template>
        </td>
      </tr>
      <!-- <tr v-if="(viewData.status == 2 && isInvitor) || (viewData.status == 3 && isSupplier)">
