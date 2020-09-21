@@ -871,7 +871,7 @@
        </el-input>
      </div>
      <div class="mt10">
-       <el-input v-model="uName" :disabled="true">
+       <el-input v-model="uName">
          <template slot="prepend">姓名</template>
        </el-input>
      </div>
@@ -1273,14 +1273,25 @@ export default {
     },
     submitUserEvent () {
       if (this.issubmit) return false
-      if (!this.submitUser || !this.submitUser.uid) {
-        this.$vux.toast.text('请先搜索用户', 'middle')
+      // if (!this.submitUser || !this.submitUser.uid) {
+      //   this.$vux.toast.text('请先搜索用户', 'middle')
+      //   return false
+      // }
+      if (this.$util.trim(this.uPhone) === '') {
+        this.$vux.toast.text('请输入手机号', 'middle')
         return false
       }
-      let postData = {demandid: this.query.id, name: this.submitUser.linkman, mobile: this.submitUser.mobile}
-      if (this.isGongshen) {
-        postData.type = 'supplier'
+      if (!Reg.rPhone.test(this.uPhone)) {
+        this.$vux.toast.text('请输入正确的手机号', 'middle')
+        return false
       }
+      if (this.$util.trim(this.uName) === '') {
+        this.$vux.toast.text('请输入姓名', 'middle')
+        return false
+      }
+      // let postData = {demandid: this.query.id, name: this.submitUser.linkman, mobile: this.submitUser.mobile}
+      let postData = {demandid: this.query.id, name: this.uName, mobile: this.uPhone}
+      if (this.isGongshen)  postData.type = 'supplier'
       this.issubmit = true
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/demands/addCustomer`, postData).then(res => {
