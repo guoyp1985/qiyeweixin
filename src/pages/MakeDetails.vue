@@ -1059,7 +1059,8 @@ export default {
       disSupplyList: false,
       selectedSuid: 0,
       showSupplyDialog: false,
-      isChanged: false
+      isChanged: false,
+      isGongshen: false
     }
   },
   methods: {
@@ -1237,6 +1238,7 @@ export default {
       this.showUserDialog = false
       this.uName = ''
       this.uPhone = ''
+      this.isGongshen = false
     },
     searchUser () {
       if (this.issubmit) return false
@@ -1275,17 +1277,20 @@ export default {
         this.$vux.toast.text('请先搜索用户', 'middle')
         return false
       }
+      let postData = {demandid: this.query.id, name: this.submitUser.linkman, mobile: this.submitUser.mobile}
+      if (this.isGongshen) {
+        postData.type = 'supplier'
+      }
       this.issubmit = true
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/demands/addCustomer`, {
-        demandid: this.query.id, name: this.submitUser.linkman, mobile: this.submitUser.mobile
-      }).then(res => {
+      this.$http.post(`${ENV.BokaApi}/api/demands/addCustomer`, postData).then(res => {
         this.$vux.loading.hide()
         this.issubmit = false
         const data = res.data
         this.$vux.toast.text(data.error, 'middle')
         if (data.flag) {
           this.showUserDialog = false
+          this.isGongshen = false
         }
       })
     },
@@ -1343,6 +1348,9 @@ export default {
       if (this.viewData.status === 3 && (this.isManager || this.isSale)) {
         this.controlBtn.push({id: 14, title: '选择供应商', type: 'warning'})
       }
+      if (this.isInvitor || this.isSupplier) {
+        this.controlBtn.push({id: 15, title: '共同制作', type: 'primary'})
+      }
     },
     buttonEvent (id) {
       switch (id) {
@@ -1388,11 +1396,13 @@ export default {
           break
         case 12:
           // 邀请共审 viewData.status > 0 && isCustomer
+          this.isGongshen = false
           this.dialogTitle = '邀请共审'
           this.showUserDialog = true
           break
         case 13:
           // 添加客户 this.viewData.canedit && (this.isManager || this.isSale)
+          this.isGongshen = false
           this.dialogTitle = '添加客户'
           this.showUserDialog = true
           break
@@ -1404,6 +1414,12 @@ export default {
           // 驳回需求 this.viewData.cancheck && (this.isManager || this.isSale)
           this.backReason = ''
           this.showBackDialog1 = true
+          break
+        case 16:
+          // 添加客户 this.viewData.canedit && (this.isManager || this.isSale)
+          this.dialogTitle = '共同制作'
+          this.isGongshen = true
+          this.showUserDialog = true
           break
       }
     },
@@ -1961,6 +1977,7 @@ export default {
       this.selectedSuid = 0
       this.showSupplyDialog = false
       this.isChanged = false
+      this.isGongshen = false
     },
     refresh () {
       this.query = this.$route.query
