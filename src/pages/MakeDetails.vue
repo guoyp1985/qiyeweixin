@@ -1325,8 +1325,14 @@ export default {
       if (this.viewData.status >= 0 && this.viewData.status < 100 && (this.isCustomer)) {
         this.controlBtn.push({id: 12, title: '邀请共审', type: 'warning'})
       }
-      if (this.viewData.canedit && this.isChanged) {
-        this.controlBtn.push({id: 2, title: '确认修改并提交', type: 'success'})
+      if (this.viewData.canedit) {
+        if (this.viewData.canconfirm) {
+          if (this.isChanged) {
+            this.controlBtn.push({id: 2, title: '确认修改并提交', type: 'success'})
+          }
+        } else {
+          this.controlBtn.push({id: 2, title: '确认修改并提交', type: 'success'})
+        }
       }
       if (this.viewData.canconfirm && !this.isChanged) {
         // 需求确认 需求确认启动制作
