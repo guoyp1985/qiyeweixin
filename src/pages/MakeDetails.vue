@@ -1382,7 +1382,7 @@ export default {
           break
         case 3:
           // 需求确认 需求确认启动制作 viewData.cancensor === 1
-          this.handleExamine(parseInt(this.query.id))
+          this.confirmAndMake()
           break
         case 4:
           // 分发 viewData.status === 1 && !isCustomer
@@ -1440,6 +1440,14 @@ export default {
           this.showUserDialog = true
           break
       }
+    },
+    confirmAndMake () {
+      let curPrice = this.viewData.price
+      if (curPrice !== '' && (isNaN(curPrice) || parseFloat(curPrice) <= 1 || parseFloat(curPrice).length > 7)) {
+        this.$vux.toast.text('请输入正确的制作价格', 'middle')
+        return false
+      }
+      this.handleExamine(parseInt(this.query.id))
     },
     onSubmit () {
       if (this.issubmit) return false

@@ -44,7 +44,6 @@ export default {
     return {
       query: {},
       themeObject: {},
-      syspara: {},
       mobile: '',
       code: '',
       verifyCode: '',
@@ -170,12 +169,23 @@ export default {
       borderStyle: `border-color:${themeColor} !important;`,
       switchShadowStyle: `box-shadow:0 1px 3px ${themeColor};`
     }
+  },
+  refresh () {
     let storageMobile = localStorage.getItem('mobile')
     if (storageMobile) {
       this.mobile = storageMobile
     }
+    clearInterval(this.timer)
+    this.code = ''
+    this.verifyCode = ''
+    this.showGetcode = true
+    this.timer = null
+    this.timenum = 60
+    this.applyMobile = null
+    this.isSubmit = false
   },
   activated () {
+    this.refresh()
   },
   mounted () {
   },
