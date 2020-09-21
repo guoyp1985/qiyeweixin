@@ -1960,6 +1960,7 @@ export default {
       })
     },
     initData () {
+      this.controlBtn = []
       this.showSos = false
       this.viewData = {}
       this.pageStart = 0
