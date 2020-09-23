@@ -1453,9 +1453,12 @@ export default {
     },
     confirmAndMake () {
       let curPrice = this.viewData.price
-      if (curPrice !== '' && (isNaN(curPrice) || parseFloat(curPrice) < 1 || parseFloat(curPrice).length > 7)) {
-        this.$vux.toast.text('请输入正确的制作价格', 'middle')
-        return false
+      var rule1 = /^(0+)|[^\d]+/g
+      if (curPrice !== '') {
+        if (isNaN(curPrice) || parseFloat(curPrice) < 1 || curPrice.length >= 10 || rule1.test(curPrice)) {
+          this.$vux.toast.text('请输入正确的制作价格', 'middle')
+          return false
+        }
       }
       this.$vux.confirm.show({
         content: `确定要确认需求启动制作吗？确认后制作需求单不可更改`,
@@ -1516,9 +1519,13 @@ export default {
         return false
       }
       if (this.isManager || this.isSale) {
-        if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) < 1 || parseFloat(params.price).length > 7)) {
-          this.$vux.toast.text('请输入正确的制作价格', 'middle')
-          return false
+        let curPrice = params.price
+        var rule1 = /^(0+)|[^\d]+/g
+        if (curPrice !== '') {
+          if (isNaN(curPrice) || parseFloat(curPrice) < 1 || curPrice.length >= 10 || rule1.test(curPrice)) {
+            this.$vux.toast.text('请输入正确的制作价格', 'middle')
+            return false
+          }
         }
       }
       var rule1 = /^(0|[1-9][0-9]*)$/
