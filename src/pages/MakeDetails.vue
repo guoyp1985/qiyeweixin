@@ -222,7 +222,7 @@
      <tr>
        <td class="title">客户诉求</td>
        <td colspan="3">
-         <el-input v-if="allowEdit" @input="inputChange" type="textarea" v-model="viewData.customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input v-if="allowEdit" @input="inputChange" type="textarea" v-model="viewData.customerdemand" placeholder="请输入客户诉求"></el-input>
          <div class="txt-css" v-else>{{viewData.customerdemand}}</div>
          <div class="diff-css" v-if="historyData && historyData.customerdemand && historyData.customerdemand != '' && viewData.customerdemand != historyData.customerdemand">{{historyData.customerdemand}}</div>
        </td>
