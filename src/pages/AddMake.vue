@@ -196,7 +196,7 @@
      <tr>
        <td class="title">客户诉求</td>
        <td colspan="3">
-         <el-input type="textarea" v-model="submitData.customerdemand" placeholder="请输入投诉内容"></el-input>
+         <el-input type="textarea" v-model="submitData.customerdemand" placeholder="请输入客户诉求"></el-input>
        </td>
      </tr>
      <tr>
