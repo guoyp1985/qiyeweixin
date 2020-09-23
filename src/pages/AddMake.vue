@@ -446,7 +446,7 @@ export default {
         this.$vux.toast.text('交付日期必须大于立项日期', 'middle')
         return false
       }
-      if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) <= 1 || parseFloat(params.price).length > 7)) {
+      if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) < 1 || parseFloat(params.price).length > 7)) {
         this.$vux.toast.text('请输入正确的制作价格', 'middle')
         return false
       }

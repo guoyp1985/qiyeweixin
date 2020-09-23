@@ -1453,7 +1453,7 @@ export default {
     },
     confirmAndMake () {
       let curPrice = this.viewData.price
-      if (curPrice !== '' && (isNaN(curPrice) || parseFloat(curPrice) <= 1 || parseFloat(curPrice).length > 7)) {
+      if (curPrice !== '' && (isNaN(curPrice) || parseFloat(curPrice) < 1 || parseFloat(curPrice).length > 7)) {
         this.$vux.toast.text('请输入正确的制作价格', 'middle')
         return false
       }
@@ -1516,7 +1516,7 @@ export default {
         return false
       }
       if (this.isManager || this.isSale) {
-        if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) <= 1 || parseFloat(params.price).length > 7)) {
+        if (params.price !== '' && (isNaN(params.price) || parseFloat(params.price) < 1 || parseFloat(params.price).length > 7)) {
           this.$vux.toast.text('请输入正确的制作价格', 'middle')
           return false
         }
