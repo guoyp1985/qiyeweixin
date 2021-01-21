@@ -1,0 +1,68 @@
+<style lang="less">
+.left-col{
+  width: 170px;min-height: 100px;margin-right: 30px;
+  .left-menu{width: 170px;z-index: 1;background-color: #fff;}
+  .left-menu .hd{height: 44px;line-height: 44px;color: #fff;background: #4889f3;border-radius: 3px 3px 0 0;}
+  .left-menu .hd h2 {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 400;
+  }
+  .class-list {border: 1px solid #f0f0f0;overflow: hidden;}
+  .class-list .item {border-top: 1px solid #f0f0f0;}
+  .class-list .item:first-child {border-top: none;}
+  .class-list .item .inner {
+      position: relative;
+      display: block;
+      color: #666;
+      font-size: 16px;
+      height: 56px;
+      line-height: 56px;
+      text-align: center;
+      background-color: #fff;
+  }
+}
+</style>
+<template>
+  <div class="left-col">
+      <div id="LeftMenu" style="position: fixed;">
+          <div class="left-menu">
+              <div class="hd">
+                  <h2>相关频道</h2>
+              </div>
+              <div class="bd">
+                  <ul class="class-list">
+                    <li v-for="(item, index) in classArr" :key="index" class="item">
+                        <a class="inner" :href="`/index?id=${item.id}`" keyname="title">{{item.title}}</a>
+                    </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
+</template>
+
+<script>
+import {} from 'vux'
+import ENV from 'env'
+export default {
+  name: 'ClassMenu',
+  data () {
+    return {
+      classArr: []
+    }
+  },
+  methods: {
+  },
+  created () {
+    this.$http.get(`${ENV.GxkApi}/api/list_n/newsclass`, {
+      params: {module: 'news'}
+    }).then(res => {
+      const data = res.data
+      if (data.flag) {
+        this.classArr = data.data
+      }
+    })
+  }
+}
+</script>

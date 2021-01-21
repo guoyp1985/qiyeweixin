@@ -10,6 +10,7 @@
 </template>
 <script>
 import ENV from 'env'
+import {Token} from '#/storage'
 export default {
   data () {
     return {
@@ -30,6 +31,9 @@ export default {
           const data = res.data
           if (data.flag) {
             clearInterval(this.codeInterval)
+            Token.remove()
+            Token.set(data.data)
+            this.$router.push('/register')
           }
         })
       }, 200)
