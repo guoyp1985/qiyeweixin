@@ -64,30 +64,6 @@ import {
   WechatEmotion,
   Badge
 } from 'vux'
-import Orderproductplate from '@/components/Orderproductplate'
-import Bargainbuy from '@/components/Bargainbuy'
-import BargainbuyView from '@/components/BargainbuyView'
-import BargainbuyDetail from '@/components/BargainbuyDetail'
-import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
-import ShareSuccess from '@/components/ShareSuccess'
-import Forminputplate from '@/components/Forminputplate'
-import FormGroupbuy from '@/components/FormGroupbuy'
-import FormBargainbuy from '@/components/FormBargainbuy'
-import FormDiscount from '@/components/FormDiscount'
-import ClipPopup from '@/components/ClipPopup'
-import CTitle from '@/components/CTitle'
-import EmotionBox from '@/components/EmotionBox'
-import Listplate from '@/components/Listplate'
-import Groupbuyitemplate from '@/components/Groupbuyitemplate'
-import TitleTip from '@/components/TitleTip'
-import Comment from '@/components/Comment'
-import Reply from '@/components/Reply'
-import CommentPopup from '@/components/CommentPopup'
-import Editor from '@/components/Editor'
-import OrderInfo from '@/components/OrderInfo'
-import Orderitemplate from '@/components/Orderitemplate'
-import Productitemplate from '@/components/Productitemplate'
-import Newsitemplate from '@/components/Newsitemplate'
 
 Vue.directive('transfer-dom', TransferDom)
 Vue.component('group', Group)
@@ -142,31 +118,6 @@ Vue.component('checker-item', CheckerItem)
 Vue.component('countdown', Countdown)
 Vue.component('emotion', WechatEmotion)
 Vue.component('badge', Badge)
-
-Vue.component('orderproductplate', Orderproductplate)
-Vue.component('bargainbuy', Bargainbuy)
-Vue.component('bargainbuy-view', BargainbuyView)
-Vue.component('bargainbuy-detail', BargainbuyDetail)
-Vue.component('bargainbuyitemplate', Bargainbuyitemplate)
-Vue.component('share-success', ShareSuccess)
-Vue.component('forminputplate', Forminputplate)
-Vue.component('form-groupbuy', FormGroupbuy)
-Vue.component('form-discount', FormDiscount)
-Vue.component('form-bargainbuy', FormBargainbuy)
-Vue.component('clip-popup', ClipPopup)
-Vue.component('c-title', CTitle)
-Vue.component('emotion-box', EmotionBox)
-Vue.component('listplate', Listplate)
-Vue.component('groupbuyitemplate', Groupbuyitemplate)
-Vue.component('title-tip', TitleTip)
-Vue.component('comment', Comment)
-Vue.component('reply', Reply)
-Vue.component('comment-popup', CommentPopup)
-Vue.component('editor', Editor)
-Vue.component('order-info', OrderInfo)
-Vue.component('orderitemplate', Orderitemplate)
-Vue.component('productitemplate', Productitemplate)
-Vue.component('newsitemplate', Newsitemplate)
 
 Vue.use(AjaxPlugin)
 Vue.use(WechatPlugin)

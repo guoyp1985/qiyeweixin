@@ -1,20 +1,3 @@
 en:
 zh-CN:
-  tIndex: 珍录
-  tLogin: 登录
-  tCenter: 个人中心
-  tGetClues: 文化创意
-  tStatement: 个人信息授权与保护声明
-  tUserList: 用户列表
-  tCluesList: 线索管理
-  Service: 服务
-  tAddUser: 新增用户
-  tMakeList: 制作需求单
-  tMakeUserList: 制作需求单
-  tAddMake: 新增制作需求
-  tMakeDetails: 制作需求详情
-  tMyOrder: 我的订单
-  tAddFenJing: 新增分镜脚本
-  tFenJing: 分镜脚本
-  tFenjing: 分镜脚本
-  tAssignSale: 分配业务员
+  tIndex: 共销客

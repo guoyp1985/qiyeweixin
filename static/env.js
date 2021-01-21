@@ -25,14 +25,13 @@ var ENV = {
     {uid: 39854},
     {uid: 25421},
     {uid: 98466}
-  ]
+  ],
+  title: '共销客',
+  logo: 'data/images/logo.png',
+  fid: 10,
+  AdminApi: 'https://admin.bsa.cn',
+  GxkApi: 'https://gxkvpc.boka.cn'
 }
 
 ENV.NoAccessUrls = [
-  ENV.BokaApi + '/api/login/*',
-  ENV.BokaApi + '/api/authLogin/*',
-  ENV.BokaApi + '/api/authUser/*',
-  ENV.BokaApi + '/api/qrcode/login*',
-  ENV.BokaApi + '/api/scanlogin',
-  ENV.BokaApi + '/api/withMiniLogin*'
 ]

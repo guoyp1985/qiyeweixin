@@ -1,17 +1,4 @@
 [
-  "AddMake",
-  "AddUser",
-  "AssignSale",
-  "Center",
-  "CluesList",
-  "Fenjing",
-  "GetClues",
-  "Login",
-  "MakeDetails",
-  "MakeList",
-  "MakeUserList",
-  "MyOrder",
-  "Redirect",
-  "Statement",
-  "UserList"
+  "Index",
+  "Code"
 ]
