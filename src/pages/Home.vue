@@ -38,6 +38,7 @@
   }
   .banner-area .swiper-pagination-bullet-active{opacity:1;}
 
+  .middle-col{width:700px;}
   .m-row1{margin-bottom: 10px;height: 272px;display:flex;}
   .m-row1 .col1{width: 458px;position:relative;}
   .m-row1 .col2{width:230px;display:flex;justify-content:flex-end;margin-left:10px;}
