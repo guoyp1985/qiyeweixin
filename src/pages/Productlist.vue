@@ -98,7 +98,7 @@ export default {
         if (data.flag) {
           const retdata = data.data
           this.listData = this.listData.concat(retdata)
-          if (retdata.length < this.limit) {
+          if (retdata.length < this.limit && this.listData.length > this.limit / 2) {
             this.isDone = true
           }
         }
