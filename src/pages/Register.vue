@@ -239,9 +239,10 @@ export default {
       this.submitData.yyzz = this.photoarr.join(',')
     },
     submitEvent () {
+      console.log(this.areaData)
       this.submitData.province = this.areaData[0]
       this.submitData.city = this.areaData[1]
-      this.submitData.country = this.areaData[2]
+      this.submitData.county = this.areaData[2]
       let iscontinue = true
       for (let i in this.requiredData) {
         let curKey = this.requiredData[i]
