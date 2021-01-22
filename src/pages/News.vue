@@ -4,7 +4,7 @@
 * @created_date: 2021-01-21
 */
 <style lang="less">
-.newsclass-page{
+.news-page{
   width:100%;
   .middle-col{flex:1;}
   .news-title{
@@ -19,7 +19,7 @@
 }
 </style>
 <template>
-  <div class="newsclass-page">
+  <div class="news-page">
     <top-menu></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
