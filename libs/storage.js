@@ -22,22 +22,6 @@ const Token = {
     return false
   }
 }
-const OpenId = {
-  set (openId) {
-    localStorage.setItem('openId', openId)
-  },
-  get () {
-    return localStorage.getItem('openId')
-  }
-}
-const WxQrCode = {
-  set (wxQrCode) {
-    localStorage.setItem('wxQrCode', wxQrCode)
-  },
-  get () {
-    return localStorage.getItem('wxQrCode')
-  }
-}
 const User = {
   set (user) {
     localStorage.setItem('user', JSON.stringify(user))
@@ -69,14 +53,6 @@ const Access = {
     }
   }
 }
-const Roomid = {
-  set (roomid) {
-    localStorage.setItem('roomid', roomid)
-  },
-  get () {
-    return localStorage.getItem('roomid')
-  }
-}
 const WxAccess = {
   set (access) {
     localStorage.setItem('wxAccess', access)
@@ -106,90 +82,22 @@ const Version = {
     }
   }
 }
-const VoiceAccess = {
-  set (access) {
-    localStorage.setItem('voiceAccess', access)
+const MenuData = {
+  set (menu) {
+    localStorage.setItem('menu', JSON.stringify(menu))
   },
   get () {
-    const res = localStorage.getItem('voiceAccess')
-    return (res === null || res === 'false') ? false : true
-  },
-  remove () {
-    const access = VoiceAccess.get()
-    if (access) {
-      localStorage.removeItem('voiceAccess')
-    }
-  }
-}
-const MiniApp = {
-  setAppId (val) {
-    localStorage.setItem('miniAppId', val)
-  },
-  getAppId () {
-    return localStorage.getItem('miniAppId')
-  },
-  removeAppId () {
-    const data = MiniApp.getAppId()
-    if (data) {
-      localStorage.removeItem('miniAppId')
-    }
-  },
-  setOpenId (val) {
-    localStorage.setItem('miniOpenId', val)
-  },
-  getOpenId (val) {
-    return localStorage.getItem('miniOpenId')
-  },
-  removeOpenId () {
-    const data = MiniApp.getOpenId()
-    if (data) {
-      localStorage.removeItem('miniOpenId')
-    }
-  }
-}
-const FirstInfo = {
-  set (info) {
-    localStorage.setItem('FirstInfo', JSON.stringify(info))
-  },
-  get () {
-    if (localStorage.getItem('FirstInfo') === 'undefined') {
+    if (localStorage.getItem('menu') === 'undefined') {
       return null
     }
-    return JSON.parse(localStorage.getItem('FirstInfo'))
+    return JSON.parse(localStorage.getItem('menu'))
   },
   remove () {
-    const info = FirstInfo.get()
-    if (info) {
-      localStorage.removeItem('FirstInfo')
-    }
-  }
-}
-const SystemParams = {
-  set (info) {
-    localStorage.setItem('SystemParams', JSON.stringify(info))
-  },
-  get () {
-    if (localStorage.getItem('SystemParams') === 'undefined') {
-      return null
-    }
-    return JSON.parse(localStorage.getItem('SystemParams'))
-  },
-  remove () {
-    const info = SystemParams.get()
-    if (info) {
-      localStorage.removeItem('SystemParams')
+    const menu = MenuData.get()
+    if (menu) {
+      localStorage.removeItem('menu')
     }
   }
 }
 
-let __height = 0
-const AdapterHeight = {
-  set (height) {
-    __height = height
-  },
-  get () {
-    return __height
-  }
-}
-
-export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess, MiniApp, AdapterHeight, FirstInfo, SystemParams }
+export { Token, User, Access, WxAccess, Version, MenuData }

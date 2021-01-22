@@ -48,6 +48,13 @@ export default {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
+  watch: {
+    '$route': {
+      handler (newVal, oldVal) {
+        this.refresh()
+      }
+    }
+  },
   methods: {
     getInfo () {
       this.$http.get(`${ENV.GxkApi}/api/moduleInfo`, {
@@ -61,11 +68,12 @@ export default {
       })
     },
     refresh () {
+      this.query = this.$route.query
+      this.viewData = {}
       this.getInfo()
     }
   },
   created () {
-    this.query = this.$route.query
   },
   activated () {
     this.refresh()

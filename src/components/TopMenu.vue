@@ -39,7 +39,7 @@
     border-radius:4px;text-align: center;margin-top: -4px;}
   .dropdown-content a:hover {background-color: rgb(60, 113, 242);color: #fff;}
   .dropdowm:hover .dropdown-content {display: block;}
-  
+
   .menuarea{
     position:fixed;left:150px;top:0;right:245px;z-index:50;height:90px;
     display:flex;justify-content:flex-end;flex-flow:row wrap; align-items:center;text-align:right;
@@ -131,11 +131,7 @@
     </div>
     <div class="menuarea" >
         <div class="menu-list">
-            <div class="menu-item visited" href="boka.html">首页</div>
-            <a class="menu-item" href="newslist.html">公司新闻</a>
-            <a class="menu-item" href="productlist.html">公司产品</a>
-            <a class="menu-item" href="customers.html">公司客户</a>
-            <a class="menu-item" href="aboutus.html">关于我们</a>
+            <div v-for="(item, index) in menuArr" :class="`menu-item ${(current) == (item.type + item.relateid) ? 'visited' : ''}`" @click="toMenu(item)">{{item.title}}</div>
         </div>
     </div>
   </div>
@@ -143,9 +139,43 @@
 
 <script>
 import {} from 'vux'
+// import ENV from 'env'
+import { MenuData } from '#/storage'
 export default {
   name: 'TopMenu',
+  props: {
+    current: {
+      type: String,
+      default: 'home'
+    }
+  },
+  data () {
+    return {
+      menuArr: null
+    }
+  },
   methods: {
+    toMenu (item) {
+      if (item.type !== this.current) {
+        switch (item.type) {
+          case 'home':
+            this.$router.push('/')
+            break
+          case 'newslist':
+            this.$router.push({path: '/newslist', query: {classid: item.relateid}})
+            break
+          case 'productlist':
+            this.$router.push({path: '/productlist', query: {classid: item.relateid}})
+            break
+          case 'aboutus':
+            this.$router.push({path: '/aboutus'})
+            break
+        }
+      }
+    }
+  },
+  created () {
+    this.menuArr = MenuData.get()
   }
 }
 </script>

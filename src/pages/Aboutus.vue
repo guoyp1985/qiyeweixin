@@ -16,7 +16,7 @@
 </style>
 <template>
   <div class="about-page">
-    <top-menu></top-menu>
+    <top-menu current="aboutus0"></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
       <div class="middle-col">

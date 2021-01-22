@@ -19,5 +19,6 @@ Vue.use(Router)
 // routes = routes.concat(demos)
 const routes = []
 export default new Router({
-  routes
+  mode: 'history',
+  routes: routes
 })

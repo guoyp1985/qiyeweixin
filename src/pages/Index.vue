@@ -118,7 +118,7 @@
 </style>
 <template>
   <div class="index-page">
-    <top-menu></top-menu>
+    <top-menu current="home0"></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
       <div class="middle-col">

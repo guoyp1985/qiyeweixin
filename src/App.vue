@@ -42,7 +42,7 @@
 <script>
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import { User } from '#/storage'
+import { MenuData } from '#/storage'
 import ENV from 'env'
 
 export default {
@@ -68,7 +68,7 @@ export default {
       }
     },
     '$route' (to, from) {
-      console.log(`set title:${this.getTitle(to.path)}`)
+      // console.log(`set title:${this.getTitle(to.path)}`)
       document.title = this.getTitle(to.path)
     }
   },
@@ -121,15 +121,21 @@ export default {
       return title || ' '
     },
     getData () {
-      const user = User.get()
-      let query = this.$util.query()
-      // this.$http.get(`${ENV.BokaApi}/api/user/show`, {
-      //   params: params
-      // }).then(res => {
-      //   if (res && res.status === 200) {
-      //     User.set(res.data)
-      //   }
-      // })
+      const hostname = document.location.hostname
+      let hname = hostname.split('.')[0]
+      hname = 'csbk'
+      this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
+        params: {module: 'channel', prefixdomain: hname}
+      }).then(res => {
+        const data = res.data
+        if (data.flag && data.data.length) {
+          MenuData.set(data.data)
+        } else {
+          if (this.$route.path !== '/sos') {
+            this.$router.replace('/sos')
+          }
+        }
+      })
     },
     globalTouch () {
       this.$vux.loading.hide()
@@ -138,7 +144,7 @@ export default {
   created () {
     console.info('App Start Up')
     document.title = this.$t('tIndex')
-    // this.getData()
+    this.getData()
     // this.$util.wxConfig()
   }
 }

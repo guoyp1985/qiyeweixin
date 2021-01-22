@@ -32,7 +32,7 @@
 </style>
 <template>
   <div class="news-list-page" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-    <top-menu></top-menu>
+    <top-menu :current="`newslist${query.classid ? query.classid : 0}`"></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
       <div class="middle-col">
@@ -81,7 +81,17 @@ export default {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
+  watch: {
+    '$route': {
+      handler (newVal, oldVal) {
+        this.refresh()
+      }
+    }
+  },
   methods: {
+    getview (to, from) {
+      this.name = this.$route.query.name
+    },
     toDetail (item) {
       this.$router.push({path: '/news', query: {id: item.id}})
     },
@@ -94,7 +104,7 @@ export default {
         if (data.flag) {
           const retdata = data.data
           this.listData = this.listData.concat(retdata)
-          if (retdata.length < this.limit) {
+          if (retdata.length < this.limit && this.listData.length > this.limit / 2) {
             this.isDone = true
           }
         }
@@ -114,11 +124,16 @@ export default {
       })
     },
     refresh () {
+      this.query = this.$route.query
+      this.listData = []
+      this.pagestart = 0
+      this.limit = 15
+      this.isLoading = false
+      this.isDone = false
       this.getList()
     }
   },
   created () {
-    this.query = this.$route.query
   },
   activated () {
     this.refresh()
