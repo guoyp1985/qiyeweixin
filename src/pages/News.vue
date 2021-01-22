@@ -56,6 +56,7 @@ export default {
         const data = res.data
         if (data.flag) {
           this.viewData = data.data
+          document.title = this.viewData.title
         }
       })
     },

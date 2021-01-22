@@ -1,10 +1,10 @@
 /*
-* @description: 新闻列表页
+* @description: 商品列表页
 * @auther: gyp
-* @created_date: 2021-01-21
+* @created_date: 2021-01-22
 */
 <style lang="less">
-.news-list-page{
+.product-list-page{
   width:100%;height:100%;overflow-y:auto;
   .middle-col{flex:1;}
   .m-row2{}
@@ -21,23 +21,17 @@
   }
   .m-row2 .list-area img{width:100%;height:100%;object-fit:cover;}
   .m-row2 .list-area .con{height:130px;}
-  .m-row2 .list-area .con h3 {line-height: 32px;min-height: 75px;}
-  .m-row2 .list-area .con .binfo{
-      position: relative;
-      color: #666;
-      font-size: 12px;
-      height: 22px;
-  }
+  .m-row2 .list-area .con h3 {line-height: 32px;}
 }
 </style>
 <template>
-  <div class="news-list-page" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+  <div class="product-list-page" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
     <top-menu></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
       <div class="middle-col">
         <div class="m-row2 list-outer">
-            <div class="list-area" template=".template3">
+            <div class="list-area">
               <div class="item" v-for="(item, index) in listData" @click="toDetail(item)">
                 <div class="item-inner">
                     <div class="pic">
@@ -45,8 +39,10 @@
                     </div>
                     <div class="con">
                         <h3>{{item.title}}</h3>
-                        <div class="binfo">
-                          <span>{{ item.dateline | dateformat }}</span>
+                        <div style="margin-bottom:5px;color:#ff0000;">{{item.sellingpoint}}</div>
+                        <div style="color:#ff0000;">
+                          <span>￥</span>
+                          <span style="font-size:16px;font-weight:bold;">{{item.price}}</span>
                         </div>
                     </div>
                 </div>
@@ -83,11 +79,11 @@ export default {
   },
   methods: {
     toDetail (item) {
-      this.$router.push({path: '/news', query: {id: item.id}})
+      this.$router.push({path: '/product', query: {id: item.id}})
     },
     getList () {
-      this.$http.get(`${ENV.GxkApi}/api/list_n/news`, {
-        params: {module: 'news', classid: this.query.classid, pagestart: this.pagestart, limit: this.limit}
+      this.$http.get(`${ENV.GxkApi}/api/list_n/product`, {
+        params: {module: 'product', classid: this.query.classid, pagestart: this.pagestart, limit: this.limit}
       }).then(res => {
         const data = res.data
         this.isLoading = false

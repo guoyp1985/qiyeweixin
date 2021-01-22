@@ -220,7 +220,7 @@ export default {
         if (data.flag) {
           this.swiperData = data.data
           setTimeout(() => {
-            let picSwiper = new Swiper('.banner-area .banner-inner', {
+            return new Swiper('.banner-area .banner-inner', {
               loop: true,
               autoplay: {
                 delay: 4000

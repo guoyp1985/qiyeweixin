@@ -13,9 +13,9 @@ var ENV = {
     {uid: 25421},
     {uid: 98466}
   ],
-  title: '共销客',
-  logo: 'data/images/logo.png',
-  fid: 10,
+  Title: '共销客',
+  Logo: 'data/images/logo.png',
+  Fid: 10,
   AdminApi: 'https://admin.bsa.cn',
   GxkApi: 'https://gxkvpc.boka.cn'
 }
