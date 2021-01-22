@@ -268,6 +268,7 @@ export default {
       })
     },
     refresh () {
+      this.query = this.$route.query
       this.hostName = this.$util.getHostName()
       this.getSwiper()
       this.getData1()
@@ -276,7 +277,6 @@ export default {
     }
   },
   created () {
-    this.query = this.$route.query
   },
   activated () {
     this.refresh()

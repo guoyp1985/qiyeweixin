@@ -30,10 +30,10 @@ export default {
       location.href = 'https://www.bsa.cn'
     },
     refresh () {
+      this.query = this.$route.query
     }
   },
   created () {
-    this.query = this.$route.query
   },
   activated () {
     this.refresh()

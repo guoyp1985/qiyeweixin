@@ -279,6 +279,7 @@ export default {
       })
     },
     refresh () {
+      this.query = this.$route.query
       this.$http.post(`${ENV.GxkApi}/api/common/getBankNames`).then(res => {
         const data = res.data
         this.cardList = data.data ? data.data : data
@@ -286,7 +287,6 @@ export default {
     }
   },
   created () {
-    this.query = this.$route.query
   },
   activated () {
     this.refresh()

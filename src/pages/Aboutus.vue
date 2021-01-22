@@ -21,12 +21,12 @@
       <class-menu></class-menu>
       <div class="middle-col">
         <h2 class="big-title">{{viewData.title}}</h2>
-        <div v-if="viewData.content && viewData.content != ''"></div>
+        <div style="margin-bottom:20px;" v-if="viewData.content && viewData.content != ''">{{viewData.content}}</div>
         <div class="v-item">
             <div class="t-cell1">营业执照: </div>
             <div class="t-cell2">
               <template v-if="viewData.yyzz && viewData.yyzz != ''">
-                <img :src="viewData.yyzz" style="width:200px;" />
+                <img :src="viewData.yyzz" style="width:200px;max-width:100%;" />
               </template>
             </div>
         </div>
@@ -35,20 +35,20 @@
             <div class="t-cell2">{{viewData.bankname}}</div>
         </div>
         <div class="v-item">
-            <div>开户账号: </div>
+            <div class="t-cell1">开户账号: </div>
             <div class="t-cell2">{{viewData.account}}</div>
         </div>
         <div class="v-item">
-            <div>联系人: </div>
+            <div class="t-cell1">联系人: </div>
             <div class="t-cell2">{{viewData.contact}}</div>
         </div>
         <div class="v-item">
-            <div>联系电话: </div>
+            <div class="t-cell1">联系电话: </div>
             <div class="t-cell2">{{viewData.mobile}}</div>
         </div>
         <div class="v-item">
-            <div>地址: </div>
-            <div class="t-cell2">{{viewData.address}}</div>
+            <div class="t-cell1">地址: </div>
+            <div class="t-cell2">{{viewData.province}}{{viewData.city}}{{viewData.county}}{{viewData.address}}</div>
         </div>
       </div>
     </div>
@@ -64,7 +64,8 @@ export default {
   data () {
     return {
       query: {},
-      viewData: {}
+      viewData: {},
+      hostName: ''
     }
   },
   filters: {
@@ -74,8 +75,8 @@ export default {
   },
   methods: {
     getInfo () {
-      this.$http.get(`${ENV.GxkApi}/api/factory/info`, {
-        params: {fid: ENV.Fid}
+      this.$http.get(`${ENV.AdminApi}/api/content_n/info`, {
+        params: {module: 'factory', prefixdomain: this.hostName}
       }).then(res => {
         const data = res.data
         if (data.flag) {
@@ -84,11 +85,12 @@ export default {
       })
     },
     refresh () {
+      this.hostName = this.$util.getHostName()
+      this.query = this.$route.query
       this.getInfo()
     }
   },
   created () {
-    this.query = this.$route.query
   },
   activated () {
     this.refresh()

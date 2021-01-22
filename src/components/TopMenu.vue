@@ -146,7 +146,7 @@ export default {
   props: {
     current: {
       type: String,
-      default: 'home'
+      default: ''
     }
   },
   data () {
@@ -156,21 +156,27 @@ export default {
   },
   methods: {
     toMenu (item) {
-      if (item.type !== this.current) {
-        switch (item.type) {
-          case 'home':
+      switch (item.type) {
+        case 'home':
+          if (item.type !== this.current) {
             this.$router.push('/')
-            break
-          case 'newslist':
+          }
+          break
+        case 'newslist':
+          if (item.type !== this.current) {
             this.$router.push({path: '/newslist', query: {classid: item.relateid}})
-            break
-          case 'productlist':
+          }
+          break
+        case 'productlist':
+          if (item.type !== this.current) {
             this.$router.push({path: '/productlist', query: {classid: item.relateid}})
-            break
-          case 'aboutus':
+          }
+          break
+        case 'aboutus':
+          if (item.type !== this.current) {
             this.$router.push({path: '/aboutus'})
-            break
-        }
+          }
+          break
       }
     }
   },

@@ -39,6 +39,7 @@ export default {
       }, 200)
     },
     refresh () {
+      this.query = this.$route.query
       clearInterval(this.codeInterval)
       this.$http.get(`${ENV.AdminApi}/api/visitor/getRegisterQrCode`).then(res => {
         const data = res.data
@@ -49,7 +50,6 @@ export default {
     }
   },
   created () {
-    this.query = this.$route.query
   },
   activated () {
     this.refresh()
