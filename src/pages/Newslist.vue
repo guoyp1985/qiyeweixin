@@ -73,7 +73,8 @@ export default {
       pagestart: 0,
       limit: 15,
       isLoading: false,
-      isDone: false
+      isDone: false,
+      hostName: ''
     }
   },
   filters: {
@@ -96,8 +97,8 @@ export default {
       this.$router.push({path: '/news', query: {id: item.id}})
     },
     getList () {
-      this.$http.get(`${ENV.GxkApi}/api/list_n/news`, {
-        params: {module: 'news', classid: this.query.classid, pagestart: this.pagestart, limit: this.limit}
+      this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
+        params: {module: 'news', prefixdomain: this.hostName, classid: this.query.classid, pagestart: this.pagestart, limit: this.limit}
       }).then(res => {
         const data = res.data
         this.isLoading = false
@@ -124,6 +125,7 @@ export default {
       })
     },
     refresh () {
+      this.hostName = this.$util.getHostName()
       this.query = this.$route.query
       this.listData = []
       this.pagestart = 0

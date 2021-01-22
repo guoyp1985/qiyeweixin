@@ -200,7 +200,8 @@ export default {
       swiperData: [],
       listData1: [],
       listData2: [],
-      listData3: []
+      listData3: [],
+      hostName: ''
     }
   },
   filters: {
@@ -213,8 +214,8 @@ export default {
       this.$router.push({path: '/news', query: {id: item.id}})
     },
     getSwiper () {
-      this.$http.get(`${ENV.GxkApi}/api/list_n/news`, {
-        params: {module: 'news', classid: 10, limit: 4}
+      this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
+        params: {module: 'news', prefixdomain: this.hostName, classid: 1, limit: 4}
       }).then(res => {
         const data = res.data
         if (data.flag) {
@@ -236,8 +237,8 @@ export default {
       })
     },
     getData1 () {
-      this.$http.get(`${ENV.GxkApi}/api/list_n/news`, {
-        params: {module: 'news', classid: 10, limit: 2}
+      this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
+        params: {module: 'news', prefixdomain: this.hostName, classid: 2, limit: 2}
       }).then(res => {
         const data = res.data
         if (data.flag) {
@@ -246,8 +247,8 @@ export default {
       })
     },
     getData2 () {
-      this.$http.get(`${ENV.GxkApi}/api/list_n/news`, {
-        params: {module: 'news', classid: 10, limit: 10}
+      this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
+        params: {module: 'news', prefixdomain: this.hostName, classid: 1, limit: 10}
       }).then(res => {
         const data = res.data
         if (data.flag) {
@@ -256,8 +257,8 @@ export default {
       })
     },
     getData3 () {
-      this.$http.get(`${ENV.GxkApi}/api/list_n/news`, {
-        params: {module: 'news', classid: 10, limit: 4}
+      this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
+        params: {module: 'news', prefixdomain: this.hostName, classid: 2, limit: 4}
       }).then(res => {
         const data = res.data
         if (data.flag) {
@@ -266,6 +267,7 @@ export default {
       })
     },
     refresh () {
+      this.hostName = this.$util.getHostName()
       this.getSwiper()
       this.getData1()
       this.getData2()

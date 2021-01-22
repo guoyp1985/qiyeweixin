@@ -852,6 +852,12 @@ Util.install = function (Vue, options) {
         }
       }
       return fileList
+    },
+    getHostName: () => {
+      const hostname = document.location.hostname
+      let hname = hostname.split('.')[0]
+      if (ENV.isKf) hname = 'csbk'
+      return hname
     }
   }
 }

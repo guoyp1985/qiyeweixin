@@ -158,7 +158,7 @@ Vue.http.interceptors.request.use(config => {
   console.log('执行ajax请求', config.url)
   console.log(Token.get())
   console.log(matchExclude(config.url))
-  if (!matchExclude(config.url)) {
+  if (matchExclude(config.url)) {
     config.cancelToken = new CancelToken(c => {
       pendings.push({ u: config.url + '&' + config.method, f: c })
     })

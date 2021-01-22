@@ -69,7 +69,8 @@ export default {
       pagestart: 0,
       limit: 15,
       isLoading: false,
-      isDone: false
+      isDone: false,
+      hostName: ''
     }
   },
   filters: {
@@ -89,8 +90,8 @@ export default {
       this.$router.push({path: '/product', query: {id: item.id}})
     },
     getList () {
-      this.$http.get(`${ENV.GxkApi}/api/list_n/product`, {
-        params: {module: 'product', classid: this.query.classid, pagestart: this.pagestart, limit: this.limit}
+      this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
+        params: {module: 'product', prefixdomain: this.hostName, classid: this.query.classid, pagestart: this.pagestart, limit: this.limit}
       }).then(res => {
         const data = res.data
         this.isLoading = false

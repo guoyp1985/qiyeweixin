@@ -121,9 +121,7 @@ export default {
       return title || ' '
     },
     getData () {
-      const hostname = document.location.hostname
-      let hname = hostname.split('.')[0]
-      hname = 'csbk'
+      let hname = this.$util.getHostName()
       this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
         params: {module: 'channel', prefixdomain: hname}
       }).then(res => {

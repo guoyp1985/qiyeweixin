@@ -49,14 +49,16 @@ export default {
   name: 'ClassMenu',
   data () {
     return {
-      classArr: []
+      classArr: [],
+      hostName: ''
     }
   },
   methods: {
   },
   created () {
-    this.$http.get(`${ENV.GxkApi}/api/list_n/newsclass`, {
-      params: {module: 'news'}
+    this.hostName = this.$util.getHostName()
+    this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
+      params: {module: 'newsclass', prefixdomain: this.hostName}
     }).then(res => {
       const data = res.data
       if (data.flag) {

@@ -113,7 +113,8 @@ export default {
       query: {},
       viewData: {},
       swiperPhoto: [],
-      contentPhoto: []
+      contentPhoto: [],
+      hostName: ''
     }
   },
   filters: {
@@ -130,8 +131,8 @@ export default {
   },
   methods: {
     getInfo () {
-      this.$http.get(`${ENV.GxkApi}/api/moduleInfo`, {
-        params: {module: 'product', id: this.query.id}
+      this.$http.get(`${ENV.AdminApi}/api/content_n/info`, {
+        params: {module: 'product', prefixdomain: this.hostName, id: this.query.id}
       }).then(res => {
         const data = res.data
         if (data.flag) {
@@ -161,6 +162,7 @@ export default {
       })
     },
     refresh () {
+      this.hostName = this.$util.getHostName()
       this.query = this.$route.query
       this.viewData = {}
       this.getInfo()
