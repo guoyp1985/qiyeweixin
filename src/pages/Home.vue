@@ -5,7 +5,7 @@
 */
 <style lang="less">
 @import '../assets/swiper.less';
-.index-page{
+.home-page{
   width:100%;
   .banner-area{width:100%;height:272px;position:relative;overflow:hidden;}
   .banner-inner{position:absolute;left:0;top:0;right:0;bottom:0;}
@@ -117,7 +117,7 @@
 }
 </style>
 <template>
-  <div class="index-page">
+  <div class="home-page">
     <top-menu current="home0"></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
