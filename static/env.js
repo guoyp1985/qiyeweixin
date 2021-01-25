@@ -5,9 +5,9 @@ var ENV = {
   Logo: 'data/images/logo.png',
   Fid: 10,
   AdminApi: 'https://admin.bsa.cn',
-  GxkApi: 'https://gxkvpc.boka.cn'
+  GxkApi: 'https://laravel.boka.cn'
 }
 
 ENV.NoAccessUrls = [
-  ENV.AdminApi + '/api/factory/register'
+  ENV.GxkApi + '/api/factory/webApply'
 ]

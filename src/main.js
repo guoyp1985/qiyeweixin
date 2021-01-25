@@ -140,7 +140,7 @@ let cancelAllPendings = () => {
 
 // 排除全局请求过滤器中的请求url
 const rExcludeUrls = ENV.NoAccessUrls.map(url => {
-  url = `${ENV.BokaApi}wx[a-zA-Z0-9]{16}${url}`
+  // url = `${ENV.GxkApi}wx[a-zA-Z0-9]{16}${url}`
   return RegExp(url.replace(/\//g, '\\/').replace(/\*/g, '.*').replace(/\?/g, '\\?'))
 })
 const matchExclude = url => {

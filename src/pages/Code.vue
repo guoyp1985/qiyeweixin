@@ -25,9 +25,7 @@ export default {
   methods: {
     ajaxScan () {
       this.codeInterval = setInterval(() => {
-        this.$http.get(`${ENV.AdminApi}/api/visitor/scanRegister`, {
-          params: {verifycode: this.verifycode}
-        }).then(res => {
+        this.$http.get(`${ENV.GxkApi}/api/scanlogin/${this.verifycode}`).then(res => {
           const data = res.data
           if (data.flag) {
             clearInterval(this.codeInterval)
@@ -41,7 +39,7 @@ export default {
     refresh () {
       this.query = this.$route.query
       clearInterval(this.codeInterval)
-      this.$http.get(`${ENV.AdminApi}/api/visitor/getRegisterQrCode`).then(res => {
+      this.$http.get(`${ENV.GxkApi}/api/qrcode/login`).then(res => {
         const data = res.data
         this.codeSrc = data.url
         this.verifycode = data.verifycode

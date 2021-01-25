@@ -71,7 +71,7 @@
             <div class="form-item flex_left">
                 <div class="title-cell">营业执照</div>
                 <div class="input-cell">
-                    <input v-model="submitData.yyzz" type="hidden" name="photo" />
+                    <input v-model="submitData.licensephoto" type="hidden" name="photo" />
                     <form enctype="multipart/form-data">
                       <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
                     </form>
@@ -116,7 +116,7 @@
             <div class="form-item flex_left">
                 <div class="title-cell">联系人</div>
                 <div class="input-cell">
-                    <input v-model="submitData.contact" class="post-input" name="contact" type="text" placeholder="联系人" />
+                    <input v-model="submitData.newbankuser" class="post-input" name="newbankuser" type="text" placeholder="联系人" />
                 </div>
             </div>
             <div class="form-item flex_left">
@@ -128,7 +128,7 @@
             <div class="form-item flex_left">
                 <div class="title-cell">开户银行</div>
                 <div class="input-cell">
-                    <select v-model="submitData.bank" class="w_100" style="height:35px;">
+                    <select v-model="submitData.newbankcode" class="w_100" style="height:35px;">
                       <option value=''>请选择银行</option>
                       <option v-for="(item,index) in cardList" :value="item.id">{{ item.name }}</option>
                     </select>
@@ -137,7 +137,7 @@
             <div class="form-item flex_left">
                 <div class="title-cell">开户账号</div>
                 <div class="input-cell">
-                    <input v-model="submitData.account" class="post-input" name="account" type="text" placeholder="开户账号" />
+                    <input v-model="submitData.newbankcardno" class="post-input" name="account" type="text" placeholder="开户账号" />
                 </div>
             </div>
             <div class="form-item flex_left">
@@ -165,15 +165,15 @@ export default {
       query: {},
       submitData: {
         title: '',
-        yyzz: '',
+        licensephoto: '',
         province: '',
         city: '',
-        country: '',
+        county: '',
         address: '',
-        contact: '',
+        newbankuser: '',
         mobile: '',
-        bank: '',
-        account: '',
+        newbankcode: '',
+        newbankcardno: '',
         content: ''
       },
       photoarr: [],
@@ -181,14 +181,14 @@ export default {
       addressData: ChinaAddressV4Data,
       areaData: [],
       cardList: [],
-      requiredData: ['title', 'yyzz', 'province', 'city', 'country', 'address', 'contact', 'mobile', 'bank', 'account', 'content']
+      requiredData: ['title', 'licensephoto', 'province', 'city', 'county', 'address', 'newbankuser', 'mobile', 'newbankcode', 'newbankcardno', 'content']
     }
   },
   methods: {
     photoCallback (data) {
       if (data.flag === 1) {
         this.photoarr.push(data.data)
-        this.submitData.yyzz = this.photoarr.join(',')
+        this.submitData.licensephoto = this.photoarr.join(',')
       } else if (data.error) {
         this.$vux.toast.show({
           text: data.error,
@@ -217,8 +217,11 @@ export default {
       if (files.length > 0) {
         const fileForm = e.target.parentNode
         const filedata = new FormData(fileForm)
+        for (let i = 0; i < files.length; i++) {
+          filedata.append('files[' + i + ']', files[i])
+        }
         this.$vux.loading.show()
-        this.$http.post(`${ENV.GxkApi}/api/upload/files`, filedata).then(res => {
+        this.$http.post(`${ENV.GxkApi}/api/uploadFiles`, filedata).then(res => {
           let data = res.data
           this.$vux.loading.hide()
           this.photoCallback(data)
@@ -236,10 +239,9 @@ export default {
     },
     deletePhoto (item, index) {
       this.photoarr.splice(index, 1)
-      this.submitData.yyzz = this.photoarr.join(',')
+      this.submitData.licensephoto = this.photoarr.join(',')
     },
     submitEvent () {
-      console.log(this.areaData)
       this.submitData.province = this.areaData[0]
       this.submitData.city = this.areaData[1]
       this.submitData.county = this.areaData[2]
@@ -247,6 +249,8 @@ export default {
       for (let i in this.requiredData) {
         let curKey = this.requiredData[i]
         if (!this.submitData[curKey] || this.submitData[curKey] === '') {
+          console.log(curKey)
+          console.log(this.submitData)
           this.$vux.toast.show({
             text: '请完善注册信息',
             type: 'text'
@@ -263,7 +267,7 @@ export default {
         })
         return false
       }
-      this.$http.post(`${ENV.AdminApi}/api/factory/register`, this.submitData).then(res => {
+      this.$http.post(`${ENV.GxkApi}/api/factory/webApply`, this.submitData).then(res => {
         const data = res.data
         const timeout = this.$util.delay(data.error)
         this.$vux.toast.show({
