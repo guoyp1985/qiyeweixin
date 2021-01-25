@@ -856,7 +856,7 @@ Util.install = function (Vue, options) {
     getHostName: () => {
       const hostname = document.location.hostname
       let hname = hostname.split('.')[0]
-      if (ENV.isKf) hname = 'csbk'
+      if (ENV.isKf) hname = ENV.preName
       return hname
     }
   }
