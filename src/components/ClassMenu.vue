@@ -21,6 +21,7 @@
       text-align: center;
       background-color: #fff;
   }
+  .class-list .item .inner.active {color: #4889f3;background: #f3f6f8;}
 }
 </style>
 <template>
@@ -32,8 +33,8 @@
               </div>
               <div class="bd">
                   <ul class="class-list">
-                    <li v-for="(item, index) in classArr" :key="index" class="item">
-                        <a class="inner" :href="`/index?id=${item.id}`" keyname="title">{{item.title}}</a>
+                    <li v-for="(item, index) in classArr" :key="index" class="item" @click="toClass(item)">
+                        <span :class="`inner ${query.classid == item.id ? 'active' : ''}`">{{item.title}}</span>
                     </li>
                   </ul>
               </div>
@@ -49,13 +50,18 @@ export default {
   name: 'ClassMenu',
   data () {
     return {
+      query: {},
       classArr: [],
       hostName: ''
     }
   },
   methods: {
+    toClass (item) {
+      this.$router.push({path: '/newslist', query: {classid: item.id}})
+    }
   },
   created () {
+    this.query = this.$route.query
     this.hostName = this.$util.getHostName()
     this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
       params: {module: 'newsclass', prefixdomain: this.hostName}
