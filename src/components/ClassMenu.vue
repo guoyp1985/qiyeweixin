@@ -64,7 +64,7 @@ export default {
     this.query = this.$route.query
     this.hostName = this.$util.getHostName()
     this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
-      params: {module: 'newsclass', prefixdomain: this.hostName}
+      params: {module: 'factorynewsclass', prefixdomain: this.hostName}
     }).then(res => {
       const data = res.data
       if (data.flag) {

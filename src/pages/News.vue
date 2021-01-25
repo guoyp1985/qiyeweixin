@@ -59,7 +59,7 @@ export default {
   methods: {
     getInfo () {
       this.$http.get(`${ENV.AdminApi}/api/content_n/info`, {
-        params: {module: 'news', prefixdomain: this.hostName, id: this.query.id}
+        params: {module: 'factorynews', prefixdomain: this.hostName, id: this.query.id}
       }).then(res => {
         const data = res.data
         if (data.flag) {
