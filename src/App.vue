@@ -42,9 +42,8 @@
 <script>
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import { MenuData } from '#/storage'
+import { MenuData, Factory, WebsiteParams } from '#/storage'
 import ENV from 'env'
-
 export default {
   name: 'app',
   provide () {
@@ -122,12 +121,14 @@ export default {
     },
     getData () {
       let hname = this.$util.getHostName()
-      this.$http.get(`${ENV.GxkApi}/api/list_n/channel`, {
-        params: {module: 'channel', prefixdomain: hname}
+      this.$http.post(`${ENV.GxkApi}/api/Website/initData`, {
+        prefixdomain: hname
       }).then(res => {
         const data = res.data
-        if (data.flag && data.data.length) {
-          MenuData.set(data.data)
+        if (data.flag) {
+          MenuData.set(data.channel)
+          Factory.set(data.factory)
+          WebsiteParams.set(data.paras)
         } else {
           if (this.$route.path !== '/sos') {
             this.$router.replace('/sos')

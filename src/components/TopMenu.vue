@@ -9,7 +9,11 @@
     flex-flow:row wrap; align-items:center;text-align:right;
   }
   .header .logo .pic{
-    width:50px;height:50px;overflow:hidden;border-radius:50%;background:linear-gradient(#e81517, #fd5660);
+    width:50px;height:50px;overflow:hidden;
+    /*
+    border-radius:50%;
+    background:linear-gradient(#e81517, #fd5660);
+    */
     display:flex;justify-content:center;align-items:center;
   }
   .header .logo .pic img{width:50px;}
@@ -119,9 +123,9 @@
     <div class="header">
       <div class="logo">
           <div class="pic">
-              <img src="../assets/images/logo.png" />
+              <img v-if="factoryInfo.photo && factoryInfo.photo != ''" :src="factoryInfo.photo" />
           </div>
-          <div class="txt">共销客</div>
+          <div class="txt">{{factoryInfo.title}}</div>
       </div>
       <div class="menu">
           <div class="btn-icon btn-menu" >
@@ -140,7 +144,7 @@
 <script>
 import {} from 'vux'
 // import ENV from 'env'
-import { MenuData } from '#/storage'
+import { MenuData, Factory } from '#/storage'
 export default {
   name: 'TopMenu',
   props: {
@@ -151,6 +155,7 @@ export default {
   },
   data () {
     return {
+      factoryInfo: {},
       menuArr: null
     }
   },
@@ -181,6 +186,7 @@ export default {
     }
   },
   created () {
+    this.factoryInfo = Factory.get()
     this.menuArr = MenuData.get()
   }
 }

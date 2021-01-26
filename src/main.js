@@ -8,7 +8,7 @@ import { sync } from 'vuex-router-sync'
 import store from './store'
 import App from './App'
 import objectAssign from 'object-assign'
-import { User, Version, Token, Access } from '#/storage'
+import { User, Version, Token, Access, Website, MenuData } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
@@ -29,7 +29,6 @@ Vue.use(ToastPlugin)
 Vue.use(AlertPlugin)
 Vue.use(ConfirmPlugin)
 Vue.use(VideoPlayer)
-console.log(Vue.wechat)
 require('es6-promise').polyfill()
 
 console.log('env.debugmode', ENV.DebugMode)
@@ -186,12 +185,18 @@ Vue.http.interceptors.response.use(response => {
 })
 
 const clearCache = () => {
-  if (ENV.Version !== Version.get()) {
+  const hostname = document.location.hostname
+  let hname = hostname.split('.')[0]
+  if (ENV.isKf) hname = ENV.preName
+  if (Website.get() !== hname) {
     Token.remove()
     User.remove()
     Access.remove()
     Version.remove()
     Version.set(ENV.Version)
+    Website.remove()
+    Website.set(hname)
+    MenuData.remove()
   }
 }
 

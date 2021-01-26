@@ -39,6 +39,40 @@ const User = {
     }
   }
 }
+const Factory = {
+  set (factory) {
+    localStorage.setItem('factory', JSON.stringify(factory))
+  },
+  get () {
+    if (localStorage.getItem('factory') === 'undefined') {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('factory'))
+  },
+  remove () {
+    const factory = Factory.get()
+    if (factory) {
+      localStorage.removeItem('factory')
+    }
+  }
+}
+const WebsiteParams = {
+  set (wp) {
+    localStorage.setItem('WebsiteParams', JSON.stringify(wp))
+  },
+  get () {
+    if (localStorage.getItem('WebsiteParams') === 'undefined') {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('WebsiteParams'))
+  },
+  remove () {
+    const wp = WebsiteParams.get()
+    if (wp) {
+      localStorage.removeItem('WebsiteParams')
+    }
+  }
+}
 const Access = {
   set (access) {
     localStorage.setItem('access', access)
@@ -82,6 +116,20 @@ const Version = {
     }
   }
 }
+const Website = {
+  set (website) {
+    localStorage.setItem('website', website)
+  },
+  get () {
+    return localStorage.getItem('website')
+  },
+  remove () {
+    const website = Website.get()
+    if (website) {
+      localStorage.removeItem('website')
+    }
+  }
+}
 const MenuData = {
   set (menu) {
     localStorage.setItem('menu', JSON.stringify(menu))
@@ -100,4 +148,4 @@ const MenuData = {
   }
 }
 
-export { Token, User, Access, WxAccess, Version, MenuData }
+export { Token, User, Access, WxAccess, Version, MenuData, Factory, Website, WebsiteParams }

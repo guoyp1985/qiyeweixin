@@ -5,7 +5,8 @@
 */
 <style lang="less">
 .register-page{
-  width:100%;height:100%;background-color:#F2F3F7;padding-top:20px;box-sizing: border-box;
+  width:100%;height:100%;background-color:#F2F3F7;box-sizing: border-box;
+  overflow-y:auto;
   .register-inner{width:600px;background-color:#fff;padding:20px;box-sizing:border-box;margin:0 auto;}
 
   .big-title{font-size:30px;color:#5889ec;padding-bottom: 10px;margin-bottom: 40px;text-align:center;}
@@ -62,6 +63,36 @@
     <div class="register-inner">
         <div class="big-title">注册信息</div>
         <div class="form-list register-area">
+          <div class="form-item flex_left">
+              <div class="title-cell">网站Logo</div>
+              <div class="input-cell">
+                  <input v-model="submitData.photo" type="hidden" />
+                  <form enctype="multipart/form-data">
+                    <input ref="logoInput" class="hide" type="file" name="files" @change="fileChange" />
+                  </form>
+                  <div class="q_photolist align_left">
+                    <template v-if="logoarr.length > 0">
+                      <div v-for="(item,index) in logoarr" :key="index" class="photoitem">
+                        <div class="inner photo" :photo="item">
+                          <img :src="item" class="pic" @click="uploadPhoto('logoInput','logo',index)" />
+                          <div class="close" @click.stop="deletePhoto(item,index,'logo')">×</div>
+                        </div>
+                      </div>
+                    </template>
+                    <div v-if="logoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('logoInput','logo')">
+                      <div class="inner">
+                        <div class="innerlist">
+                          <div class="flex_center h_100">
+                            <div class="txt">
+                              <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
             <div class="form-item flex_left">
                 <div class="title-cell">公司名称</div>
                 <div class="input-cell">
@@ -79,12 +110,12 @@
                       <template v-if="photoarr.length > 0">
                         <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                           <div class="inner photo" :photo="item">
-                            <img :src="item" class="pic" @click="uploadPhoto('fileInput','photo',index)" />
-                            <div class="close" @click.stop="deletePhoto(item,index,'photo')">×</div>
+                            <img :src="item" class="pic" @click="uploadPhoto('fileInput','yyzx',index)" />
+                            <div class="close" @click.stop="deletePhoto(item,index,'yyzx')">×</div>
                           </div>
                         </div>
                       </template>
-                      <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','photo')">
+                      <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','yyzx')">
                         <div class="inner">
                           <div class="innerlist">
                             <div class="flex_center h_100">
@@ -176,8 +207,10 @@ export default {
         newbankcardno: '',
         content: ''
       },
+      logoarr: [],
       photoarr: [],
       maxnum: 1,
+      uploadType: '',
       addressData: ChinaAddressV4Data,
       areaData: [],
       cardList: [],
@@ -187,8 +220,13 @@ export default {
   methods: {
     photoCallback (data) {
       if (data.flag === 1) {
-        this.photoarr.push(data.data)
-        this.submitData.licensephoto = this.photoarr.join(',')
+        if (this.uploadType === 'logo') {
+          this.logoarr.push(data.data)
+          this.submitData.photo = this.logoarr.join(',')
+        } else if (this.uploadType === 'yyzx') {
+          this.photoarr.push(data.data)
+          this.submitData.licensephoto = this.photoarr.join(',')
+        }
       } else if (data.error) {
         this.$vux.toast.show({
           text: data.error,
@@ -196,9 +234,10 @@ export default {
         })
       }
     },
-    uploadPhoto () {
+    uploadPhoto (refname, type) {
       const self = this
-      const fileInput = this.$refs.fileInput[0] ? this.$refs.fileInput[0] : this.$refs.fileInput
+      const fileInput = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      this.uploadType = type
       if (this.$util.isPC()) {
         fileInput.click()
       } else {

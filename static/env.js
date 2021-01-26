@@ -1,7 +1,7 @@
 var ENV = {
   Version: '1.0.0',
   isKf: true,
-  preName: 'sqdcj',
+  preName: 'sqdcj', // sqdcj zsygx
   Title: '共销客',
   Logo: 'data/images/logo.png',
   Fid: 10,
