@@ -7,7 +7,7 @@
 @import '../assets/swiper.less';
 .home-page{
   width:100%;
-  .banner-area{width:100%;height:272px;position:relative;overflow:hidden;}
+  .banner-area{width:100%;height:389px;position:relative;overflow:hidden;}
   .banner-inner{position:absolute;left:0;top:0;right:0;bottom:0;}
   .banner-item{position:relative;float:left;display:block;}
   .banner-item img{width:100%;height:100%;object-fit:cover;position:absolute;overflow:hidden;}
@@ -39,8 +39,8 @@
   .banner-area .swiper-pagination-bullet-active{opacity:1;}
 
   .middle-col{width:700px;}
-  .m-row1{margin-bottom: 10px;height: 272px;display:flex;}
-  .m-row1 .col1{width: 458px;position:relative;}
+  .m-row1{margin-bottom: 10px;height: 389px;display:flex;}
+  .m-row1 .col1{width:700px;position:relative;}
   .m-row1 .col2{width:230px;display:flex;justify-content:flex-end;margin-left:10px;}
   .m-row1 .list-area{width:100%;}
   .m-row1 .list-area .item{width:100%;height: 130px;position:relative;}
@@ -129,22 +129,22 @@
                   <div class="banner-inner">
                       <div class="banner-swiper swiper-wrapper">
                         <div v-for="(item,index) in swiperData" :key="item.id" class="banner-item swiper-slide" @click="toNews(item)">
-                            <img :src="item.photo" />
-                            <div class="txt">{{item.title}}</div>
+                            <img :src="item" />
+                            <!-- <div class="txt">{{item.title}}</div> -->
                         </div>
                       </div>
                       <div class="swiper-pagination"></div>
                   </div>
               </div>
             </div>
-            <div class="col2">
+            <!-- <div class="col2">
               <div class="list-area" v-if="listData1.length">
                 <div class="item" v-for="(item, index) in listData1" :key="item.id" @click="toNews(item)">
                   <img :src="item.photo" />
                   <div class="txt">{{item.title}}</div>
                 </div>
               </div>
-            </div>
+            </div> -->
         </div>
         <div class="m-row2">
             <div class="row-head"><h2>精选新闻</h2></div>
@@ -169,9 +169,9 @@
           <div class="right-inner">
               <div class="r-list-area" style="margin-top: unset;">
                   <div class="list-head">
-                      <h2><span class="txt">精品原创</span></h2>
+                      <h2><span class="txt">精选商品</span></h2>
                   </div>
-                  <div class="list-con">
+                  <div class="list-con" v-if="listData3.length">
                       <ul class="r-news-list" v-if="listData3.length">
                         <li class="item cf false" v-for="(item, index) in listData3" :key="item.id"  @click="toNews(item)">
                             <div class="pic">
@@ -215,25 +215,29 @@ export default {
       this.$router.push({path: '/news', query: {id: item.id}})
     },
     getSwiper () {
-      this.$http.get(`${ENV.GxkApi}/api/list_n/factorynews`, {
-        params: {module: 'factorynews', prefixdomain: this.hostName, classid: 1, limit: 4}
+      this.$http.post(`${ENV.GxkApi}/api/Paras_n/getFactoryParas`, {
+        prefixdomain: this.hostName
       }).then(res => {
         const data = res.data
         if (data.flag) {
-          this.swiperData = data.data
-          setTimeout(() => {
-            return new Swiper('.banner-area .banner-inner', {
-              loop: true,
-              autoplay: {
-                delay: 4000
-              },
-              speed: 2000,
-              pagination: {
-                el: '.banner-area .swiper-pagination',
-                clickable: true
-              }
-            })
-          }, 1000)
+          let retData = data.data
+          let bannerPhoto = retData.website_banner
+          if (bannerPhoto && bannerPhoto !== '') this.swiperData = retData.website_banner.split(',')
+          if (this.swiperData.length) {
+            setTimeout(() => {
+              return new Swiper('.banner-area .banner-inner', {
+                loop: true,
+                autoplay: {
+                  delay: 4000
+                },
+                speed: 2000,
+                pagination: {
+                  el: '.banner-area .swiper-pagination',
+                  clickable: true
+                }
+              })
+            }, 1000)
+          }
         }
       })
     },
@@ -258,8 +262,8 @@ export default {
       })
     },
     getData3 () {
-      this.$http.get(`${ENV.GxkApi}/api/list_n/factorynews`, {
-        params: {module: 'factorynews', prefixdomain: this.hostName, classid: 2, limit: 4}
+      this.$http.get(`${ENV.GxkApi}/api/list_n/factoryproduct`, {
+        params: {module: 'factoryproduct', prefixdomain: this.hostName, classid: 2, limit: 4}
       }).then(res => {
         const data = res.data
         if (data.flag) {
