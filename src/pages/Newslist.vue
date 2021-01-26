@@ -97,8 +97,8 @@ export default {
       this.$router.push({path: '/news', query: {id: item.id}})
     },
     getList () {
-      this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
-        params: {module: 'news', prefixdomain: this.hostName, classid: this.query.classid, pagestart: this.pagestart, limit: this.limit}
+      this.$http.get(`${ENV.GxkApi}/api/list_n/factorynews`, {
+        params: {module: 'factorynews', prefixdomain: this.hostName, classid: this.query.classid, pagestart: this.pagestart, limit: this.limit}
       }).then(res => {
         const data = res.data
         this.isLoading = false

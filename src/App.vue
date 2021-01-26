@@ -122,7 +122,7 @@ export default {
     },
     getData () {
       let hname = this.$util.getHostName()
-      this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
+      this.$http.get(`${ENV.GxkApi}/api/list_n/channel`, {
         params: {module: 'channel', prefixdomain: hname}
       }).then(res => {
         const data = res.data

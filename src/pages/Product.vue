@@ -131,8 +131,8 @@ export default {
   },
   methods: {
     getInfo () {
-      this.$http.get(`${ENV.AdminApi}/api/content_n/info`, {
-        params: {module: 'product', prefixdomain: this.hostName, id: this.query.id}
+      this.$http.get(`${ENV.GxkApi}/api/moduleInfo_n`, {
+        params: {module: 'factoryproduct', prefixdomain: this.hostName, id: this.query.id}
       }).then(res => {
         const data = res.data
         if (data.flag) {

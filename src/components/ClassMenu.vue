@@ -63,7 +63,7 @@ export default {
   created () {
     this.query = this.$route.query
     this.hostName = this.$util.getHostName()
-    this.$http.get(`${ENV.AdminApi}/api/content_n/getList`, {
+    this.$http.get(`${ENV.GxkApi}/api/list_n/factorynewsclass`, {
       params: {module: 'factorynewsclass', prefixdomain: this.hostName}
     }).then(res => {
       const data = res.data
