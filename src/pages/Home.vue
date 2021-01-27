@@ -253,7 +253,7 @@ export default {
     },
     getData2 () {
       this.$http.get(`${ENV.GxkApi}/api/list_n/factorynews`, {
-        params: {module: 'factorynews', prefixdomain: this.hostName, classid: 1, limit: 10}
+        params: {module: 'factorynews', prefixdomain: this.hostName, limit: 10}
       }).then(res => {
         const data = res.data
         if (data.flag) {
@@ -263,7 +263,7 @@ export default {
     },
     getData3 () {
       this.$http.get(`${ENV.GxkApi}/api/list_n/factoryproduct`, {
-        params: {module: 'factoryproduct', prefixdomain: this.hostName, classid: 2, limit: 4}
+        params: {module: 'factoryproduct', prefixdomain: this.hostName, limit: 4}
       }).then(res => {
         const data = res.data
         if (data.flag) {
@@ -275,7 +275,7 @@ export default {
       this.query = this.$route.query
       this.hostName = this.$util.getHostName()
       this.getSwiper()
-      this.getData1()
+      // this.getData1()
       this.getData2()
       this.getData3()
     }

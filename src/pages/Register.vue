@@ -187,7 +187,7 @@
 <script>
 import ENV from 'env'
 import Reg from '#/reg'
-import { XAddress, ChinaAddressV4Data } from 'vux'
+import { XAddress, ChinaAddressV4Data, Value2nameFilter as value2name } from 'vux'
 const jweixin = require('../../static/jweixin')
 export default {
   components: { XAddress },
@@ -281,6 +281,7 @@ export default {
       this.submitData.licensephoto = this.photoarr.join(',')
     },
     submitEvent () {
+      this.areaData = value2name(this.areaData || [], ChinaAddressV4Data).split(' ')
       this.submitData.province = this.areaData[0]
       this.submitData.city = this.areaData[1]
       this.submitData.county = this.areaData[2]

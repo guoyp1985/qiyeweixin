@@ -5,7 +5,7 @@
     box-sizing:border-box;border-bottom:#cccccc 1px solid;background-color:#fff;
   }
   .header .logo{
-    width:150px;height:100%;display:flex;justify-content:flex-end;
+    padding-left:20px;height:100%;display:flex;justify-content:flex-end;
     flex-flow:row wrap; align-items:center;text-align:right;
   }
   .header .logo .pic{

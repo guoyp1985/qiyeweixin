@@ -25,22 +25,22 @@
         <div class="v-item">
             <div class="t-cell1">营业执照: </div>
             <div class="t-cell2">
-              <template v-if="viewData.yyzz && viewData.yyzz != ''">
-                <img :src="viewData.yyzz" style="width:200px;max-width:100%;" />
+              <template v-if="viewData.licensephoto && viewData.licensephoto != ''">
+                <img :src="viewData.licensephoto" style="width:200px;max-width:100%;" />
               </template>
             </div>
         </div>
         <div class="v-item">
             <div class="t-cell1">开户银行: </div>
-            <div class="t-cell2">{{viewData.bankname}}</div>
+            <div class="t-cell2">{{viewData.newbankname}}</div>
         </div>
         <div class="v-item">
             <div class="t-cell1">开户账号: </div>
-            <div class="t-cell2">{{viewData.account}}</div>
+            <div class="t-cell2">{{viewData.newbankcardno}}</div>
         </div>
         <div class="v-item">
             <div class="t-cell1">联系人: </div>
-            <div class="t-cell2">{{viewData.contact}}</div>
+            <div class="t-cell2">{{viewData.newbankuser}}</div>
         </div>
         <div class="v-item">
             <div class="t-cell1">联系电话: </div>
@@ -57,6 +57,7 @@
 <script>
 import ENV from 'env'
 import Time from '#/time'
+import { Factory } from '#/storage'
 import TopMenu from '@/components/TopMenu'
 import ClassMenu from '@/components/ClassMenu'
 export default {
@@ -87,7 +88,7 @@ export default {
     refresh () {
       this.hostName = this.$util.getHostName()
       this.query = this.$route.query
-      this.getInfo()
+      this.viewData = Factory.get()
     }
   },
   created () {
