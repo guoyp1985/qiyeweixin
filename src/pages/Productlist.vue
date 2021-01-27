@@ -118,6 +118,7 @@ export default {
       })
     },
     refresh () {
+      this.hostName = this.$util.getHostName()
       this.query = this.$route.query
       this.listData = []
       this.pagestart = 0

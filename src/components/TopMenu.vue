@@ -169,12 +169,16 @@ export default {
           break
         case 'newslist':
           if (item.type !== this.current) {
-            this.$router.push({path: '/newslist', query: {classid: item.relateid}})
+            let params = {}
+            if (item.relateid) params.classid = item.relateid
+            this.$router.push({path: '/newslist', query: params})
           }
           break
         case 'productlist':
           if (item.type !== this.current) {
-            this.$router.push({path: '/productlist', query: {classid: item.relateid}})
+            let params = {}
+            if (item.relateid) params.classid = item.relateid
+            this.$router.push({path: '/productlist', query: params})
           }
           break
         case 'aboutus':
