@@ -9,9 +9,8 @@ module.exports = {
   dev: {
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../companybsa/index.html'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/companybsa/',
+    assetsPublicPath: '/',
     proxyTable: {},
 
     // Various Dev Server settings
