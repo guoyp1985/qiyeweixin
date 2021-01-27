@@ -25,7 +25,21 @@
       <class-menu></class-menu>
       <div class="middle-col">
         <h1 class="news-title">{{viewData.title}}</h1>
-        <div class="news-content" v-html="viewData.content"></div>
+        <template v-if="viewData && viewData.id">
+          <template v-if="newsFormat == 'json' && viewData.content && viewData.content != ''">
+            <template v-for="(item, index) in viewData.content">
+              <div v-if="item.content && item.content != ''" class="padding10">{{item.content}}</div>
+              <template v-for="(photo,index1) in item.photo" index="index1" item="photo">
+                <div class="flex_center">
+                  <img :src="photo" style="max-width:100%;"/>
+                </div>
+              </template>
+            </template>
+          </template>
+          <template v-else>
+          <div class="news-content" v-html="viewData.content"></div>
+          </template>
+        </template>
       </div>
     </div>
   </div>
@@ -41,7 +55,9 @@ export default {
     return {
       query: {},
       viewData: {},
-      hostName: ''
+      hostName: '',
+      newsFormat: '',
+      contentArr: []
     }
   },
   filters: {
@@ -63,6 +79,12 @@ export default {
       }).then(res => {
         const data = res.data
         if (data.flag) {
+          let retdata = data.data
+          if (retdata.c_format === 'json') {
+            this.newsFormat = 'json'
+          } else {
+            this.newsFormat = ''
+          }
           this.viewData = data.data
           document.title = this.viewData.title
         }
