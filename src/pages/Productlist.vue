@@ -15,7 +15,7 @@
   .m-row2 .item-inner:hover{color:#2291f7}
   .m-row2 .list-area .pic{
       margin-right: 20px;
-      width: 230px;
+      width: 130px;
       height: 130px;
       overflow: hidden;
   }
