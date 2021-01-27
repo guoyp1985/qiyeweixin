@@ -110,10 +110,14 @@
   .r-list-area .item .txt {
       display:block;
       position: relative;
-      width: 140px;
-      padding-left: 10px;
+      width: 100%;
       line-height: 22px;
       z-index: 1;color:#333;
+  }
+  .r-list-area .item .txt1 {
+      display:block;width:100%;margin-top:5px;
+      position: relative;
+      z-index: 1;
   }
 }
 </style>
@@ -173,11 +177,14 @@
                   </div>
                   <div class="list-con" v-if="listData3.length">
                       <ul class="r-news-list" v-if="listData3.length">
-                        <li class="item cf false" v-for="(item, index) in listData3" :key="item.id"  @click="toNews(item)">
+                        <li class="item cf false" v-for="(item, index) in listData3" :key="item.id"  @click="toProduct(item)">
                             <div class="pic">
                                 <img :src="item.photo" />
                             </div>
-                            <div class="txt">{{item.title}}</div>
+                            <div class="flex_cell pl10">
+                              <div class="txt">{{item.title}}</div>
+                              <div class="txt1 color-red7"><span>￥</span><span>{{item.showprice}}</span></div>
+                            </div>
                         </li>
                       </ul>
                   </div>
@@ -214,6 +221,9 @@ export default {
     toNews (item) {
       this.$router.push({path: '/news', query: {id: item.id}})
     },
+    toProduct (item) {
+      this.$router.push({path: '/product', query: {id: item.id}})
+    },
     getSwiper () {
       this.$http.post(`${ENV.GxkApi}/api/Paras_n/getFactoryParas`, {
         prefixdomain: this.hostName
@@ -223,7 +233,7 @@ export default {
           let retData = data.data
           let bannerPhoto = retData.website_banner
           if (bannerPhoto && bannerPhoto !== '') this.swiperData = retData.website_banner.split(',')
-          if (this.swiperData.length) {
+          if (this.swiperData.length > 1) {
             setTimeout(() => {
               return new Swiper('.banner-area .banner-inner', {
                 loop: true,
