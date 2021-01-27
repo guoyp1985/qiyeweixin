@@ -68,6 +68,7 @@ routes.push({
 
 const router = new VueRouter({
   mode: 'history',
+  base: '/companybsa/',
   routes: routes
 })
 
