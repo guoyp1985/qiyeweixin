@@ -39,10 +39,10 @@
                     </div>
                     <div class="con">
                         <h3>{{item.title}}</h3>
-                        <div style="margin-bottom:5px;color:#ff0000;">{{item.sellingpoint}}</div>
-                        <div style="color:#ff0000;">
+                        <div v-if="item.sellingpoint && item.sellingpoint != ''" class="color-red7 mb5">{{item.sellingpoint}}</div>
+                        <div class="color-red7">
                           <span>￥</span>
-                          <span style="font-size:16px;font-weight:bold;">{{item.price}}</span>
+                          <span style="font-size:16px;font-weight:bold;">{{item.showprice}}</span>
                         </div>
                     </div>
                 </div>
