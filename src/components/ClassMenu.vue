@@ -3,12 +3,7 @@
   width: 170px;min-height: 100px;margin-right: 30px;
   .left-inner{width:170px;position:fixed;}
   .left-menu{width: 170px;z-index: 1;background-color: #fff;}
-  .left-menu .hd{height: 44px;line-height: 44px;color: #fff;background: #4889f3;border-radius: 3px 3px 0 0;}
-  .left-menu .hd h2 {
-      text-align: center;
-      font-size: 16px;
-      font-weight: 400;
-  }
+  .left-menu .hd{height: 44px;line-height: 44px;color: #fff;background: #4889f3;border-radius: 3px 3px 0 0;font-size: 16px;text-align: center;}
   .class-list {border: 1px solid #f0f0f0;overflow: hidden;}
   .class-list .item {border-top: 1px solid #f0f0f0;}
   .class-list .item:first-child {border-top: none;}
@@ -37,15 +32,13 @@
   <div class="left-col">
       <div class="left-inner">
           <div class="left-menu">
-              <div class="hd">
-                  <h2>相关频道</h2>
-              </div>
+              <div class="hd">相关频道</div>
               <div class="bd">
-                  <ul class="class-list">
-                    <li v-for="(item, index) in classArr" :key="index" class="item" @click="toClass(item)">
+                  <div class="class-list">
+                    <div v-for="(item, index) in classArr" :key="index" class="item" @click="toClass(item)">
                         <span :class="`inner ${query.classid == item.id ? 'active' : ''}`">{{item.title}}</span>
-                    </li>
-                  </ul>
+                    </div>
+                  </div>
               </div>
           </div>
       </div>

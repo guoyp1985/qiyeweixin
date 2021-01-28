@@ -77,7 +77,7 @@
     .main-area{
       width:100%;display:block;
       .left-col{
-        width:100%;
+        width:100%;margin-right:0;
         .left-inner{position:relative;width:100%;}
         .left-menu{width:100%;}
         .hd{width:100%;}
