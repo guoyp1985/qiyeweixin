@@ -1,8 +1,3 @@
-/*
-* @description: 首页
-* @auther: gyp
-* @created_date: 2021-01-21
-*/
 <style lang="less">
 @import '../assets/swiper.less';
 .home-page{
@@ -38,9 +33,10 @@
   }
   .banner-area .swiper-pagination-bullet-active{opacity:1;}
 
+  .top-row{width:900px;display:flex;flex:1;}
   .middle-col{width:700px;}
   .m-row1{margin-bottom: 10px;height: 389px;display:flex;}
-  .m-row1 .col1{width:700px;position:relative;}
+  .m-row1 .col1{width:100%;position:relative;}
   .m-row1 .col2{width:230px;display:flex;justify-content:flex-end;margin-left:10px;}
   .m-row1 .list-area{width:100%;}
   .m-row1 .list-area .item{width:100%;height: 130px;position:relative;}
@@ -74,7 +70,7 @@
       overflow: hidden;
   }
   .m-row2 .list-area img{width:100%;height:100%;object-fit:cover;}
-  .m-row2 .list-area .con{height:130px;}
+  .m-row2 .list-area .con{height:130px;flex:1;}
   .m-row2 .list-area .con h3 {line-height: 32px;min-height: 75px;}
   .m-row2 .list-area .con .binfo{
       position: relative;
@@ -92,12 +88,11 @@
       display: block;
       width: 100%;
       height: 100%;
-      font-size: 20px;
       color: #4889f3;
   }
   .r-list-area .list-con{background-color: #f7f8f9;padding: 5px 15px;margin-bottom: 35px;}
   .r-list-area .item {position: relative;padding: 10px 0;font-size: 14px;display:flex;}
-  .r-list-area .item .pic {display:block;position: relative;width: 120px;height: 80px;overflow: hidden;}
+  .r-list-area .item .pic {display:block;position: relative;width: 100px;height: 100px;overflow: hidden;}
   .r-list-area .item .pic img {
       position: relative;
       -webkit-transition: -webkit-transform .3s ease-out;
@@ -120,60 +115,73 @@
       z-index: 1;
   }
 }
+@media (max-width: 1199px) {
+  .home-page.mobile{
+    .main-area{display:block;}
+    .top-row{width:100%;}
+    .middle-col{flex:1;width:auto;margin-right:10px;}
+    .right-col{
+      width:100%;padding-left:180px;padding-right:10px;box-sizing: border-box;margin-top:35px;
+      .right-inner{width:100%;}
+    }
+  }
+}
 </style>
 <template>
-  <div class="home-page">
+  <div class="home-page mobile">
     <top-menu current="home0"></top-menu>
     <div class="main-area">
-      <class-menu></class-menu>
-      <div class="middle-col">
-        <div class="m-row1">
-            <div class="col1">
-              <div class="banner-area">
-                  <div class="banner-inner">
-                      <div class="banner-swiper swiper-wrapper">
-                        <div v-for="(item,index) in swiperData" :key="item.id" class="banner-item swiper-slide" @click="toNews(item)">
-                            <img :src="item" />
-                            <!-- <div class="txt">{{item.title}}</div> -->
+      <div class="top-row">
+        <class-menu></class-menu>
+        <div class="middle-col">
+          <div class="m-row1">
+              <div class="col1">
+                <div class="banner-area">
+                    <div class="banner-inner">
+                        <div class="banner-swiper swiper-wrapper">
+                          <div v-for="(item,index) in swiperData" :key="item.id" class="banner-item swiper-slide" @click="toNews(item)">
+                              <img :src="item" />
+                              <!-- <div class="txt">{{item.title}}</div> -->
+                          </div>
                         </div>
-                      </div>
-                      <div class="swiper-pagination"></div>
-                  </div>
-              </div>
-            </div>
-            <!-- <div class="col2">
-              <div class="list-area" v-if="listData1.length">
-                <div class="item" v-for="(item, index) in listData1" :key="item.id" @click="toNews(item)">
-                  <img :src="item.photo" />
-                  <div class="txt">{{item.title}}</div>
+                        <div class="swiper-pagination"></div>
+                    </div>
                 </div>
               </div>
-            </div> -->
-        </div>
-        <div class="m-row2">
-            <div class="row-head"><h2>精选新闻</h2></div>
-            <div class="list-area" v-if="listData2.length">
-              <div class="item" v-for="(item, index) in listData2" :key="item.id">
-                  <div class="item-inner "  @click="toNews(item)">
-                      <div class="pic">
-                          <img :src="item.photo" />
-                      </div>
-                      <div class="con">
-                          <h3 class="dis_area" keyname="title">{{item.title}}</h3>
-                          <div class="binfo">
-                              <span>{{ item.dateline | dateformat }}</span>
-                          </div>
-                      </div>
+              <!-- <div class="col2">
+                <div class="list-area" v-if="listData1.length">
+                  <div class="item" v-for="(item, index) in listData1" :key="item.id" @click="toNews(item)">
+                    <img :src="item.photo" />
+                    <div class="txt">{{item.title}}</div>
                   </div>
+                </div>
+              </div> -->
+          </div>
+          <div class="m-row2">
+              <div class="row-head"><h2>精选新闻</h2></div>
+              <div class="list-area" v-if="listData2.length">
+                <div class="item" v-for="(item, index) in listData2" :key="item.id">
+                    <div class="item-inner "  @click="toNews(item)">
+                        <div class="pic">
+                            <img :src="item.photo" />
+                        </div>
+                        <div class="con">
+                            <h3 class="dis_area" keyname="title">{{item.title}}</h3>
+                            <div class="binfo">
+                                <span>{{ item.dateline | dateformat }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
               </div>
-            </div>
+          </div>
         </div>
       </div>
       <div class="right-col">
           <div class="right-inner">
               <div class="r-list-area" style="margin-top: unset;">
                   <div class="list-head">
-                      <h2><span class="txt">精选商品</span></h2>
+                      <h2 class="txt">精选商品</h2>
                   </div>
                   <div class="list-con" v-if="listData3.length">
                       <ul class="r-news-list" v-if="listData3.length">

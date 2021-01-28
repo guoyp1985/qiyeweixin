@@ -1,8 +1,3 @@
-/*
-* @description: 关于我们
-* @auther: gyp
-* @created_date: 2021-01-22
-*/
 <style lang="less">
 .about-page{
   width:100%;
@@ -12,6 +7,11 @@
   .v-item .t-cell2{flex:1;}
 
   .big-title{font-size:30px;color:#5889ec;padding-bottom: 10px;margin-bottom: 40px;}
+}
+@media (max-width: 1199px) {
+  .about-page.mobile{
+    .middle-col{flex:1;margin-right:10px;overflow:hidden;}
+  }
 }
 </style>
 <template>

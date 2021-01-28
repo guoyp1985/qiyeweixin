@@ -10,31 +10,14 @@
   }
   .header .logo .pic{
     width:50px;height:50px;overflow:hidden;
-    /*
-    border-radius:50%;
-    background:linear-gradient(#e81517, #fd5660);
-    */
     display:flex;justify-content:center;align-items:center;
   }
   .header .logo .pic img{width:50px;}
   .header .logo .txt{font-weight:bold;font-size:20px;padding-left:10px;}
-  .header .login{width:245px;padding-right:30px;box-sizing:border-box;display:flex;
-    justify-content:flex-end;flex-flow:row wrap; align-items:center;}
-  .header .login .btn{
-    display:flex;justify-content:center; align-items:center;float:left;
-    width:100px;height:45px;font-size:16px;color:#fff;text-decoration:none;margin-right:5px;
-    background-color: rgb(60, 113, 242);box-shadow:transparent 2px 2px 4px 0px;border-radius:4px;
-  }
-  .header .login .denglu{-webkit-tap-highlight-color:rgba(0,0,0,0);}
-  .header .login .denglu .btn {text-decoration: none;color:#fff;}
-  .header .login .denglu:link{text-decoration:none;color:transparent;}
-  .header .login .denglu:visited {text-decoration:none;color:transparent;}
-  .header .login .denglu:hover {text-decoration:underline;color:transparent;}
-  .header .login .denglu:active {text-decoration:none;color:transparent;}
   .header .menu{flex:1;width:28px;margin-left:24%;-webkit-tap-highlight-color:rgba(0,0,0,0);}
   .menuarea .menu-item:hover{text-decoration:none;}
   .menu-item{color: #000000;}
-  .menu-item.visited {color: red;}
+  .menu-item.visited {color: #FF0036 !important;}
   .denglu {position: relative;display: inline-block;}
   .dropdowm{width: 100px;}
   .dropdown-content {display: none;position: absolute;background-color: #f9f9f9;width:100px;
@@ -53,6 +36,7 @@
   .menuarea .menu-item{font-size:20px;padding:0 30px;display:block;text-decoration:none;}
   .menuarea .menu-item:active{text-decoration:none;}
 
+}
   @media (min-width:1200px) {
     .mobile .header{display:flex;}
     .mobile .menuarea{
@@ -73,7 +57,7 @@
     .mobile .header .login{width:220px;float:right;}
     .mobile .header .login .btn{width:100px;font-size:14px;}
     .mobile .header .menu{display:flex;justify-content:flex-end;flex-flow:row wrap; align-items:center;text-align:right;}
-    .mobile .header .btn-icon{width:100px;display: flex;justify-content:flex-end;flex-flow:row wrap; align-items:center;text-align:right;}
+    .mobile .header .btn-icon{padding-left:10px;padding-right:10px;box-sizing:border-box;display: flex;justify-content:flex-end;flex-flow:row wrap; align-items:center;text-align:right;}
     .mobile .menuarea.active{display:block;}
     .mobile .menuarea{position:fixed;left:0px;top:90px;bottom:0;right:0px;z-index:50;display:none;}
     .mobile .menuarea .menu-list{background-color:#464646;height:0;transition:all 0.5s ease;overflow:hidden;}
@@ -116,7 +100,6 @@
     .mobile .header .login{display:none;}
     .mobile .header .menu{margin-right: 10%;}
   }
-}
 </style>
 <template>
   <div class="top-header">
@@ -128,12 +111,12 @@
           <div class="txt">{{factoryInfo.title}}</div>
       </div>
       <div class="menu">
-          <div class="btn-icon btn-menu" >
+          <div class="btn-icon btn-menu" @click="handleMenu">
               <i class="al al-menu"></i>
           </div>
       </div>
     </div>
-    <div class="menuarea" >
+    <div :class="`menuarea ${menuActive ? 'active' : ''}`" @click="clickMenu">
         <div class="menu-list">
             <div v-for="(item, index) in menuArr" :class="`menu-item ${(current) == (item.type + item.relateid) ? 'visited' : ''}`" @click="toMenu(item)">{{item.title}}</div>
         </div>
@@ -156,7 +139,8 @@ export default {
   data () {
     return {
       factoryInfo: {},
-      menuArr: null
+      menuArr: null,
+      menuActive: false
     }
   },
   methods: {
@@ -187,6 +171,12 @@ export default {
           }
           break
       }
+    },
+    handleMenu () {
+      this.menuActive = !this.menuActive
+    },
+    clickMenu () {
+      this.menuActive = false
     }
   },
   created () {

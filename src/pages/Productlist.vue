@@ -1,8 +1,3 @@
-/*
-* @description: 商品列表页
-* @auther: gyp
-* @created_date: 2021-01-22
-*/
 <style lang="less">
 .product-list-page{
   width:100%;height:100%;overflow-y:auto;
@@ -12,6 +7,7 @@
   .m-row2 .item{border-top: 1px solid #e6e6e6;}
   .m-row2 .item:first-child{border-top:none;}
   .m-row2 .item-inner{width:100%;display:flex;padding: 20px 0;color:#333;}
+  .list-area .item:first-child .item-inner{padding-top:0;}
   .m-row2 .item-inner:hover{color:#2291f7}
   .m-row2 .list-area .pic{
       margin-right: 20px;
@@ -20,8 +16,13 @@
       overflow: hidden;
   }
   .m-row2 .list-area img{width:100%;height:100%;object-fit:cover;}
-  .m-row2 .list-area .con{height:130px;}
+  .m-row2 .list-area .con{height:130px;flex:1;}
   .m-row2 .list-area .con h3 {line-height: 32px;}
+}
+@media (max-width: 1199px) {
+  .product-list-page.mobile{
+    .middle-col{flex:1;margin-right:10px;overflow:hidden;}
+  }
 }
 </style>
 <template>

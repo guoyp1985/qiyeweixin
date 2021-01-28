@@ -1,8 +1,3 @@
-/*
-* @description: 新闻详情页
-* @auther: gyp
-* @created_date: 2021-01-21
-*/
 <style lang="less">
 .news-page{
   width:100%;
@@ -16,6 +11,11 @@
     text-align:center;
   }
   .news-content img{max-width:100%;}
+}
+@media (max-width: 1199px) {
+  .news-page.mobile{
+    .middle-col{flex:1;margin-right:10px;overflow:hidden;}
+  }
 }
 </style>
 <template>

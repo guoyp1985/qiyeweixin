@@ -1,6 +1,7 @@
 <style lang="less">
 .left-col{
   width: 170px;min-height: 100px;margin-right: 30px;
+  .left-inner{width:170px;position:fixed;}
   .left-menu{width: 170px;z-index: 1;background-color: #fff;}
   .left-menu .hd{height: 44px;line-height: 44px;color: #fff;background: #4889f3;border-radius: 3px 3px 0 0;}
   .left-menu .hd h2 {
@@ -23,10 +24,18 @@
   }
   .class-list .item .inner.active {color: #4889f3;background: #f3f6f8;}
 }
+@media (max-width: 1199px) {
+  .mobile{
+    .left-col{
+      margin-right:10px;
+      .left-menu{}
+    }
+  }
+}
 </style>
 <template>
   <div class="left-col">
-      <div id="LeftMenu" style="position: fixed;">
+      <div class="left-inner">
           <div class="left-menu">
               <div class="hd">
                   <h2>相关频道</h2>
