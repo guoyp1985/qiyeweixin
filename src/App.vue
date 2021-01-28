@@ -130,8 +130,8 @@ export default {
           Factory.set(data.factory)
           WebsiteParams.set(data.paras)
         } else {
-          if (this.$route.path !== '/sos') {
-            this.$router.replace('/sos')
+          if (this.$route.path !== '/register') {
+            this.$router.replace('/register')
           }
         }
       })
