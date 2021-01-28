@@ -207,6 +207,7 @@ export default {
         newbankcardno: '',
         content: ''
       },
+      isSubmit: false,
       logoarr: [],
       photoarr: [],
       maxnum: 1,
@@ -281,6 +282,7 @@ export default {
       this.submitData.licensephoto = this.photoarr.join(',')
     },
     submitEvent () {
+      if (this.isSubmit) return false
       this.areaData = value2name(this.areaData || [], ChinaAddressV4Data).split(' ')
       this.submitData.province = this.areaData[0]
       this.submitData.city = this.areaData[1]
@@ -307,6 +309,7 @@ export default {
         })
         return false
       }
+      this.isSubmit = true
       this.$http.post(`${ENV.GxkApi}/api/factory/webApply`, this.submitData).then(res => {
         const data = res.data
         const timeout = this.$util.delay(data.error)
@@ -316,7 +319,9 @@ export default {
           time: timeout,
           onHide: () => {
             if (data.flag) {
-
+              location.href = `https://${data.prefixdomain}.${ENV.WebHost}`
+            } else {
+              this.isSubmit = false
             }
           }
         })

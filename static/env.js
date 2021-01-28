@@ -6,7 +6,8 @@ var ENV = {
   Logo: 'data/images/logo.png',
   Fid: 10,
   AdminApi: 'https://admin.bsa.cn',
-  GxkApi: 'https://laravel.boka.cn'
+  GxkApi: 'https://laravel.boka.cn',
+  WebHost: 'bsa.cn'
 }
 
 ENV.NoAccessUrls = [
