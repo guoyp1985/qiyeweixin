@@ -106,8 +106,8 @@
   <div class="top-header">
     <div class="header">
       <div class="logo">
-          <div class="pic">
-              <img v-if="factoryInfo.photo && factoryInfo.photo != ''" :src="factoryInfo.photo" />
+          <div class="pic" v-if="factoryInfo.photo && factoryInfo.photo != ''">
+              <img :src="factoryInfo.photo" />
           </div>
           <div class="txt">{{factoryInfo.company}}</div>
       </div>

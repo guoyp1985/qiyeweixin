@@ -86,13 +86,18 @@
         ul,li{width:100%;}
       }
     }
+    .middle-col{margin-right:0;margin-top:10px;}
     .swiper-outer{display:block;}
-    .p-info{width:100%;padding-left:0;}
+    .swiper-area{width:100%;}
+    .p-info{
+      width:100%;padding:10px;box-sizing: border-box;
+      .p-title{font-size:16px;}
+    }
   }
 }
 </style>
 <template>
-  <div class="product-page">
+  <div class="product-page mobile">
     <top-menu></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
