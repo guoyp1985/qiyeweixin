@@ -209,6 +209,7 @@
 <script>
 import ENV from 'env'
 import Time from '#/time'
+import { Factory } from '#/storage'
 import TopMenu from '@/components/TopMenu'
 import ClassMenu from '@/components/ClassMenu'
 import Footer from '@/components/Footer'
@@ -218,6 +219,7 @@ export default {
   data () {
     return {
       query: {},
+      factoryInfo: {},
       swiperData: [],
       listData1: [],
       listData2: [],
@@ -297,6 +299,10 @@ export default {
     refresh () {
       this.query = this.$route.query
       this.hostName = this.$util.getHostName()
+      this.factoryInfo = Factory.get()
+      if (this.factoryInfo.title && this.factoryInfo.title !== '') {
+        document.title = this.factoryInfo.title
+      }
       this.getSwiper()
       // this.getData1()
       this.getData2()

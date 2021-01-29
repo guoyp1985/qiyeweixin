@@ -62,6 +62,9 @@
   <div class="register-page">
     <div class="register-inner">
         <div class="big-title">注册信息</div>
+        <div class="tip-txt color-red7 pb20">
+          <div>*填写的注册信息将会在网站中展示</div>
+        </div>
         <div class="form-list register-area">
           <div class="form-item flex_left">
               <div class="title-cell">网站Logo</div>
@@ -93,42 +96,49 @@
                   </div>
               </div>
           </div>
-            <div class="form-item flex_left">
-                <div class="title-cell">公司名称</div>
-                <div class="input-cell">
-                    <input v-model="submitData.title" class="post-input" name="title" type="text" placeholder="公司名称" />
-                </div>
-            </div>
-            <div class="form-item flex_left">
-                <div class="title-cell">营业执照</div>
-                <div class="input-cell">
-                    <input v-model="submitData.licensephoto" type="hidden" name="photo" />
-                    <form enctype="multipart/form-data">
-                      <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
-                    </form>
-                    <div class="q_photolist align_left">
-                      <template v-if="photoarr.length > 0">
-                        <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                          <div class="inner photo" :photo="item">
-                            <img :src="item" class="pic" @click="uploadPhoto('fileInput','yyzx',index)" />
-                            <div class="close" @click.stop="deletePhoto(item,index,'yyzx')">×</div>
-                          </div>
+          <div class="form-item flex_left">
+              <div class="title-cell">公司名称</div>
+              <div class="input-cell">
+                  <input v-model="submitData.title" class="post-input" name="title" type="text" placeholder="公司名称" />
+              </div>
+          </div>
+          <div class="form-item flex_left">
+              <div class="title-cell">公司简称</div>
+              <div class="input-cell">
+                  <input v-model="submitData.company" class="post-input" name="title" type="text" placeholder="公司简称" />
+                  <div class="font12 color-red7">公司简称将做为网站名称显示</div>
+              </div>
+          </div>
+          <div class="form-item flex_left">
+              <div class="title-cell">营业执照</div>
+              <div class="input-cell">
+                  <input v-model="submitData.licensephoto" type="hidden" name="photo" />
+                  <form enctype="multipart/form-data">
+                    <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+                  </form>
+                  <div class="q_photolist align_left">
+                    <template v-if="photoarr.length > 0">
+                      <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
+                        <div class="inner photo" :photo="item">
+                          <img :src="item" class="pic" @click="uploadPhoto('fileInput','yyzx',index)" />
+                          <div class="close" @click.stop="deletePhoto(item,index,'yyzx')">×</div>
                         </div>
-                      </template>
-                      <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','yyzx')">
-                        <div class="inner">
-                          <div class="innerlist">
-                            <div class="flex_center h_100">
-                              <div class="txt">
-                                <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                              </div>
+                      </div>
+                    </template>
+                    <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','yyzx')">
+                      <div class="inner">
+                        <div class="innerlist">
+                          <div class="flex_center h_100">
+                            <div class="txt">
+                              <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                </div>
-            </div>
+                  </div>
+              </div>
+          </div>
             <div class="form-item flex_left">
                 <div class="title-cell">公司地址</div>
                 <div class="input-cell">
@@ -159,10 +169,7 @@
             <div class="form-item flex_left">
                 <div class="title-cell">开户银行</div>
                 <div class="input-cell">
-                    <select v-model="submitData.newbankcode" class="w_100" style="height:35px;">
-                      <option value=''>请选择银行</option>
-                      <option v-for="(item,index) in cardList" :value="item.id">{{ item.name }}</option>
-                    </select>
+                    <input v-model="submitData.bankname" class="post-input" name="bankname" type="text" placeholder="开户银行" />
                 </div>
             </div>
             <div class="form-item flex_left">
@@ -203,7 +210,7 @@ export default {
         address: '',
         newbankuser: '',
         mobile: '',
-        newbankcode: '',
+        bankname: '',
         newbankcardno: '',
         content: ''
       },
@@ -215,7 +222,7 @@ export default {
       addressData: ChinaAddressV4Data,
       areaData: [],
       cardList: [],
-      requiredData: ['title', 'licensephoto', 'province', 'city', 'county', 'address', 'newbankuser', 'mobile', 'newbankcode', 'newbankcardno', 'content']
+      requiredData: ['title', 'licensephoto', 'province', 'city', 'county', 'address', 'newbankuser', 'mobile', 'bankname', 'newbankcardno', 'content']
     }
   },
   methods: {

@@ -109,7 +109,7 @@
           <div class="pic">
               <img v-if="factoryInfo.photo && factoryInfo.photo != ''" :src="factoryInfo.photo" />
           </div>
-          <div class="txt">{{factoryInfo.title}}</div>
+          <div class="txt">{{factoryInfo.company}}</div>
       </div>
       <div class="menu">
           <div class="btn-icon btn-menu" @click="handleMenu">

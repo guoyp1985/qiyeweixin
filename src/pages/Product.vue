@@ -123,10 +123,6 @@
                 <span v-if="viewData.postate > 0">{{viewData.postate}}</span>
                 <span v-else>包邮</span>
               </div>
-              <div class="ml20">
-                <span>销量: </span>
-                <span>{{viewData.saled}}</span>
-              </div>
             </div>
             <div class="btn-buy">立即购买</div>
           </div>
