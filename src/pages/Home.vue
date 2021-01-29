@@ -127,11 +127,14 @@
       width:100%;padding-left:180px;padding-right:10px;box-sizing: border-box;margin-top:35px;
       .right-inner{width:100%;}
     }
+    .r-list-area .list-head {
+      padding-left:0;
+    }
   }
 }
 </style>
 <template>
-  <div class="home-page mobile">
+  <div class="home-page">
     <top-menu current="home0"></top-menu>
     <div class="main-area">
       <div class="top-row">

@@ -1,5 +1,6 @@
 var ENV = {
   Version: '1.0.0',
+  GzhName: '博卡授权中心',
   isKf: true,
   preName: 'sqdcj', // sqdcj zsygx
   Title: '共销客',

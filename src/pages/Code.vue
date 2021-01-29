@@ -1,11 +1,27 @@
-/*
-* @description: 二维码页
-* @auther: gyp
-* @created_date: 2021-01-21
-*/
+<style lang="less">
+.code-page{
+  width:100%;height:100%;
+  .pic{
+    text-align:center;
+    img{max-width:100%;}
+  }
+  .txt-area{
+    width:100%;padding:20px;box-sizing: border-box;text-align:left;
+  }
+}
+</style>
 <template>
   <div class="code-page flex_center font14">
-    <img :src="codeSrc">
+    <div class="w_100">
+      <div class="pic">
+        <img :src="codeSrc">
+      </div>
+      <div class="txt-area">
+        <div class="align_left">
+          <span class="color-red7">注意: </span>扫码前必需先关注公众号【<span class="bold">{{gzhName}}</span>】
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -17,7 +33,8 @@ export default {
       query: {},
       codeSrc: '',
       codeInterval: null,
-      verifycode: null
+      verifycode: null,
+      gzhName: ENV.GzhName
     }
   },
   watch: {
@@ -54,9 +71,3 @@ export default {
   }
 }
 </script>
-<style lang="less">
-.code-page{
-  width:100%;height:100%;
-  img{max-width:100%;}
-}
-</style>
