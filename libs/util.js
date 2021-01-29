@@ -36,6 +36,9 @@ Util.install = function (Vue, options) {
       const userAgentInfo = navigator.userAgent
       return !Reg.rPlatfrom.test(userAgentInfo)
     },
+    isMobile: function () {
+      return navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|IEMobile)/i)
+    },
     isAndroid: function() {
       const userAgentInfo = navigator.userAgent
       return Reg.rAndroid.test(userAgentInfo)

@@ -50,6 +50,7 @@
       text-align: center;
       font-size: 16px;
   }
+  .buy-area{position:absolute;left:20px;bottom:0;}
   .details-br{text-align: center;color: #bcbcbc;padding: 10px;background: #eeeeee;}
   .photo-list img{width:100%;display:block;}
   .details{width:100%;overflow:hidden;}
@@ -91,7 +92,7 @@
 }
 </style>
 <template>
-  <div class="product-page mobile">
+  <div class="product-page">
     <top-menu></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
@@ -124,17 +125,18 @@
                 <span v-else>包邮</span>
               </div>
             </div>
-            <div class="btn-buy">
+            <div v-if="isMobile && jumpAppId && jumpAppId != ''" class="buy-area">
               <wx-open-launch-weapp
                 :username="jumpAppId"
                 @launch="handleLaunchFn"
                 @error="handleErrorFn"
                 style="width:100%;display:block;">
                 <script type="text/wxtag-template">
-                  <div style="width:100%;height:100%;">立即购买</div>
+                  <div style="border-radius:5px;background-color: #ff0036;border: 1px solid #ff0036;color: #fff;width: 178px;height: 38px;line-height: 38px;text-align: center;font-size: 16px;">立即购买</div>
                 </script>
               </wx-open-launch-weapp>
             </div>
+            <div v-else class="btn-buy">立即购买</div>
           </div>
         </div>
         <div class="details">
@@ -171,22 +173,23 @@
 <script>
 import ENV from 'env'
 import Time from '#/time'
-import { Factory } from '#/storage'
+import { InitData } from '#/storage'
 import TopMenu from '@/components/TopMenu'
 import ClassMenu from '@/components/ClassMenu'
 import Footer from '@/components/Footer'
 const Swiper = require('../../static/swiper')
+const jweixin = require('../../static/jweixin')
 export default {
   components: {TopMenu, ClassMenu, Footer},
   data () {
     return {
       query: {},
-      factoryInfo: {},
       viewData: {},
       swiperPhoto: [],
       contentPhoto: [],
       hostName: '',
-      jumpAppId: ''
+      jumpAppId: '',
+      isMobile: false
     }
   },
   filters: {
@@ -250,11 +253,12 @@ export default {
     refresh () {
       this.hostName = this.$util.getHostName()
       this.query = this.$route.query
-      this.factoryInfo = Factory.get()
+      const initData = InitData.get()
+      this.isMobile = this.$util.isMobile()
       if (ENV.TestApp) {
         this.jumpAppId = ENV.GhId
-      } else {
-        this.jumpAppId = this.factoryInfo.ghId
+      } else if (initData.miniprogram && initData.miniprogram.user_name) {
+        this.jumpAppId = initData.miniprogram.user_name
       }
       this.viewData = {}
       this.getInfo()

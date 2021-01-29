@@ -42,7 +42,7 @@
 <script>
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import { MenuData, Factory, WebsiteParams } from '#/storage'
+import { InitData, MenuData, Factory, WebsiteParams } from '#/storage'
 import ENV from 'env'
 export default {
   name: 'app',
@@ -126,6 +126,7 @@ export default {
       }).then(res => {
         const data = res.data
         if (data.flag) {
+          InitData.set(data)
           MenuData.set(data.channel)
           Factory.set(data.factory)
           WebsiteParams.set(data.paras)

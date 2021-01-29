@@ -147,5 +147,22 @@ const MenuData = {
     }
   }
 }
+const InitData = {
+  set (initdata) {
+    localStorage.setItem('initdata', JSON.stringify(initdata))
+  },
+  get () {
+    if (localStorage.getItem('initdata') === 'undefined') {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('initdata'))
+  },
+  remove () {
+    const initdata = InitData.get()
+    if (initdata) {
+      localStorage.removeItem('initdata')
+    }
+  }
+}
 
-export { Token, User, Access, WxAccess, Version, MenuData, Factory, Website, WebsiteParams }
+export { Token, User, Access, WxAccess, Version, MenuData, Factory, Website, WebsiteParams, InitData }
