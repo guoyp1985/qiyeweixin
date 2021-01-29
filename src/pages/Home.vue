@@ -40,6 +40,7 @@
   .m-row1 .col2{width:230px;display:flex;justify-content:flex-end;margin-left:10px;}
   .m-row1 .list-area{width:100%;}
   .m-row1 .list-area .item{width:100%;height: 130px;position:relative;}
+  .m-row1 .list-area .item:hover{cursor:pointer;}
   .m-row1 .list-area .item:not(:first-child){margin-top:11px;}
   .m-row1 .list-area img {width: 100%;height: 100%;object-fit:cover;}
   .m-row1 .list-area .txt{
@@ -61,6 +62,7 @@
   .m-row2 .list-area{}
   .m-row2 .item{border-top: 1px solid #e6e6e6;}
   .m-row2 .item:first-child{border-top:none;}
+  .m-row2 .item:hover{cursor:pointer;}
   .m-row2 .item-inner{width:100%;display:flex;padding: 20px 0;color:#333;}
   .m-row2 .item-inner:hover{color:#2291f7}
   .m-row2 .list-area .pic{
@@ -92,6 +94,7 @@
   }
   .r-list-area .list-con{background-color: #f7f8f9;padding: 5px 15px;margin-bottom: 35px;}
   .r-list-area .item {position: relative;padding: 10px 0;font-size: 14px;display:flex;}
+  .r-list-area .item:hover{cursor:pointer;}
   .r-list-area .item .pic {display:block;position: relative;width: 100px;height: 100px;overflow: hidden;}
   .r-list-area .item .pic img {
       position: relative;

@@ -7,6 +7,7 @@
   .class-list {border: 1px solid #f0f0f0;overflow: hidden;}
   .class-list .item {border-top: 1px solid #f0f0f0;}
   .class-list .item:first-child {border-top: none;}
+  .class-list .item:hover{cursor:pointer;}
   .class-list .item .inner {
       position: relative;
       display: block;

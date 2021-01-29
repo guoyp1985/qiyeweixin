@@ -8,6 +8,7 @@
   .m-row2 .item:first-child{border-top:none;}
   .m-row2 .item-inner{width:100%;display:flex;padding: 20px 0;color:#333;}
   .list-area .item:first-child .item-inner{padding-top:0;}
+  .list-area .item:hover{cursor:pointer;}
   .m-row2 .item-inner:hover{color:#2291f7}
   .m-row2 .list-area .pic{
       margin-right: 20px;

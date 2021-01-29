@@ -17,6 +17,7 @@
   .header .menu{flex:1;width:28px;margin-left:24%;-webkit-tap-highlight-color:rgba(0,0,0,0);}
   .menuarea .menu-item:hover{text-decoration:none;}
   .menu-item{color: #000000;}
+  .menu-item:hover{cursor:pointer;}
   .menu-item.visited {color: #FF0036 !important;}
   .denglu {position: relative;display: inline-block;}
   .dropdowm{width: 100px;}
