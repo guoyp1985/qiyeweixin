@@ -22,14 +22,14 @@
       <div class="middle-col">
         <h2 class="big-title">{{viewData.title}}</h2>
         <div style="margin-bottom:20px;" v-if="viewData.content && viewData.content != ''">{{viewData.content}}</div>
-        <div class="v-item">
+        <!-- <div class="v-item">
             <div class="t-cell1">营业执照: </div>
             <div class="t-cell2">
               <template v-if="viewData.licensephoto && viewData.licensephoto != ''">
                 <img :src="viewData.licensephoto" style="width:200px;max-width:100%;" />
               </template>
             </div>
-        </div>
+        </div> -->
         <div class="v-item">
             <div class="t-cell1">开户银行: </div>
             <div class="t-cell2">{{viewData.newbankname}}</div>
