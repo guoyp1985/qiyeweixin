@@ -178,7 +178,6 @@ import TopMenu from '@/components/TopMenu'
 import ClassMenu from '@/components/ClassMenu'
 import Footer from '@/components/Footer'
 const Swiper = require('../../static/swiper')
-const jweixin = require('../../static/jweixin')
 export default {
   components: {TopMenu, ClassMenu, Footer},
   data () {
@@ -255,9 +254,7 @@ export default {
       this.query = this.$route.query
       const initData = InitData.get()
       this.isMobile = this.$util.isMobile()
-      if (ENV.TestApp) {
-        this.jumpAppId = ENV.GhId
-      } else if (initData.miniprogram && initData.miniprogram.user_name) {
+      if (initData.miniprogram && initData.miniprogram.user_name) {
         this.jumpAppId = initData.miniprogram.user_name
       }
       this.viewData = {}

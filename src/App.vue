@@ -145,7 +145,7 @@ export default {
     console.info('App Start Up')
     document.title = this.$t('tIndex')
     this.getData()
-    // this.$util.wxConfig()
+    this.$util.wxConfig()
   }
 }
 </script>

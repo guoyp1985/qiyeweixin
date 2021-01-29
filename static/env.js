@@ -8,10 +8,7 @@ var ENV = {
   AdminApi: 'https://admin.bsa.cn',
   GxkApi: 'https://laravel.boka.cn',
   WebHost: 'bsa.cn',
-  AdminLogin: 'http://laravelcms.boka.cn/admin/login/login?role=wesite',
-  TestApp: true,
-  AppId: '',
-  GhId: 'gh_dc6e3c73bc4c'
+  AdminLogin: 'http://laravelcms.boka.cn/admin/login/login?role=wesite'
 }
 
 ENV.NoAccessUrls = [
