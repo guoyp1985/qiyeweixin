@@ -124,7 +124,17 @@
                 <span v-else>包邮</span>
               </div>
             </div>
-            <div class="btn-buy">立即购买</div>
+            <div class="btn-buy">
+              <wx-open-launch-weapp
+                :username="jumpAppId"
+                @launch="handleLaunchFn"
+                @error="handleErrorFn"
+                style="width:100%;display:block;">
+                <script type="text/wxtag-template">
+                  <div style="width:100%;height:100%;">立即购买</div>
+                </script>
+              </wx-open-launch-weapp>
+            </div>
           </div>
         </div>
         <div class="details">
@@ -161,6 +171,7 @@
 <script>
 import ENV from 'env'
 import Time from '#/time'
+import { Factory } from '#/storage'
 import TopMenu from '@/components/TopMenu'
 import ClassMenu from '@/components/ClassMenu'
 import Footer from '@/components/Footer'
@@ -170,10 +181,12 @@ export default {
   data () {
     return {
       query: {},
+      factoryInfo: {},
       viewData: {},
       swiperPhoto: [],
       contentPhoto: [],
-      hostName: ''
+      hostName: '',
+      jumpAppId: ''
     }
   },
   filters: {
@@ -189,6 +202,14 @@ export default {
     }
   },
   methods: {
+    handleLaunchFn (e) {
+      console.log(e)
+    },
+    handleErrorFn (e) {
+      this.$vux.toast.show({
+        text: '小程序跳转失败'
+      })
+    },
     getInfo () {
       this.$http.get(`${ENV.GxkApi}/api/moduleInfo_n`, {
         params: {module: 'factoryproduct', prefixdomain: this.hostName, id: this.query.id}
@@ -229,6 +250,12 @@ export default {
     refresh () {
       this.hostName = this.$util.getHostName()
       this.query = this.$route.query
+      this.factoryInfo = Factory.get()
+      if (ENV.TestApp) {
+        this.jumpAppId = ENV.GhId
+      } else {
+        this.jumpAppId = this.factoryInfo.ghId
+      }
       this.viewData = {}
       this.getInfo()
     }
