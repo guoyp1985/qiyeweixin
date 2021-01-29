@@ -159,6 +159,7 @@
         </div>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 <script>
@@ -166,9 +167,10 @@ import ENV from 'env'
 import Time from '#/time'
 import TopMenu from '@/components/TopMenu'
 import ClassMenu from '@/components/ClassMenu'
+import Footer from '@/components/Footer'
 const Swiper = require('../../static/swiper')
 export default {
-  components: {TopMenu, ClassMenu},
+  components: {TopMenu, ClassMenu, Footer},
   data () {
     return {
       query: {},

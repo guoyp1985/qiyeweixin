@@ -55,6 +55,7 @@
         </div>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 <script>
@@ -62,8 +63,9 @@ import ENV from 'env'
 import Time from '#/time'
 import TopMenu from '@/components/TopMenu'
 import ClassMenu from '@/components/ClassMenu'
+import Footer from '@/components/Footer'
 export default {
-  components: {TopMenu, ClassMenu},
+  components: {TopMenu, ClassMenu, Footer},
   data () {
     return {
       query: {},
@@ -111,6 +113,8 @@ export default {
       this.$util.scrollEvent({
         element: scrollarea,
         callback: () => {
+          if (this.isLoading) return false
+          console.log('进入到了商品分页')
           if (this.listData.length === (this.pagestart + 1) * this.limit) {
             this.pagestart++
             this.isLoading = true

@@ -7,7 +7,8 @@ var ENV = {
   Fid: 10,
   AdminApi: 'https://admin.bsa.cn',
   GxkApi: 'https://laravel.boka.cn',
-  WebHost: 'bsa.cn'
+  WebHost: 'bsa.cn',
+  AdminLogin: 'http://laravelcms.boka.cn/admin/login/login?role=wesite'
 }
 
 ENV.NoAccessUrls = [

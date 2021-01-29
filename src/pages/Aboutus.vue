@@ -52,6 +52,7 @@
         </div>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 <script>
@@ -60,8 +61,9 @@ import Time from '#/time'
 import { Factory } from '#/storage'
 import TopMenu from '@/components/TopMenu'
 import ClassMenu from '@/components/ClassMenu'
+import Footer from '@/components/Footer'
 export default {
-  components: {TopMenu, ClassMenu},
+  components: {TopMenu, ClassMenu, Footer},
   data () {
     return {
       query: {},

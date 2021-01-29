@@ -1,7 +1,7 @@
 <style lang="less">
 .left-col{
   width: 170px;min-height: 100px;margin-right: 30px;
-  .left-inner{width:170px;position:fixed;}
+  .left-inner{width:170px;}
   .left-menu{width: 170px;z-index: 1;background-color: #fff;}
   .left-menu .hd{height: 44px;line-height: 44px;color: #fff;background: #4889f3;border-radius: 3px 3px 0 0;font-size: 16px;text-align: center;}
   .class-list {border: 1px solid #f0f0f0;overflow: hidden;}
