@@ -92,7 +92,7 @@
 }
 </style>
 <template>
-  <div class="product-page">
+  <div :class="`product-page ${factoryInfo && factoryInfo.viplevel > 0 ? 'mobile' : ''}`">
     <top-menu></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
@@ -173,7 +173,7 @@
 <script>
 import ENV from 'env'
 import Time from '#/time'
-import { InitData } from '#/storage'
+import { InitData, Factory } from '#/storage'
 import TopMenu from '@/components/TopMenu'
 import ClassMenu from '@/components/ClassMenu'
 import Footer from '@/components/Footer'
@@ -183,6 +183,7 @@ export default {
   data () {
     return {
       query: {},
+      factoryInfo: {},
       viewData: {},
       swiperPhoto: [],
       contentPhoto: [],
@@ -252,6 +253,7 @@ export default {
     refresh () {
       this.hostName = this.$util.getHostName()
       this.query = this.$route.query
+      this.factoryInfo = Factory.get()
       const initData = InitData.get()
       this.isMobile = this.$util.isMobile()
       if (initData.miniprogram && initData.miniprogram.user_name) {

@@ -134,7 +134,7 @@
 }
 </style>
 <template>
-  <div class="home-page">
+  <div :class="`home-page ${factoryInfo && factoryInfo.viplevel > 0 ? 'mobile' : ''}`">
     <top-menu current="home0"></top-menu>
     <div class="main-area">
       <div class="top-row">
