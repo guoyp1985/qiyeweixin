@@ -10,9 +10,14 @@
   <div class="web-footer">
     <div><span>{{factoryInfo.title}}</span><span class="ml10">版权所有</span></div>
     <div>地址: {{fulladdress}}</div>
-    <div><span>联系人: {{factoryInfo.newbankuser}}</span><span class="ml20">联系电话: {{factoryInfo.mobile}}</span></div>
     <div>
-      <span>技术支持: 北京博卡先锋软件开发有限公司</span>
+      <span>联系人: {{factoryInfo.newbankuser}}</span>
+      <span class="ml20">联系电话: </span>
+      <a :href="`tel:${factoryInfo.mobile}`" class="txt1">{{factoryInfo.mobile}}</a>
+    </div>
+    <div>
+      <a class="txt1" :href="bokaUrl" target="_blank">博卡先锋 一云多屏</a>
+      <span class="ml5">技术支持</span>
       <a class="txt1 ml20" :href="adminUrl" target="_blank">管理后台</a>
     </div>
   </div>
@@ -28,7 +33,8 @@ export default {
     return {
       factoryInfo: {},
       fulladdress: '',
-      adminUrl: ENV.AdminLogin
+      adminUrl: ENV.AdminLogin,
+      bokaUrl: ENV.BokaUrl
     }
   },
   methods: {

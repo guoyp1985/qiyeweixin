@@ -29,7 +29,7 @@
   .dropdowm:hover .dropdown-content {display: block;}
 
   .menuarea{
-    position:fixed;left:150px;top:0;right:245px;z-index:50;height:90px;
+    position:fixed;left:150px;top:0;right:50px;z-index:50;height:90px;
     display:flex;justify-content:flex-end;flex-flow:row wrap; align-items:center;text-align:right;
   }
   .header .btn-icon{display:none;}
@@ -170,6 +170,9 @@ export default {
           if (item.type !== this.current) {
             this.$router.push({path: '/aboutus'})
           }
+          break
+        default:
+          this.$router.push({path: '/channel', query: {id: item.id}})
           break
       }
     },

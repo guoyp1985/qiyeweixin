@@ -1,5 +1,5 @@
 <style lang="less">
-.news-page{
+.channel-page{
   width:100%;
   .middle-col{flex:1;}
   .news-title{
@@ -13,13 +13,13 @@
   .news-content img{max-width:100%;}
 }
 @media (max-width: 1199px) {
-  .news-page.mobile{
+  .channel-page.mobile{
     .middle-col{flex:1;margin-right:10px;overflow:hidden;}
   }
 }
 </style>
 <template>
-  <div :class="`news-page ${factoryInfo && factoryInfo.viplevel > 0 ? 'mobile' : ''}`">
+  <div :class="`channel-page ${factoryInfo && factoryInfo.viplevel > 0 ? 'mobile' : ''}`">
     <top-menu></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
@@ -79,7 +79,7 @@ export default {
   methods: {
     getInfo () {
       this.$http.get(`${ENV.GxkApi}/api/moduleInfo_n`, {
-        params: {module: 'factorynews', prefixdomain: this.hostName, id: this.query.id}
+        params: {module: 'channel', prefixdomain: this.hostName, id: this.query.id}
       }).then(res => {
         const data = res.data
         if (data.flag) {

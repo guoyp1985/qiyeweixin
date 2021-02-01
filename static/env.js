@@ -1,5 +1,6 @@
 var ENV = {
   Version: '1.0.0',
+  GzhName: '博卡授权中心',
   isKf: true,
   preName: 'sqdcj', // sqdcj zsygx
   Title: '共销客',
@@ -8,7 +9,8 @@ var ENV = {
   AdminApi: 'https://admin.bsa.cn',
   GxkApi: 'https://laravel.boka.cn',
   WebHost: 'bsa.cn',
-  AdminLogin: 'http://laravelcms.boka.cn/admin/login/login?role=wesite'
+  AdminLogin: 'http://laravelcms.boka.cn/admin/login/login?role=website',
+  BokaUrl: 'http://www.boka.cn'
 }
 
 ENV.NoAccessUrls = [

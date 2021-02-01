@@ -27,7 +27,7 @@
 }
 </style>
 <template>
-  <div class="product-list-page" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+  <div :class="`product-list-page ${factoryInfo && factoryInfo.viplevel > 0 ? 'mobile' : ''}`" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
     <top-menu :current="`productlist${query.classid ? query.classid : 0}`"></top-menu>
     <div class="main-area">
       <class-menu></class-menu>
@@ -61,6 +61,7 @@
 <script>
 import ENV from 'env'
 import Time from '#/time'
+import { Factory } from '#/storage'
 import TopMenu from '@/components/TopMenu'
 import ClassMenu from '@/components/ClassMenu'
 import Footer from '@/components/Footer'
@@ -69,6 +70,7 @@ export default {
   data () {
     return {
       query: {},
+      factoryInfo: {},
       listData: [],
       pagestart: 0,
       limit: 15,
@@ -126,6 +128,7 @@ export default {
     refresh () {
       this.hostName = this.$util.getHostName()
       this.query = this.$route.query
+      this.factoryInfo = Factory.get()
       this.listData = []
       this.pagestart = 0
       this.limit = 15

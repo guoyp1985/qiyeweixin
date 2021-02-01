@@ -57,6 +57,11 @@
   }
   .r-address .vux-popup-picker-select{text-align:left !important;}
 }
+@media (max-width: 600px) {
+  .register-page{
+    .register-inner{width:100%;}
+  }
+}
 </style>
 <template>
   <div class="register-page">
